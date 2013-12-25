@@ -34,7 +34,7 @@ var Game = (function () {
         this.ship.graphics.endFill();
 
         this.ship.x = 160;
-        this.ship.y = 490;
+        this.ship.y = 495;
         this.ship.rotation = 0;
 
         this.stage.addChild(this.ship);
@@ -76,11 +76,13 @@ var Game = (function () {
             case 37:
                 //left
                 this.vector1.h -= 0.1;
+                console.log(this.vector1.h);
                 break;
 
             case 39:
                 //right
                 this.vector1.h += 0.1;
+                console.log(this.vector1.h);
                 break;
         }
     };
