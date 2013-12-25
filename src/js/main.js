@@ -16,8 +16,8 @@ var Game = (function () {
     var Game = function () {
         _.bindAll(this);
 
-        this.h1 = -Math.PI / 2;
-        this.h2 = -Math.PI / 2;
+        this.h1 = Math.PI / 2;
+        this.h2 = Math.PI / 2;
         this.v1 = 1;
         this.v2 = 1;
 
