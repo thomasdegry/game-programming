@@ -16,13 +16,10 @@ var Game = (function () {
     var Game = function () {
         _.bindAll(this);
 
-        this.h1 = -Math.PI / 2;
-        this.h2 = -Math.PI / 2;
+        this.h1 = Math.PI / 2;
         this.v1 = 1;
-        this.v2 = 1;
 
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
-        this.vector2 = new Vector(0, 0, this.h2, this.v2);
 
         this.stage = new createjs.Stage("canvas");
         this.stage.canvas.width = 300;
@@ -65,37 +62,38 @@ var Game = (function () {
         switch(event.keyCode) {
             case 38:
                 //up
-                this.vector1.v += 100;
+                this.vector1.v += 10;
                 break;
 
             case 40:
                 //down
-                this.vector1.v -= 100;
+                this.vector1.v -= 10;
                 break;
 
             case 37:
                 //left
-                this.vector1.h -= 0.1;
+                this.vector1.setHeading(this.vector1.h - 0.1);
                 console.log(this.vector1.h);
                 break;
 
             case 39:
                 //right
-                this.vector1.h += 0.1;
+                this.vector1.setHeading(this.vector1.h + 0.1);
                 console.log(this.vector1.h);
                 break;
         }
     };
 
+
+
     Game.prototype.tickHandler = function(event) {
         var vector = this.vector1.clone();
-            vector.addVector(this.vector2);
         var endCoords = vector.getEndCoords();
 
         this.ship.x += parseFloat(endCoords.x / 100);
         this.ship.y += parseFloat(endCoords.y / 100);
 
-        this.ship.rotation = vector.h * 57.2957795;
+        this.ship.rotation = this.vector1.getHeading();
 
         this.stage.update();
         this.draw();
@@ -152,6 +150,20 @@ var Vector = (function () {
         }
 
         return {x:newX,y:newY};
+    };
+
+    Vector.prototype.setHeading = function(heading){
+        this.h = heading;
+        if (this.h > 2*Math.PI) {
+            this.h -= 2*Math.PI;
+        }
+        if(this.h < 0){
+            this.h += 2*Math.PI;
+        }
+    };
+
+    Vector.prototype.getHeading = function(){
+        return this.h * 57.2957795;
     };
 
     Vector.prototype.clone = function() {

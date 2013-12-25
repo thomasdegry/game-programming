@@ -45,6 +45,20 @@ var Vector = (function () {
         return {x:newX,y:newY};
     };
 
+    Vector.prototype.setHeading = function(heading){
+        this.h = heading;
+        if (this.h > 2*Math.PI) {
+            this.h -= 2*Math.PI;
+        }
+        if(this.h < 0){
+            this.h += 2*Math.PI;
+        }
+    };
+
+    Vector.prototype.getHeading = function(){
+        return this.h * 57.2957795;
+    };
+
     Vector.prototype.clone = function() {
         var clone = new Vector(this.x,this.y,this.h,this.v);
         return clone;
