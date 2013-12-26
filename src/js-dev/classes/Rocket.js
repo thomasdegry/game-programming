@@ -23,8 +23,11 @@ var Rocket = (function () {
         var vector = this.vector.clone();
         var endCoords = vector.getEndCoords();
 
-        this.shape.x += parseFloat(endCoords.x / 100);
-        this.shape.y += parseFloat(endCoords.y / 100);
+        this.x += parseFloat(endCoords.x / 100);
+        this.y += parseFloat(endCoords.y / 100);
+
+        this.shape.x = this.x;
+        this.shape.y = this.y;
 
         this.shape.rotation = this.vector.getHeading();
     };

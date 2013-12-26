@@ -10,33 +10,140 @@ var Settings =(function () {
 
 })();
 
-/* globals Vector:true, Rocket:true */
+var Bound = (function () {
+
+    var Bound = function (x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    };
+
+    return Bound;
+})();
+
+var CollisionDetection = (function() {
+
+    function CollisionDetection() {
+
+    }
+
+    CollisionDetection.checkCollision = function(shapeA, shapeB) {
+        var vX = (shapeA.x + (shapeA.width/2)) - (shapeB.x + (shapeB.width / 2));
+        var vY = (shapeA.y + (shapeA.height/2)) - (shapeB.y + (shapeB.height / 2));
+
+        var hWidths = (shapeA.width/2) + (shapeB.width/2);
+        var hHeights = (shapeA.height/2) + (shapeB.height/2);
+
+        var waar = Math.abs(vX) < hWidths && Math.abs(vY) < hHeights;
+        // console.log(vX, vY, hWidths, hHeights, waar);
+
+        var colDir = "";
+
+        if(Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
+            //Botsing langs de zijkanten
+            var oX = hWidths - Math.abs(vX);
+            var oY = hHeights - Math.abs(vY);
+
+            if(oX >= oY) {
+                //top bottom
+                if(vY > 0) {
+                    colDir = "t";
+                    shapeA.y += oY;
+                } else {
+                    colDir = "b";
+                    shapeA.y -= oY;
+                }
+            } else {
+                //left right
+                if(vX > 0) {
+                    colDir = "l";
+                    shapeA.x += oX;
+                } else {
+                    colDir = "r";
+                    shapeA.x -= oX;
+                }
+            }
+
+            return colDir;
+        }
+    };
+
+    return CollisionDetection;
+
+})();
+
+var Galaxy = (function () {
+
+    var Galaxy = function (width, height) {
+        _.bindAll(this);
+
+        this.width = width;
+        this.height = height;
+
+        this.container = new createjs.Container();
+    };
+
+    Galaxy.prototype.addObject = function(object) {
+        this.container.addChild(object);
+    };
+
+    Galaxy.prototype.followRocket = function(rocket, height, offset) {
+        var y = -(rocket.y - (height/2)) + offset;
+
+        if(y < this.boundW) {
+            this.container.y = this.boundW;
+        } else if(y > 0) {
+            this.container.y = 0;
+        } else {
+            this.container.y = y;
+        }
+    };
+
+    return Galaxy;
+})();
+
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, CollisionDetection:true */
 var Game = (function () {
 
     var Game = function () {
         _.bindAll(this);
 
+        // setup defaults
         this.h1 = Math.PI / 2;
         this.v1 = 1;
 
+        this.cWidth = 300;
+        this.cHeight = 500;
+
+        // create default vector
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
 
+        // setup the stage
         this.stage = new createjs.Stage("canvas");
-        this.stage.canvas.width = 300;
-        this.stage.canvas.height = 500;
+        this.stage.canvas.width = this.cWidth;
+        this.stage.canvas.height = this.cHeight;
 
+        // create a galaxy
+        this.galaxy = new Galaxy(300, 3000);
+
+        // create an empty bounds array and fill it in the createbounds()
+        this.bounds = [];
+        this.createBounds();
+
+        // make a rocket
         this.rocket = new Rocket(-5, -10, 10, 20, 'FF0000', this.vector1);
         this.rocket.shape.x = 160;
         this.rocket.shape.y = 495;
         this.stage.addChild(this.rocket.shape);
 
-        // this.stage.addChild(this.ship);
-
+        // setup the ticker
         this.ticker = createjs.Ticker;
         this.ticker.useRAF = true;
         this.ticker.setFPS(60);
         this.ticker.addEventListener('tick', this.tickHandler);
 
+        // add the eventlisteners
         window.onkeydown = this.keyDownHandler;
         document.getElementById('canvas').addEventListener('mousedown', this.resetToMousePos);
     };
@@ -50,8 +157,8 @@ var Game = (function () {
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
 
-        this.rocket.shape.x = x;
-        this.rocket.shape.y = y;
+        this.rocket.x = x;
+        this.rocket.y = y;
     };
 
     Game.prototype.keyDownHandler = function(event) {
@@ -75,6 +182,19 @@ var Game = (function () {
     };
 
     Game.prototype.tickHandler = function(event) {
+        // loop through the bounds to see if there is collision
+        for(var i = 0; i < this.bounds.length; i++) {
+            switch(CollisionDetection.checkCollision(this.rocket, this.bounds[i])) {
+                case "l":
+                    this.rocket.shape.x = 0;
+                    break;
+
+                case "r":
+                    this.rocket.shape.x = this.cWidth;
+                    break;
+            }
+        }
+
         this.rocket.update();
 
         this.stage.update();
@@ -82,6 +202,15 @@ var Game = (function () {
     };
 
     Game.prototype.draw = function() {
+    };
+
+    Game.prototype.createBounds = function() {
+        // three bounds, no bound on the top, right border, bottom border, left border
+        this.bounds.push(new Bound(this.galaxy.width - 1, 0, 1, this.galaxy.height));
+        this.bounds.push(new Bound(0, this.galaxy.height - 1, this.galaxy.width, 1));
+        this.bounds.push(new Bound(0, 0, 1, this.galaxy.height));
+
+        console.log(this.bounds);
     };
 
     return Game;
@@ -112,8 +241,11 @@ var Rocket = (function () {
         var vector = this.vector.clone();
         var endCoords = vector.getEndCoords();
 
-        this.shape.x += parseFloat(endCoords.x / 100);
-        this.shape.y += parseFloat(endCoords.y / 100);
+        this.x += parseFloat(endCoords.x / 100);
+        this.y += parseFloat(endCoords.y / 100);
+
+        this.shape.x = this.x;
+        this.shape.y = this.y;
 
         this.shape.rotation = this.vector.getHeading();
     };
