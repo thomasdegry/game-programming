@@ -1,4 +1,4 @@
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, CollisionDetection:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, CollisionDetection:true, Planet:true */
 var Game = (function () {
 
     var Game = function () {
@@ -21,16 +21,22 @@ var Game = (function () {
 
         // create a galaxy
         this.galaxy = new Galaxy(300, 3000);
+        this.galaxy.container.y = -2500;
+        this.stage.addChild(this.galaxy.container);
 
         // create an empty bounds array and fill it in the createbounds()
         this.bounds = [];
         this.createBounds();
 
+        // create temporary level
+        this.planets = [];
+        this.createPlanets();
+
         // make a rocket
         this.rocket = new Rocket(-5, -10, 10, 20, 'FF0000', this.vector1);
         this.rocket.shape.x = 160;
         this.rocket.shape.y = 495;
-        this.stage.addChild(this.rocket.shape);
+        this.galaxy.addObject(this.rocket.shape);
 
         // setup the ticker
         this.ticker = createjs.Ticker;
@@ -46,14 +52,17 @@ var Game = (function () {
     Game.prototype.resetToMousePos = function(event) {
         var x = event.x;
         var y = event.y;
+        console.log('y: ' + y);
 
         var canvas = document.getElementById('canvas');
 
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
+        console.log('nieuwe y: ' + y);
+        console.log('plaatsings y : ' + (y - this.galaxy.container.y));
 
         this.rocket.x = x;
-        this.rocket.y = y;
+        this.rocket.y = y - this.galaxy.container.y;
     };
 
     Game.prototype.keyDownHandler = function(event) {
@@ -87,16 +96,53 @@ var Game = (function () {
                 case "r":
                     this.rocket.shape.x = this.cWidth;
                     break;
+
+                default:
+                    break;
             }
         }
 
         this.rocket.update();
 
+        this.galaxy.followRocket(this.rocket, this.cHeight, 0);
         this.stage.update();
         this.draw();
     };
 
     Game.prototype.draw = function() {
+    };
+
+    Game.prototype.createPlanets = function() {
+        this.planets.push(new Planet(100, 100, 30));
+        this.planets.push(new Planet(100, 200, 30));
+        this.planets.push(new Planet(100, 300, 30));
+        this.planets.push(new Planet(100, 400, 30));
+        this.planets.push(new Planet(100, 500, 30));
+        this.planets.push(new Planet(100, 600, 30));
+        this.planets.push(new Planet(100, 700, 30));
+        this.planets.push(new Planet(100, 800, 30));
+        this.planets.push(new Planet(100, 900, 30));
+        this.planets.push(new Planet(100, 1000, 30));
+        this.planets.push(new Planet(100, 1100, 30));
+        this.planets.push(new Planet(100, 1200, 30));
+        this.planets.push(new Planet(100, 1300, 30));
+        this.planets.push(new Planet(100, 1400, 30));
+        this.planets.push(new Planet(100, 1500, 30));
+        this.planets.push(new Planet(100, 1600, 30));
+        this.planets.push(new Planet(100, 1700, 30));
+        this.planets.push(new Planet(100, 1800, 30));
+        this.planets.push(new Planet(100, 1900, 30));
+        this.planets.push(new Planet(100, 2000, 30));
+        this.planets.push(new Planet(100, 2100, 30));
+        this.planets.push(new Planet(100, 2200, 30));
+        this.planets.push(new Planet(100, 2300, 30));
+        this.planets.push(new Planet(100, 2400, 30));
+        this.planets.push(new Planet(100, 2500, 30));
+        this.planets.push(new Planet(100, 2600, 30));
+        this.planets.push(new Planet(100, 2700, 30));
+        for (var i = this.planets.length - 1; i >= 0; i--) {
+            this.galaxy.addObject(this.planets[i].shape);
+        }
     };
 
     Game.prototype.createBounds = function() {

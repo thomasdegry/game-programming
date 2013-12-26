@@ -7,6 +7,12 @@ var Galaxy = (function () {
         this.height = height;
 
         this.container = new createjs.Container();
+
+        this.background = new createjs.Shape();
+        this.background.graphics.beginFill('#efefef');
+        this.background.graphics.drawRect(0, 0, width, height);
+        this.background.graphics.endFill();
+        this.container.addChild(this.container);
     };
 
     Galaxy.prototype.addObject = function(object) {
