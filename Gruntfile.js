@@ -93,6 +93,7 @@ module.exports = function(grunt) {
           globals:{
               $: true,
               console:true,
+              createjs: true,
               alert:true,
               tpl:true,
               _:true,

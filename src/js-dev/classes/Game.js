@@ -1,4 +1,4 @@
-/* globals Vector:true, createjs:true */
+/* globals Vector:true, Rocket:true */
 var Game = (function () {
 
     var Game = function () {
@@ -13,16 +13,12 @@ var Game = (function () {
         this.stage.canvas.width = 300;
         this.stage.canvas.height = 500;
 
-        this.ship = new createjs.Shape();
-        this.ship.graphics.beginFill('#262626');
-        this.ship.graphics.drawRect(-5, -10, 10, 20);
-        this.ship.graphics.endFill();
+        this.rocket = new Rocket(-5, -10, 10, 20, 'FF0000', this.vector1);
+        this.rocket.shape.x = 160;
+        this.rocket.shape.y = 495;
+        this.stage.addChild(this.rocket.shape);
 
-        this.ship.x = 160;
-        this.ship.y = 495;
-        this.ship.rotation = 0;
-
-        this.stage.addChild(this.ship);
+        // this.stage.addChild(this.ship);
 
         this.ticker = createjs.Ticker;
         this.ticker.useRAF = true;
@@ -42,46 +38,32 @@ var Game = (function () {
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
 
-        this.ship.x = x;
-        this.ship.y = y;
+        this.rocket.shape.x = x;
+        this.rocket.shape.y = y;
     };
 
     Game.prototype.keyDownHandler = function(event) {
         switch(event.keyCode) {
-            case 38:
-                //up
-                this.vector1.v += 10;
+            case 38: //up
+                this.rocket.vector.v += 10;
                 break;
 
-            case 40:
-                //down
-                this.vector1.v -= 10;
+            case 40: //down
+                this.rocket.vector.v -= 10;
                 break;
 
-            case 37:
-                //left
-                this.vector1.setHeading(this.vector1.h - 0.1);
-                console.log(this.vector1.h);
+            case 37: //left
+                this.rocket.vector.setHeading(this.rocket.vector.h - 0.1);
                 break;
 
-            case 39:
-                //right
-                this.vector1.setHeading(this.vector1.h + 0.1);
-                console.log(this.vector1.h);
+            case 39: //right
+                this.rocket.vector.setHeading(this.rocket.vector.h + 0.1);
                 break;
         }
     };
 
-
-
     Game.prototype.tickHandler = function(event) {
-        var vector = this.vector1.clone();
-        var endCoords = vector.getEndCoords();
-
-        this.ship.x += parseFloat(endCoords.x / 100);
-        this.ship.y += parseFloat(endCoords.y / 100);
-
-        this.ship.rotation = this.vector1.getHeading();
+        this.rocket.update();
 
         this.stage.update();
         this.draw();
