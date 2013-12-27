@@ -119,8 +119,8 @@ var Game = (function () {
         this.h1 = Math.PI / 2;
         this.v1 = 1;
 
-        this.cWidth = 300;
-        this.cHeight = 500;
+        this.cWidth = 500;
+        this.cHeight = 700;
 
         // create default vector
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
@@ -131,7 +131,7 @@ var Game = (function () {
         this.stage.canvas.height = this.cHeight;
 
         // create a galaxy
-        this.galaxy = new Galaxy(300, 3000);
+        this.galaxy = new Galaxy(this.cWidth, 3000);
         this.galaxy.container.y = -2500;
         this.stage.addChild(this.galaxy.container);
 
@@ -145,8 +145,10 @@ var Game = (function () {
 
         // make a rocket
         this.rocket = new Rocket(-5, -10, 10, 20, 'FF0000', this.vector1);
-        this.rocket.shape.x = 160;
-        this.rocket.shape.y = 495;
+        // this.rocket.shape.x = 250;
+        // this.rocket.shape.y = 2500;
+        this.rocket.x = 150;
+        this.rocket.y = 2980;
         this.galaxy.addObject(this.rocket.shape);
 
         // setup the ticker
@@ -163,14 +165,11 @@ var Game = (function () {
     Game.prototype.resetToMousePos = function(event) {
         var x = event.x;
         var y = event.y;
-        console.log('y: ' + y);
 
         var canvas = document.getElementById('canvas');
 
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
-        console.log('nieuwe y: ' + y);
-        console.log('plaatsings y : ' + (y - this.galaxy.container.y));
 
         this.rocket.x = x;
         this.rocket.y = y - this.galaxy.container.y;
@@ -207,9 +206,6 @@ var Game = (function () {
                 case "r":
                     this.rocket.shape.x = this.cWidth;
                     break;
-
-                default:
-                    break;
             }
         }
 
@@ -224,45 +220,23 @@ var Game = (function () {
     };
 
     Game.prototype.createPlanets = function() {
-        this.planets.push(new Planet(100, 100, 30));
-        this.planets.push(new Planet(100, 200, 30));
-        this.planets.push(new Planet(100, 300, 30));
-        this.planets.push(new Planet(100, 400, 30));
-        this.planets.push(new Planet(100, 500, 30));
-        this.planets.push(new Planet(100, 600, 30));
-        this.planets.push(new Planet(100, 700, 30));
-        this.planets.push(new Planet(100, 800, 30));
-        this.planets.push(new Planet(100, 900, 30));
-        this.planets.push(new Planet(100, 1000, 30));
-        this.planets.push(new Planet(100, 1100, 30));
-        this.planets.push(new Planet(100, 1200, 30));
-        this.planets.push(new Planet(100, 1300, 30));
-        this.planets.push(new Planet(100, 1400, 30));
-        this.planets.push(new Planet(100, 1500, 30));
-        this.planets.push(new Planet(100, 1600, 30));
-        this.planets.push(new Planet(100, 1700, 30));
-        this.planets.push(new Planet(100, 1800, 30));
-        this.planets.push(new Planet(100, 1900, 30));
-        this.planets.push(new Planet(100, 2000, 30));
-        this.planets.push(new Planet(100, 2100, 30));
-        this.planets.push(new Planet(100, 2200, 30));
-        this.planets.push(new Planet(100, 2300, 30));
-        this.planets.push(new Planet(100, 2400, 30));
-        this.planets.push(new Planet(100, 2500, 30));
-        this.planets.push(new Planet(100, 2600, 30));
-        this.planets.push(new Planet(100, 2700, 30));
-        for (var i = this.planets.length - 1; i >= 0; i--) {
-            this.galaxy.addObject(this.planets[i].shape);
+        var yPos = 100;
+        for(var i = 0; i < 27; i++) {
+            this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), yPos, (Math.floor(Math.random() * 20) + 20)));
+            yPos += 100;
+        }
+
+        for (var j = this.planets.length - 1; j >= 0; j--) {
+            this.galaxy.addObject(this.planets[j].gravityField);
+            this.galaxy.addObject(this.planets[j].shape);
         }
     };
 
     Game.prototype.createBounds = function() {
         // three bounds, no bound on the top, right border, bottom border, left border
         this.bounds.push(new Bound(this.galaxy.width - 1, 0, 1, this.galaxy.height));
-        this.bounds.push(new Bound(0, this.galaxy.height - 1, this.galaxy.width, 1));
+        // this.bounds.push(new Bound(0, this.galaxy.height - 1, this.galaxy.width, 1));
         this.bounds.push(new Bound(0, 0, 1, this.galaxy.height));
-
-        console.log(this.bounds);
     };
 
     return Game;
@@ -275,14 +249,23 @@ var Planet = (function () {
         this.x = x;
         this.y = y;
         this.radius = radius;
+        this.gravityRadius = radius + Math.floor(Math.random() * 70);
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#FF0000');
         this.shape.graphics.drawCircle((-radius / 2), (-radius/2), radius);
         this.shape.graphics.endFill();
 
+        this.gravityField = new createjs.Shape();
+        this.gravityField.graphics.beginFill("#00FF00");
+        this.gravityField.graphics.drawCircle((-radius / 2), (-radius/2), this.gravityRadius);
+        this.gravityField.graphics.endFill();
+
         this.shape.x = this.x;
         this.shape.y = this.y;
+
+        this.gravityField.x = this.x;
+        this.gravityField.y = this.y;
     };
 
     return Planet;

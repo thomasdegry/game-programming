@@ -65,8 +65,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 /* line 1, ../sass/modules/_canvas.scss */
 #canvas {
-  width: 300px;
-  height: 500px;
+  width: 500px;
+  height: 700px;
   margin: 0 auto;
   border: 1px solid black;
   display: block;
