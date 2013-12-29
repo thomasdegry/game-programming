@@ -216,23 +216,41 @@ var Game = (function () {
             }
         }
 
+        var collisionFlag = false,
+            crashFlag = false;
+
         for(var j = 0; j < this.planets.length; j++){
-            if (this.log) {
+            if(this.log) {
                 console.log("distance to planet "+j+": "+ Util.getDistance(this.planets[j],this.rocket));
             }
-            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].gravityRadius){
-                $("#inbound").removeClass('false').addClass('true');
-                // this.rocket.workingVectors.push(new Vector(this.rocket.x,this.rocket.y));
-            }else{
-                $("#inbound").removeClass('true').addClass('false');
 
+            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].gravityRadius) {
+                collisionFlag = true;
+            } else {
+                if(!collisionFlag) {
+                    collisionFlag = false;
+                }
             }
-            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].radius){
-                $("#crash").removeClass('false').addClass('true');
-            }else{
-                $("#crash").removeClass('true').addClass('false');
 
+            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].radius) {
+                crashFlag = true;
+            } else {
+                if(!crashFlag) {
+                    crashFlag = false;
+                }
             }
+        }
+
+        if(collisionFlag) {
+            $("#inbound").removeClass('false').addClass('true');
+        } else {
+            $("#inbound").removeClass('true').addClass('false');
+        }
+
+        if(crashFlag) {
+            $("#crash").removeClass('false').addClass('true');
+        } else {
+            $("#crash").removeClass('true').addClass('false');
         }
 
         this.rocket.update();

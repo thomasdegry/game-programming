@@ -11,11 +11,12 @@ div.indicator{
     &.false{
         background: red;
     }
+}
 
-    &:nth-child(1) {
-            left: 10px;
-    }
-    &:nth-child(2) {
-            left: 70px;
-    }
+#inbound {
+    left: 10px;
+}
+
+#crash {
+    left: 70px;
 }
