@@ -1,8 +1,10 @@
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, CollisionDetection:true, Planet:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, CollisionDetection:true, Planet:true, Util:true */
 var Game = (function () {
 
     var Game = function () {
         _.bindAll(this);
+
+        this.log = false;
 
         // setup defaults
         this.h1 = Math.PI / 2;
@@ -81,6 +83,11 @@ var Game = (function () {
             case 39: //right
                 this.rocket.vector.setHeading(this.rocket.vector.h + 0.1);
                 break;
+
+            case 76:
+                this.log = !this.log;
+                break;
+
         }
     };
 
@@ -95,6 +102,24 @@ var Game = (function () {
                 case "r":
                     this.rocket.shape.x = this.cWidth;
                     break;
+            }
+        }
+
+        for(var j = 0; j < this.planets.length; j++){
+            if (this.log) {
+                console.log("distance to planet "+j+": "+ Util.getDistance(this.planets[j],this.rocket));
+            }
+            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].gravityRadius){
+                $("#inbound").removeClass('false').addClass('true');
+            }else{
+                $("#inbound").removeClass('true').addClass('false');
+
+            }
+            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].radius){
+                $("#crash").removeClass('false').addClass('true');
+            }else{
+                $("#crash").removeClass('true').addClass('false');
+
             }
         }
 

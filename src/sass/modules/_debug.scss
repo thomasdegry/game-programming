@@ -1,0 +1,21 @@
+div.indicator{
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+
+    &.true{
+        background: green;
+    }
+    &.false{
+        background: red;
+    }
+
+    &:nth-child(1) {
+            left: 10px;
+    }
+    &:nth-child(2) {
+            left: 70px;
+    }
+}
