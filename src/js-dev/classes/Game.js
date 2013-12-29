@@ -35,7 +35,7 @@ var Game = (function () {
         this.createPlanets();
 
         // make a rocket
-        this.rocket = new Rocket(-5, -10, 10, 20, 'FF0000', this.vector1);
+        this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
         // this.rocket.shape.x = 250;
         // this.rocket.shape.y = 2500;
         this.rocket.x = 150;
@@ -113,8 +113,13 @@ var Game = (function () {
                 console.log("distance to planet "+j+": "+ Util.getDistance(this.planets[j],this.rocket));
             }
 
-            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].gravityRadius) {
+            var d = Util.getDistance(this.planets[j],this.rocket);
+
+            if(d < this.planets[j].gravityRadius) {
                 collisionFlag = true;
+                var angle = Util.getAngle(this.planets[j],this.rocket);
+                var force = this.planets[j].gravityRadius - d;
+                this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force));
             } else {
                 if(!collisionFlag) {
                     collisionFlag = false;

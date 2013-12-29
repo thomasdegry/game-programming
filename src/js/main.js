@@ -146,7 +146,7 @@ var Game = (function () {
         this.createPlanets();
 
         // make a rocket
-        this.rocket = new Rocket(-5, -10, 10, 20, 'FF0000', this.vector1);
+        this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
         // this.rocket.shape.x = 250;
         // this.rocket.shape.y = 2500;
         this.rocket.x = 150;
@@ -224,8 +224,13 @@ var Game = (function () {
                 console.log("distance to planet "+j+": "+ Util.getDistance(this.planets[j],this.rocket));
             }
 
-            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].gravityRadius) {
+            var d = Util.getDistance(this.planets[j],this.rocket);
+
+            if(d < this.planets[j].gravityRadius) {
                 collisionFlag = true;
+                var angle = Util.getAngle(this.planets[j],this.rocket);
+                var force = this.planets[j].gravityRadius - d;
+                this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force));
             } else {
                 if(!collisionFlag) {
                     collisionFlag = false;
@@ -293,7 +298,7 @@ var Planet = (function () {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.gravityRadius = radius + Math.floor(Math.random() * 70);
+        this.gravityRadius = radius + Math.floor(Math.random() * 200);
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#FF0000');
@@ -304,6 +309,7 @@ var Planet = (function () {
         this.gravityField.graphics.beginFill("#00FF00");
         this.gravityField.graphics.drawCircle((-radius / 2), (-radius/2), this.gravityRadius);
         this.gravityField.graphics.endFill();
+        this.gravityField.alpha = 0.08;
 
         this.shape.x = this.x;
         this.shape.y = this.y;
@@ -352,7 +358,9 @@ var Rocket = (function () {
         this.shape.x = this.x;
         this.shape.y = this.y;
 
-        this.shape.rotation = this.vector.getHeading();
+        this.shape.rotation = this.rocketVector.getHeading();
+
+        this.workingVectors = [];
     };
 
     return Rocket;
@@ -367,6 +375,26 @@ var Util =(function () {
     Util.getDistance = function(obj1, obj2) {
         var d = Math.sqrt(Math.pow((obj1.x - obj2.x),2)+Math.pow((obj1.y-obj2.y),2));
         return d;
+    };
+
+    Util.getAngle = function(obj1, obj2){
+        var angle = Math.atan(Math.abs(obj1.y-obj2.y)/Math.abs(obj1.x-obj2.x));
+
+        if (obj2.x < obj1.x && obj2.y > obj1.y || obj2.x > obj1.x && obj2.y < obj1.y) {
+            angle = Math.PI - angle;
+        }
+        if (obj2.y < obj1.y) {
+            angle += Math.PI;
+        }
+
+        if (angle < 0) {
+            angle = angle + 2*Math.PI;
+        }
+        if (angle > 2*Math.PI) {
+            angle = angle - 2*Math.PI;
+        }
+        console.log('Angle: '+angle);
+        return angle;
     };
 
     return Util;
@@ -385,7 +413,11 @@ var Vector = (function () {
             this.x = x;
             this.y = y;
             this.h = h;
-            this.v = v;
+            if (v < 0) {
+                this.v = 0;
+            }else{
+                this.v = v;
+            }
     };
 
     Vector.prototype.addVector = function(vector) {

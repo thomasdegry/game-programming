@@ -5,7 +5,7 @@ var Planet = (function () {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.gravityRadius = radius + Math.floor(Math.random() * 70);
+        this.gravityRadius = radius + Math.floor(Math.random() * 200);
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#FF0000');
@@ -16,6 +16,7 @@ var Planet = (function () {
         this.gravityField.graphics.beginFill("#00FF00");
         this.gravityField.graphics.drawCircle((-radius / 2), (-radius/2), this.gravityRadius);
         this.gravityField.graphics.endFill();
+        this.gravityField.alpha = 0.08;
 
         this.shape.x = this.x;
         this.shape.y = this.y;

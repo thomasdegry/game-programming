@@ -35,7 +35,9 @@ var Rocket = (function () {
         this.shape.x = this.x;
         this.shape.y = this.y;
 
-        this.shape.rotation = this.vector.getHeading();
+        this.shape.rotation = this.rocketVector.getHeading();
+
+        this.workingVectors = [];
     };
 
     return Rocket;

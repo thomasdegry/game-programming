@@ -9,6 +9,26 @@ var Util =(function () {
         return d;
     };
 
+    Util.getAngle = function(obj1, obj2){
+        var angle = Math.atan(Math.abs(obj1.y-obj2.y)/Math.abs(obj1.x-obj2.x));
+
+        if (obj2.x < obj1.x && obj2.y > obj1.y || obj2.x > obj1.x && obj2.y < obj1.y) {
+            angle = Math.PI - angle;
+        }
+        if (obj2.y < obj1.y) {
+            angle += Math.PI;
+        }
+
+        if (angle < 0) {
+            angle = angle + 2*Math.PI;
+        }
+        if (angle > 2*Math.PI) {
+            angle = angle - 2*Math.PI;
+        }
+        console.log('Angle: '+angle);
+        return angle;
+    };
+
     return Util;
 
 })();

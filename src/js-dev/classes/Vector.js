@@ -10,7 +10,11 @@ var Vector = (function () {
             this.x = x;
             this.y = y;
             this.h = h;
-            this.v = v;
+            if (v < 0) {
+                this.v = 0;
+            }else{
+                this.v = v;
+            }
     };
 
     Vector.prototype.addVector = function(vector) {
