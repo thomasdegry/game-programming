@@ -69,19 +69,19 @@ var Game = (function () {
     Game.prototype.keyDownHandler = function(event) {
         switch(event.keyCode) {
             case 38: //up
-                this.rocket.vector.v += 10;
+                this.rocket.rocketVector.v += 10;
                 break;
 
             case 40: //down
-                this.rocket.vector.v -= 10;
+                this.rocket.rocketVector.v -= 10;
                 break;
 
             case 37: //left
-                this.rocket.vector.setHeading(this.rocket.vector.h - 0.1);
+                this.rocket.rocketVector.setHeading(this.rocket.rocketVector.h - 0.1);
                 break;
 
             case 39: //right
-                this.rocket.vector.setHeading(this.rocket.vector.h + 0.1);
+                this.rocket.rocketVector.setHeading(this.rocket.rocketVector.h + 0.1);
                 break;
 
             case 76:
@@ -111,6 +111,7 @@ var Game = (function () {
             }
             if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].gravityRadius){
                 $("#inbound").removeClass('false').addClass('true');
+                // this.rocket.workingVectors.push(new Vector(this.rocket.x,this.rocket.y));
             }else{
                 $("#inbound").removeClass('true').addClass('false');
 

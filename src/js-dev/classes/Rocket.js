@@ -8,7 +8,8 @@ var Rocket = (function () {
         this.width = width;
         this.height = height;
         this.color = color;
-        this.vector = vector;
+        this.rocketVector = vector;
+        this.workingVectors = [];
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#' + color);
@@ -20,7 +21,12 @@ var Rocket = (function () {
     };
 
     Rocket.prototype.update = function() {
-        var vector = this.vector.clone();
+        var vector = this.rocketVector.clone();
+
+        for(var i = 0; i < this.workingVectors.length; i++){
+            vector.addVector(this.workingVectors[i]);
+        }
+
         var endCoords = vector.getEndCoords();
 
         this.x += parseFloat(endCoords.x / 100);

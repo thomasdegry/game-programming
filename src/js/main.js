@@ -180,19 +180,19 @@ var Game = (function () {
     Game.prototype.keyDownHandler = function(event) {
         switch(event.keyCode) {
             case 38: //up
-                this.rocket.vector.v += 10;
+                this.rocket.rocketVector.v += 10;
                 break;
 
             case 40: //down
-                this.rocket.vector.v -= 10;
+                this.rocket.rocketVector.v -= 10;
                 break;
 
             case 37: //left
-                this.rocket.vector.setHeading(this.rocket.vector.h - 0.1);
+                this.rocket.rocketVector.setHeading(this.rocket.rocketVector.h - 0.1);
                 break;
 
             case 39: //right
-                this.rocket.vector.setHeading(this.rocket.vector.h + 0.1);
+                this.rocket.rocketVector.setHeading(this.rocket.rocketVector.h + 0.1);
                 break;
 
             case 76:
@@ -222,6 +222,7 @@ var Game = (function () {
             }
             if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].gravityRadius){
                 $("#inbound").removeClass('false').addClass('true');
+                // this.rocket.workingVectors.push(new Vector(this.rocket.x,this.rocket.y));
             }else{
                 $("#inbound").removeClass('true').addClass('false');
 
@@ -306,7 +307,8 @@ var Rocket = (function () {
         this.width = width;
         this.height = height;
         this.color = color;
-        this.vector = vector;
+        this.rocketVector = vector;
+        this.workingVectors = [];
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#' + color);
@@ -318,7 +320,12 @@ var Rocket = (function () {
     };
 
     Rocket.prototype.update = function() {
-        var vector = this.vector.clone();
+        var vector = this.rocketVector.clone();
+
+        for(var i = 0; i < this.workingVectors.length; i++){
+            vector.addVector(this.workingVectors[i]);
+        }
+
         var endCoords = vector.getEndCoords();
 
         this.x += parseFloat(endCoords.x / 100);
@@ -355,7 +362,7 @@ var Vector = (function () {
     var Vector = function (x,y,h,v) {
             // x en y zijn de startcoordinaten van de vector.
             // deze zijn niet gelijkgesteld aan het nulpunt.
-            // h is de heading van de vector in radialen. tussen -Pi en Pi.
+            // h is de heading van de vector in radialen. tussen 0 en 2Pi.
             // v is de grotte van de vector. (velocity).
             this.x = x;
             this.y = y;

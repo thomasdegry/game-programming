@@ -5,7 +5,7 @@ var Vector = (function () {
     var Vector = function (x,y,h,v) {
             // x en y zijn de startcoordinaten van de vector.
             // deze zijn niet gelijkgesteld aan het nulpunt.
-            // h is de heading van de vector in radialen. tussen -Pi en Pi.
+            // h is de heading van de vector in radialen. tussen 0 en 2Pi.
             // v is de grotte van de vector. (velocity).
             this.x = x;
             this.y = y;
