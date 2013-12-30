@@ -138,9 +138,9 @@ var Game = (function () {
         this.stage.canvas.height = this.cHeight;
 
         // set container height
-        this.galaxy = new Galaxy(this.cWidth, 3000);
+        this.galaxy = new Galaxy(this.cWidth, 300000);
         // create a galaxy
-        this.galaxy.container.y = -2500;
+        this.galaxy.container.y = -(this.galaxy.height-this.cHeight);
         this.stage.addChild(this.galaxy.container);
 
         // create an empty bounds array and fill it in the createbounds()
@@ -157,7 +157,7 @@ var Game = (function () {
         // this.rocket.shape.x = 250;
         // this.rocket.shape.y = 2500;
         this.rocket.x = 150;
-        this.rocket.y = 2980;
+        this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.shape);
 
         // setup the ticker
@@ -281,32 +281,10 @@ var Game = (function () {
     };
 
     Game.prototype.reArrangePlanets = function() {
-        //Delete planets that are further away then canvas height (invisible)
-        // var furthestAway;
-        // for(var i = 0; i < this.planets.length; i++){
-        //     var d = Util.getDistance(this.planets[i], this.rocket);
-        //     if(d > this.cHeight) {
-        //         this.galaxy.removeObject(this.planets[i].shape);
-        //         this.galaxy.removeObject(this.planets[i].gravityField);
-        //         this.planets.splice(i, 1);
-        //     } else {
-        //         if(furthestAway === undefined) {
-        //             furthestAway = this.planets[i];
-        //         } else {
-        //             if(furthestAway.y > this.planets[i].y) {
-        //                 furthestAway = this.planets[i];
-        //             }
-        //         }
-        //     }
-        // }
-
         for(var i = 0; i < this.planets.length; i++) {
-            if(this.log) {
-                console.log('Rocket y = ' + this.rocket.y + ' en planet.y = ' + this.planets[i].y);
-            }
-
             if(this.rocket.y - this.planets[i].y < (-this.cHeight)) {
                 this.planets[i].y = this.currentPlanetYPos;
+                this.planets[i].x = Math.floor(Math.random() * this.cWidth);
                 this.planets[i].update();
                 this.currentPlanetYPos -= 100;
             }
