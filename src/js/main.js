@@ -125,6 +125,7 @@ var Game = (function () {
         // setup defaults
         this.h1 = Math.PI / 2;
         this.v1 = 1;
+        this.difficultyMultiplier = 1;
 
         this.cWidth = 500;
         this.cHeight = 700;
@@ -265,6 +266,10 @@ var Game = (function () {
             $("#crash").removeClass('true').addClass('false');
         }
 
+        if(Math.floor(this.galaxy.container.y) % 500 === 0) {
+            this.difficultyMultiplier += 0.1;
+        }
+
         this.reArrangePlanets();
 
         this.rocket.update();
@@ -285,7 +290,7 @@ var Game = (function () {
             if(this.rocket.y - this.planets[i].y < (-this.cHeight)) {
                 this.planets[i].y = this.currentPlanetYPos;
                 this.planets[i].x = Math.floor(Math.random() * this.cWidth);
-                this.planets[i].update();
+                this.planets[i].update(this.difficultyMultiplier);
                 this.currentPlanetYPos -= 100;
             }
         }
@@ -306,7 +311,6 @@ var Game = (function () {
     Game.prototype.createBounds = function() {
         // three bounds, no bound on the top, right border, bottom border, left border
         this.bounds.push(new Bound(this.galaxy.width - 1, 0, 1, this.galaxy.height));
-        // this.bounds.push(new Bound(0, this.galaxy.height - 1, this.galaxy.width, 1));
         this.bounds.push(new Bound(0, 0, 1, this.galaxy.height));
     };
 
@@ -340,9 +344,16 @@ var Planet = (function () {
         this.gravityField.y = this.y;
     };
 
-    Planet.prototype.update = function() {
+    Planet.prototype.update = function(multiplier) {
         this.shape.x = this.x;
         this.shape.y = this.y;
+
+        this.gravityRadius = (this.radius + Math.floor(Math.random() * 200)) * multiplier;
+        this.gravityField.graphics.clear();
+        this.gravityField.graphics.beginFill("#00FF00");
+        this.gravityField.graphics.drawCircle((-this.radius / 2), (-this.radius/2), this.gravityRadius);
+        this.gravityField.graphics.endFill();
+        this.gravityField.alpha = 0.08;
 
         this.gravityField.x = this.x;
         this.gravityField.y = this.y;

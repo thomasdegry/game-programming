@@ -25,9 +25,16 @@ var Planet = (function () {
         this.gravityField.y = this.y;
     };
 
-    Planet.prototype.update = function() {
+    Planet.prototype.update = function(multiplier) {
         this.shape.x = this.x;
         this.shape.y = this.y;
+
+        this.gravityRadius = (this.radius + Math.floor(Math.random() * 200)) * multiplier;
+        this.gravityField.graphics.clear();
+        this.gravityField.graphics.beginFill("#00FF00");
+        this.gravityField.graphics.drawCircle((-this.radius / 2), (-this.radius/2), this.gravityRadius);
+        this.gravityField.graphics.endFill();
+        this.gravityField.alpha = 0.08;
 
         this.gravityField.x = this.x;
         this.gravityField.y = this.y;
