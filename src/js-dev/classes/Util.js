@@ -25,7 +25,6 @@ var Util =(function () {
         if (angle > 2*Math.PI) {
             angle = angle - 2*Math.PI;
         }
-        console.log('Angle: '+angle);
         return angle;
     };
 

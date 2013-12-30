@@ -4,6 +4,7 @@ var Game = (function () {
     var Game = function () {
         _.bindAll(this);
 
+        // debug vars
         this.log = false;
 
         // setup defaults
@@ -21,8 +22,9 @@ var Game = (function () {
         this.stage.canvas.width = this.cWidth;
         this.stage.canvas.height = this.cHeight;
 
-        // create a galaxy
+        // set container height
         this.galaxy = new Galaxy(this.cWidth, 3000);
+        // create a galaxy
         this.galaxy.container.y = -2500;
         this.stage.addChild(this.galaxy.container);
 
@@ -31,6 +33,7 @@ var Game = (function () {
         this.createBounds();
 
         // create temporary level
+        this.currentPlanetYPos = this.galaxy.height - 250;
         this.planets = [];
         this.createPlanets();
 
@@ -109,9 +112,9 @@ var Game = (function () {
             crashFlag = false;
 
         for(var j = 0; j < this.planets.length; j++){
-            if(this.log) {
-                console.log("distance to planet "+j+": "+ Util.getDistance(this.planets[j],this.rocket));
-            }
+            // if(this.log) {
+            //     console.log("distance to planet "+j+": "+ Util.getDistance(this.planets[j],this.rocket));
+            // }
 
             var d = Util.getDistance(this.planets[j],this.rocket);
 
@@ -147,9 +150,14 @@ var Game = (function () {
             $("#crash").removeClass('true').addClass('false');
         }
 
+        this.reArrangePlanets();
+
         this.rocket.update();
 
         this.galaxy.followRocket(this.rocket, this.cHeight, 0);
+        // if(this.log) {
+        //     console.log(this.galaxy.container.y);
+        // }
         this.stage.update();
         this.draw();
     };
@@ -157,11 +165,43 @@ var Game = (function () {
     Game.prototype.draw = function() {
     };
 
+    Game.prototype.reArrangePlanets = function() {
+        //Delete planets that are further away then canvas height (invisible)
+        // var furthestAway;
+        // for(var i = 0; i < this.planets.length; i++){
+        //     var d = Util.getDistance(this.planets[i], this.rocket);
+        //     if(d > this.cHeight) {
+        //         this.galaxy.removeObject(this.planets[i].shape);
+        //         this.galaxy.removeObject(this.planets[i].gravityField);
+        //         this.planets.splice(i, 1);
+        //     } else {
+        //         if(furthestAway === undefined) {
+        //             furthestAway = this.planets[i];
+        //         } else {
+        //             if(furthestAway.y > this.planets[i].y) {
+        //                 furthestAway = this.planets[i];
+        //             }
+        //         }
+        //     }
+        // }
+
+        for(var i = 0; i < this.planets.length; i++) {
+            if(this.log) {
+                console.log('Rocket y = ' + this.rocket.y + ' en planet.y = ' + this.planets[i].y);
+            }
+
+            if(this.rocket.y - this.planets[i].y < (-this.cHeight)) {
+                this.planets[i].y = this.currentPlanetYPos;
+                this.planets[i].update();
+                this.currentPlanetYPos -= 100;
+            }
+        }
+    };
+
     Game.prototype.createPlanets = function() {
-        var yPos = 100;
-        for(var i = 0; i < 27; i++) {
-            this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), yPos, (Math.floor(Math.random() * 20) + 20)));
-            yPos += 100;
+        for(var i = 0; i < 15; i++) {
+            this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
+            this.currentPlanetYPos -= 100;
         }
 
         for (var j = this.planets.length - 1; j >= 0; j--) {

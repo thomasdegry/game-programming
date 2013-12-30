@@ -19,6 +19,10 @@ var Galaxy = (function () {
         this.container.addChild(object);
     };
 
+    Galaxy.prototype.removeObject = function(object) {
+        this.container.removeChild(object);
+    };
+
     Galaxy.prototype.followRocket = function(rocket, height, offset) {
         var y = -(rocket.y - (height/2)) + offset;
 

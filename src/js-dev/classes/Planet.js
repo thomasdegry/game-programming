@@ -25,5 +25,13 @@ var Planet = (function () {
         this.gravityField.y = this.y;
     };
 
+    Planet.prototype.update = function() {
+        this.shape.x = this.x;
+        this.shape.y = this.y;
+
+        this.gravityField.x = this.x;
+        this.gravityField.y = this.y;
+    };
+
     return Planet;
 })();
