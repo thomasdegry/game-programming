@@ -10,6 +10,7 @@ var Rocket = (function () {
         this.color = color;
         this.rocketVector = vector;
         this.workingVectors = [];
+        this.remainingLives = 2;
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#' + color);
@@ -38,6 +39,10 @@ var Rocket = (function () {
         this.shape.rotation = this.rocketVector.getHeading();
 
         this.workingVectors = [];
+    };
+
+    Rocket.prototype.dieOnce = function() {
+        this.remainingLives--;
     };
 
     return Rocket;

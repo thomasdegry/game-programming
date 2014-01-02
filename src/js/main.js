@@ -155,11 +155,16 @@ var Game = (function () {
 
         // make a rocket
         this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
-        // this.rocket.shape.x = 250;
-        // this.rocket.shape.y = 2500;
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.shape);
+
+        // score field
+        this.score = new createjs.Text("0000", "20px Helvetica Neue", "#303030");
+        this.score.x = 15;
+        this.score.y = 30;
+        this.score.textBaseline = "alphabetic";
+        this.stage.addChild(this.score);
 
         // setup the ticker
         this.ticker = createjs.Ticker;
@@ -262,12 +267,18 @@ var Game = (function () {
 
         if(crashFlag) {
             $("#crash").removeClass('false').addClass('true');
+            this.rocket.dieOnce();
+            console.log(this.rocket.remainingLives);
+            if(this.rocket.remainingLives === 0) {
+                this.endGame();
+            }
         } else {
             $("#crash").removeClass('true').addClass('false');
         }
 
-        if(Math.floor(this.galaxy.container.y) % 500 === 0) {
-            this.difficultyMultiplier += 0.1;
+        this.score.text = Util.proceedZeros(Math.floor(300000 + this.galaxy.container.y - 370));
+        if(Math.abs(Math.floor(this.galaxy.container.y)) % 500 === 0) {
+            this.difficultyMultiplier = Math.floor(this.difficultyMultiplier + 0.1);
         }
 
         this.reArrangePlanets();
@@ -283,6 +294,27 @@ var Game = (function () {
     };
 
     Game.prototype.draw = function() {
+    };
+
+    Game.prototype.endGame = function() {
+        this.difficultyMultiplier = 1;
+
+        this.stage.removeChild(this.galaxy.container);
+        this.galaxy = undefined;
+        this.galaxy = new Galaxy(this.cWidth, 300000);
+        this.galaxy.container.y = -(this.galaxy.height-this.cHeight);
+        this.stage.addChild(this.galaxy.container);
+
+        this.galaxy.removeObject(this.rocket.shape);
+        this.rocket = undefined;
+        this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
+        this.rocket.x = 150;
+        this.rocket.y = this.galaxy.height - 20;
+        this.galaxy.addObject(this.rocket.shape);
+
+        this.currentPlanetYPos = this.galaxy.height - 250;
+        this.planets = [];
+        this.createPlanets();
     };
 
     Game.prototype.reArrangePlanets = function() {
@@ -374,6 +406,7 @@ var Rocket = (function () {
         this.color = color;
         this.rocketVector = vector;
         this.workingVectors = [];
+        this.remainingLives = 2;
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#' + color);
@@ -402,6 +435,10 @@ var Rocket = (function () {
         this.shape.rotation = this.rocketVector.getHeading();
 
         this.workingVectors = [];
+    };
+
+    Rocket.prototype.dieOnce = function() {
+        this.remainingLives--;
     };
 
     return Rocket;
@@ -435,6 +472,18 @@ var Util =(function () {
             angle = angle - 2*Math.PI;
         }
         return angle;
+    };
+
+    Util.proceedZeros = function(score) {
+        if(score.length === 1) {
+            return "000" + score;
+        } else if(score.length === 2) {
+            return "00" + score;
+        } else if(score.length === 3) {
+            return "0" + score;
+        } else {
+            return score;
+        }
     };
 
     return Util;
