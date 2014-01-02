@@ -42,6 +42,7 @@ var Rocket = (function () {
     };
 
     Rocket.prototype.dieOnce = function() {
+        console.log('die once');
         this.remainingLives--;
     };
 

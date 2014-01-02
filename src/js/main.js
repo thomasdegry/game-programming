@@ -230,7 +230,9 @@ var Game = (function () {
         }
 
         var collisionFlag = false,
-            crashFlag = false;
+            crashFlag = false,
+            crashPlanet,
+            crashIndex;
 
         for(var j = 0; j < this.planets.length; j++){
             // if(this.log) {
@@ -252,6 +254,8 @@ var Game = (function () {
 
             if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].radius) {
                 crashFlag = true;
+                crashPlanet = this.planets[j];
+                crashIndex = j;
             } else {
                 if(!crashFlag) {
                     crashFlag = false;
@@ -268,6 +272,10 @@ var Game = (function () {
         if(crashFlag) {
             $("#crash").removeClass('false').addClass('true');
             this.rocket.dieOnce();
+            console.log(crashPlanet);
+            this.galaxy.removeObject(crashPlanet.shape);
+            this.galaxy.removeObject(crashPlanet.gravityField);
+            this.planets.splice(crashIndex, 1);
             console.log(this.rocket.remainingLives);
             if(this.rocket.remainingLives === 0) {
                 this.endGame();
@@ -438,6 +446,7 @@ var Rocket = (function () {
     };
 
     Rocket.prototype.dieOnce = function() {
+        console.log('die once');
         this.remainingLives--;
     };
 
