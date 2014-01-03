@@ -11,6 +11,7 @@ var Game = (function () {
         this.h1 = Math.PI / 2;
         this.v1 = 1;
         this.difficultyMultiplier = 1;
+        this.planetDistance = 200;
 
         this.cWidth = 500;
         this.cHeight = 700;
@@ -22,6 +23,11 @@ var Game = (function () {
         this.stage = new createjs.Stage("canvas");
         this.stage.canvas.width = this.cWidth;
         this.stage.canvas.height = this.cHeight;
+
+        // create gradient background
+        this.background = new createjs.Shape();
+        this.background.graphics.beginLinearGradientFill(["#3c3449","#1f1f21"], [0, 1], 0, 0, this.cWidth, this.cHeight).drawRect(0, 0, this.cWidth, this.cHeight);
+        this.stage.addChild(this.background);
 
         // set container height
         this.galaxy = new Galaxy(this.cWidth, 300000);
@@ -39,13 +45,14 @@ var Game = (function () {
         this.createPlanets();
 
         // make a rocket
-        this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
+        this.rocket = new Rocket(-5, -10, 10, 20, 'efefef', this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.shape);
+        this.galaxy.addObject(this.rocket.rocketImg);
 
         // score field
-        this.score = new createjs.Text("0000", "20px Helvetica Neue", "#303030");
+        this.score = new createjs.Text("0000", "20px sequibold", "#efefef");
         this.score.x = 15;
         this.score.y = 30;
         this.score.textBaseline = "alphabetic";
@@ -70,6 +77,12 @@ var Game = (function () {
 
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
+
+        var planet = new createjs.Bitmap('img/planet.png');
+        // planet.x = x;
+        // planet.y = y;
+        this.stage.addChild(planet);
+        this.stage.update();
 
         this.rocket.x = x;
         this.rocket.y = y - this.galaxy.container.y;
@@ -157,8 +170,8 @@ var Game = (function () {
         if(crashFlag) {
             $("#crash").removeClass('false').addClass('true');
             this.rocket.dieOnce();
-            console.log(crashPlanet);
-            this.galaxy.removeObject(crashPlanet.shape);
+            this.galaxy.removeObject(crashPlanet.planetImg);
+            this.galaxy.removeObject(crashPlanet.stroke);
             this.galaxy.removeObject(crashPlanet.gravityField);
             this.planets.splice(crashIndex, 1);
             console.log(this.rocket.remainingLives);
@@ -169,16 +182,17 @@ var Game = (function () {
             $("#crash").removeClass('true').addClass('false');
         }
 
-        this.score.text = Util.proceedZeros(Math.floor(300000 + this.galaxy.container.y - 370));
+        this.score.text = Util.proceedZeros(Math.floor(300000 + this.galaxy.container.y - 600));
         if(Math.abs(Math.floor(this.galaxy.container.y)) % 500 === 0) {
             this.difficultyMultiplier = Math.floor(this.difficultyMultiplier + 0.1);
+            // this.planetDistance -= 10;
         }
 
         this.reArrangePlanets();
 
         this.rocket.update();
 
-        this.galaxy.followRocket(this.rocket, this.cHeight, 0);
+        this.galaxy.followRocket(this.rocket, this.cHeight, 230);
         // if(this.log) {
         //     console.log(this.galaxy.container.y);
         // }
@@ -200,6 +214,8 @@ var Game = (function () {
 
         this.galaxy.removeObject(this.rocket.shape);
         this.rocket = undefined;
+        this.vector1 = undefined;
+        this.vector1 = new Vector(0, 0, this.h1, this.v1);
         this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
@@ -216,7 +232,7 @@ var Game = (function () {
                 this.planets[i].y = this.currentPlanetYPos;
                 this.planets[i].x = Math.floor(Math.random() * this.cWidth);
                 this.planets[i].update(this.difficultyMultiplier);
-                this.currentPlanetYPos -= 100;
+                this.currentPlanetYPos -= this.planetDistance;
             }
         }
     };
@@ -224,12 +240,14 @@ var Game = (function () {
     Game.prototype.createPlanets = function() {
         for(var i = 0; i < 15; i++) {
             this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
-            this.currentPlanetYPos -= 100;
+            this.currentPlanetYPos -= this.planetDistance;
         }
 
         for (var j = this.planets.length - 1; j >= 0; j--) {
             this.galaxy.addObject(this.planets[j].gravityField);
-            this.galaxy.addObject(this.planets[j].shape);
+            // this.galaxy.addObject(this.planets[j].shape);
+            this.galaxy.addObject(this.planets[j].planetImg);
+            this.galaxy.addObject(this.planets[j].stroke);
         }
     };
 

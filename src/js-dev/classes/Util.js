@@ -29,11 +29,11 @@ var Util =(function () {
     };
 
     Util.proceedZeros = function(score) {
-        if(score.length === 1) {
+        if(score.toString().length === 1) {
             return "000" + score;
-        } else if(score.length === 2) {
+        } else if(score.toString().length === 2) {
             return "00" + score;
-        } else if(score.length === 3) {
+        } else if(score.toString().length === 3) {
             return "0" + score;
         } else {
             return score;

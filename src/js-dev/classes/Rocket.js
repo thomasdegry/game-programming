@@ -14,11 +14,24 @@ var Rocket = (function () {
 
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#' + color);
-        this.shape.graphics.drawRect((-width / 2), (-height/2), width, height);
+        this.shape.graphics.drawPolyStar(0, 0, width, 3, 0, 180);
         this.shape.graphics.endFill();
+        this.shape.scaleX = 4.5;
+        this.shape.scaleY = 2.4;
 
-        this.shape.x = this.x;
-        this.shape.y = this.y;
+        this.rocketImg = new createjs.Bitmap('img/rocket.png');
+
+        this.zero = new createjs.Shape();
+        this.zero.graphics.beginFill('#ff0000');
+        this.zero.graphics.drawCircle(-(width/2), (-height/2), 1);
+        this.zero.graphics.endFill();
+
+        this.shape.x = this.x - (this.width / 2);
+        this.shape.y = this.y - (this.width / 2);
+
+        this.rocketImg.x = this.x - 74;
+        this.rocketImg.y = this.y - 43;
+
     };
 
     Rocket.prototype.update = function() {
@@ -33,8 +46,11 @@ var Rocket = (function () {
         this.x += parseFloat(endCoords.x / 100);
         this.y += parseFloat(endCoords.y / 100);
 
-        this.shape.x = this.x;
-        this.shape.y = this.y;
+        this.shape.x = this.x - (this.width / 2);
+        this.shape.y = this.y - (this.width / 2);
+
+        this.rocketImg.x = this.x - 74;
+        this.rocketImg.y = this.y - 43;
 
         this.shape.rotation = this.rocketVector.getHeading();
 
@@ -42,7 +58,6 @@ var Rocket = (function () {
     };
 
     Rocket.prototype.dieOnce = function() {
-        console.log('die once');
         this.remainingLives--;
     };
 
