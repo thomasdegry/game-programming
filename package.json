@@ -1,15 +1,12 @@
 {
-  "name": "week08_labo",
-  "devDependencies": {
-    "grunt":"*",
-    "grunt-contrib-concat":"*",
-    "grunt-contrib-uglify":"*",
-    "grunt-contrib-watch":"*",
-    "grunt-contrib-compass":"*",
-    "grunt-contrib-jshint":"*",
-    "grunt-contrib-clean":"*",
-    "grunt-contrib-copy":"*",
-    "grunt-contrib-handlebars":"*",
-    "grunt-concurrent":"*"
-    }
+  "name": "thomas-degry-wouter-vandersyppe",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.4",
+    "jade": "*"
+  }
 }

@@ -1,0 +1,26 @@
+div.indicator{
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+
+    &.true{
+        background: green;
+    }
+    &.false{
+        background: red;
+    }
+}
+
+#inbound {
+    left: 10px;
+}
+
+#crash {
+    left: 70px;
+}
+
+.hide {
+    display: none !important;
+}
