@@ -8,7 +8,8 @@ var Controller = (function () {
     function Controller () {
         this.socket = io.connect('http://' + window.location.host);
         this.code = 0;
-        this.emit = true;
+        this.emitOrientation = true;
+        this.emitSpeed = true;
         this.emitTimeout = null;
         this.sliderHeight = undefined;
         this.underConstruction = false;
@@ -48,7 +49,7 @@ var Controller = (function () {
             login.parentNode.removeChild(header[0]);
             login.parentNode.removeChild(login);
 
-            $("#speedSlider").removeClass('hide');
+            $("#speedSlider").removeClass('out');
             that.sliderHeight = $("#speedSlider").height();
         });
 
@@ -58,6 +59,7 @@ var Controller = (function () {
         });
 
         this.socket.on('gameplay:stop', function () {
+            console.log('[CONTROLLER] gameplay:stop received');
             that.stopLevel();
         });
     };
@@ -67,8 +69,17 @@ var Controller = (function () {
 
     Controller.prototype.startLevel = function() {
         var that = this;
+        console.log('[CONTROLLER] startLevel');
 
-        this.emit = true;
+        var restartButton = document.getElementById('restartButton');
+        if(restartButton !== null) {
+            restartButton.parentNode.removeChild(restartButton);
+        }
+        if($("#speedSlider").hasClass('out')) {
+            $("#speedSlider").removeClass('out');
+        }
+
+        this.emitOrientation = true;
         this.emitSpeed = true;
 
         // Start listening for accelerometer
@@ -80,26 +91,19 @@ var Controller = (function () {
                 tilt = 180;
             }
 
-            if (that.emit) {
+            if (that.emitOrientation) {
                 that.socket.emit('move', {tilt: tilt});
-                that.emit = false;
+                that.emitOrientation = false;
                 that.showHeadingOnControlPanel(tilt);
 
                 that.emitTimeout = setTimeout(function () {
-                    that.emit = true;
+                    that.emitOrientation = true;
                 }, 17);
             }
         }, false);
 
         $("#speedSlider").swipe({
             swipeStatus:function(event, phase, direction, distance, duration, fingers) {
-                // var relativeFingerHeight = event.pageY / that.sliderHeight;
-                // if(relativeFingerHeight > 1) {
-                //     relativeFingerHeight = 1;
-                // } else if(relativeFingerHeight < 0) {
-                //     relativeFingerHeight = 0;
-                // }
-
                 if(that.emitSpeed && phase === 'move') {
                     // that.socket.emit('speed:change', {speed: relativeFingerHeight});
                     that.socket.emit('speed:change', {speed: direction});
@@ -121,9 +125,36 @@ var Controller = (function () {
     };
 
     Controller.prototype.stopLevel = function () {
-        this.emit = false;
-        this.emitTimeout = null;
+        console.log('[CONTROLLER] in stopLevel');
         window.removeEventListener('deviceorientation');
+        console.log('[CONTROLLER] removedEventListener');
+        this.emitOrientation = false;
+        this.emitTimeout = null;
+        this.emitSpeed = false;
+        this.emitSpeedTimeout = null;
+        $("#speedSlider").swipe("destroy");
+        window.removeEventListener('deviceorientation');
+
+        this.showSpeedOnControlPanel(0);
+        this.showHeadingOnControlPanel(0);
+        $('#speedSlider').addClass('out');
+
+        var speedSlider = document.getElementById('speedSlider');
+        var restartButton = document.createElement('a');
+        restartButton.setAttribute('href', '#');
+        restartButton.setAttribute('id', 'restartButton');
+        restartButton.innerHTML = 'Restart?';
+        document.getElementById('speedSlider').appendChild(restartButton);
+
+
+        var that = this;
+        document.getElementById('restartButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            that.socket.emit('gameplay:restart');
+            that.startLevel();
+        });
     };
 
     Controller.prototype.showHeadingOnControlPanel = function(tilt) {

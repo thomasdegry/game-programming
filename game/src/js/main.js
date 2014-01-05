@@ -156,6 +156,9 @@ var Game = (function () {
             that.startGame();
         });
 
+        // this.socket.on('gameplay:start', this.restart);
+        this.socket.on('gameplay:restart', this.restart);
+
         window.onbeforeunload = function() {
             this.socket.emit('game:stop');
             this.socket.disconnect();
@@ -284,12 +287,17 @@ var Game = (function () {
             if(this.debug === true) {
                 $("#crash").removeClass('false').addClass('true');
             }
+
+            // subtract a life of your rocket
             this.rocket.dieOnce();
+            // remove the current planet from the galaxy
             this.galaxy.removeObject(crashPlanet.container);
             this.planets.splice(crashIndex, 1);
-            console.log(this.rocket.remainingLives);
+
             if(this.rocket.remainingLives === 0) {
+                console.log('[GAME] call endGame function');
                 this.endGame();
+                return false;
             }
         } else {
             if(this.debug) {
@@ -320,26 +328,37 @@ var Game = (function () {
     };
 
     Game.prototype.endGame = function() {
-        this.difficultyMultiplier = 1;
-
+        console.log('[GAME] in end game function');
+        this.ticker.removeEventListener('tick', this.tickHandler);
+        this.currentPlanetYPos = this.galaxy.height - 250;
+        this.galaxy.removeObject(this.rocket.shape);
         this.stage.removeChild(this.galaxy.container);
-        this.galaxy = undefined;
+        this.stage.update();
+        this.difficultyMultiplier = 1;
+        this.rocket = undefined;
+        this.vector1 = undefined;
+        this.planets = [];
+
+        if(this.useController) {
+            this.socket.emit('gameplay:stop');
+        }
+    };
+
+    Game.prototype.restart = function() {
+        console.log('[GAME] Game.prototype.restart');
         this.galaxy = new Galaxy(this.cWidth, 300000);
         this.galaxy.container.y = -(this.galaxy.height-this.cHeight);
         this.stage.addChild(this.galaxy.container);
 
-        this.galaxy.removeObject(this.rocket.shape);
-        this.rocket = undefined;
-        this.vector1 = undefined;
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
         this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.shape);
 
-        this.currentPlanetYPos = this.galaxy.height - 250;
-        this.planets = [];
         this.createPlanets();
+
+        this.ticker.addEventListener('tick', this.tickHandler);
     };
 
     Game.prototype.reArrangePlanets = function() {

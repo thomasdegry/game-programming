@@ -62,12 +62,16 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+    socket.on('gameplay:restart', function() {
+        io.sockets.clients(socket.code)[0].emit('gameplay:restart');
+    })
+
     socket.on('gameplay:start', function () {
         socket.broadcast.to(socket.code).emit('gameplay:start');
     });
 
     socket.on('gameplay:stop', function () {
-        console.log('level stopped');
+        console.log('[SERVER] Emit gameplay:stop');
         socket.broadcast.to(socket.code).emit('gameplay:stop');
     });
 
