@@ -47,7 +47,7 @@ var Rocket = (function () {
             that.updateHeading(data['tilt'] / 500);
         });
 
-        this.socket.on('speedchange', function(data) {
+        this.socket.on('speed:change', function(data) {
             that.setRelativeSpeed(data['speed']);
         });
 
@@ -108,12 +108,16 @@ var Rocket = (function () {
     };
 
     Rocket.prototype.setRelativeSpeed = function(direction) {
-        console.log(direction);
         if(direction === 'up') {
-            this.rocketVector.v += 10;
+            if(this.rocketVector.v <= 690) {
+                this.rocketVector.v += 10;
+            }
         } else if(direction === 'down') {
-            this.rocketVector.v -= 10;
+            if(this.rocketVector.v > 0) {
+                this.rocketVector.v -= 10;
+            }
         }
+        this.socket.emit('speed:updated', {newSpeed: this.rocketVector.v});
     };
 
     Rocket.prototype.dieOnce = function() {

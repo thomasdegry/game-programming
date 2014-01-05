@@ -75,8 +75,13 @@ io.sockets.on('connection', function (socket) {
         io.sockets.clients(socket.code)[0].emit('move', data);
     });
 
-    socket.on('speedchange', function (data) {
-        io.sockets.clients(socket.code)[0].emit('speedchange', data);
+    socket.on('speed:change', function (data) {
+        io.sockets.clients(socket.code)[0].emit('speed:change', data);
         console.log(data);
+    });
+
+    socket.on('speed:updated', function(data) {
+        // io.sockets.clients(socket.code)[0].emit('speed:updated', data);
+        io.sockets.in(data.code).emit('speed:updated', data);
     });
 });
