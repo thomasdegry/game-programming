@@ -167,6 +167,37 @@ body {
   line-height: 2em;
 }
 /* line 76, ../sass/modules/_canvas.scss */
+.canvas-wrapper .connect-instructions a {
+  display: inline-block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-size: 1em;
+  line-height: 1.4em;
+  color: #efefef;
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #efefef;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+  opacity: 0.4;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.4s;
+  -moz-transition-duration: 0.4s;
+  -o-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+}
+/* line 91, ../sass/modules/_canvas.scss */
+.canvas-wrapper .connect-instructions a:hover {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+/* line 96, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions.out {
   top: 400px;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);

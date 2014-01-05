@@ -73,6 +73,26 @@ body {
             line-height: 2em;
         }
 
+        a {
+            display: inline-block;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            text-transform: uppercase;
+            font-size: 1em;
+            line-height: 1.4em;
+            color: #efefef;
+            text-decoration: none;
+            padding-bottom: 3px;
+            border-bottom: 1px solid #efefef;
+            @include opacity(0.4);
+            @include transition-property(all);
+            @include transition-duration(0.4s);
+            @include transition-timing-function(ease-in-out);
+
+            &:hover {
+                @include opacity(1);
+            }
+        }
+
         &.out {
             top: 400px;
             @include opacity(0);

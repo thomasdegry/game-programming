@@ -42,14 +42,38 @@ var Rocket = (function () {
 
     Rocket.prototype.bind = function() {
         var that = this;
+
         this.socket.on('move', function(data) {
             that.updateHeading(data['tilt'] / 500);
         });
 
         this.socket.on('speedchange', function(data) {
-            // that.setDirectSpeed(data['speed'] * 600);
             that.setRelativeSpeed(data['speed']);
         });
+
+        window.onkeydown = this.keyDownHandler;
+    };
+
+    Rocket.prototype.keyDownHandler = function(event) {
+        event.preventDefault();
+        switch(event.keyCode) {
+            case 38: //up
+                this.rocketVector.v += 10;
+                break;
+
+            case 40: //down
+                this.rocketVector.v -= 10;
+                break;
+
+            case 37: //left
+                this.updateHeading(-0.1);
+                break;
+
+            case 39: //right
+                this.updateHeading(0.1);
+                break;
+
+        }
     };
 
     Rocket.prototype.update = function() {

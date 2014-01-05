@@ -128,6 +128,8 @@ var Game = (function () {
         this.v1 = 1;
         this.difficultyMultiplier = 1;
         this.planetDistance = 200;
+        this.debug = true;
+        this.useController = true;
 
         this.socket = window.socket;
 
@@ -137,12 +139,18 @@ var Game = (function () {
         // create default vector
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
 
+        if(this.debug) {
+            $("#crash, #inbound").removeClass('hide');
+        }
+
         this.bind();
     };
 
     Game.prototype.bind = function() {
         var that = this;
         $("#launch").click(this.showConnect);
+
+        $("#no-controller").click(this.proceedWithoutController);
 
         this.socket.on('join:accept', function(data) {
             that.startGame();
@@ -166,8 +174,17 @@ var Game = (function () {
         $(".connect-instructions p span").text(this.rocket.identifier);
     };
 
+    Game.prototype.proceedWithoutController = function(event) {
+        event.preventDefault();
+        this.useController = false;
+        this.startGame();
+    };
+
     Game.prototype.startGame = function() {
-        this.socket.emit('gameplay:start');
+        if(this.useController) {
+            this.socket.emit('gameplay:start');
+        }
+
         $(".connect-instructions").addClass('out');
         // setup the stage
         this.stage = new createjs.Stage("canvas");
@@ -207,50 +224,6 @@ var Game = (function () {
         this.ticker.useRAF = true;
         this.ticker.setFPS(60);
         this.ticker.addEventListener('tick', this.tickHandler);
-
-        // add the eventlisteners
-        document.getElementById('canvas').addEventListener('mousedown', this.resetToMousePos);
-        window.onkeydown = this.keyDownHandler;
-    };
-
-    Game.prototype.resetToMousePos = function(event) {
-        var x = event.x;
-        var y = event.y;
-
-        var canvas = document.getElementById('canvas');
-
-        x -= canvas.offsetLeft;
-        y -= canvas.offsetTop;
-
-        var planet = new createjs.Bitmap('img/planet.png');
-        // planet.x = x;
-        // planet.y = y;
-        this.stage.addChild(planet);
-        this.stage.update();
-
-        this.rocket.x = x;
-        this.rocket.y = y - this.galaxy.container.y;
-    };
-
-    Game.prototype.keyDownHandler = function(event) {
-        switch(event.keyCode) {
-            case 38: //up
-                this.rocket.rocketVector.v += 10;
-                break;
-
-            case 40: //down
-                this.rocket.rocketVector.v -= 10;
-                break;
-
-            case 37: //left
-                this.rocket.updateHeading(-0.1);
-                break;
-
-            case 39: //right
-                this.rocket.updateHeading(0.1);
-                break;
-
-        }
     };
 
     Game.prototype.tickHandler = function(event) {
@@ -301,31 +274,36 @@ var Game = (function () {
             }
         }
 
-        if(collisionFlag) {
+        if(collisionFlag && this.debug === true) {
             $("#inbound").removeClass('false').addClass('true');
         } else {
             $("#inbound").removeClass('true').addClass('false');
         }
 
         if(crashFlag) {
-            $("#crash").removeClass('false').addClass('true');
+            if(this.debug === true) {
+                $("#crash").removeClass('false').addClass('true');
+            }
             this.rocket.dieOnce();
-            this.galaxy.removeObject(crashPlanet.planetImg);
-            this.galaxy.removeObject(crashPlanet.stroke);
-            this.galaxy.removeObject(crashPlanet.gravityField);
+            this.galaxy.removeObject(crashPlanet.container);
             this.planets.splice(crashIndex, 1);
             console.log(this.rocket.remainingLives);
             if(this.rocket.remainingLives === 0) {
                 this.endGame();
             }
         } else {
-            $("#crash").removeClass('true').addClass('false');
+            if(this.debug) {
+                $("#crash").removeClass('true').addClass('false');
+            }
         }
 
         this.score.text = Util.proceedZeros(Math.floor(300000 + this.galaxy.container.y - 600));
+
         if(Math.abs(Math.floor(this.galaxy.container.y)) % 500 === 0) {
             this.difficultyMultiplier = Math.floor(this.difficultyMultiplier + 0.1);
-            // this.planetDistance -= 10;
+            if(this.planetDistance > 5) {
+                this.planetDistance -= 5;
+            }
         }
 
         this.reArrangePlanets();
@@ -333,9 +311,7 @@ var Game = (function () {
         this.rocket.update();
 
         this.galaxy.followRocket(this.rocket, this.cHeight, 230);
-        // if(this.log) {
-        //     console.log(this.galaxy.container.y);
-        // }
+
         this.stage.update();
         this.draw();
     };
@@ -384,10 +360,7 @@ var Game = (function () {
         }
 
         for (var j = this.planets.length - 1; j >= 0; j--) {
-            this.galaxy.addObject(this.planets[j].gravityField);
-            // this.galaxy.addObject(this.planets[j].shape);
-            this.galaxy.addObject(this.planets[j].planetImg);
-            this.galaxy.addObject(this.planets[j].stroke);
+            this.galaxy.addObject(this.planets[j].container);
         }
     };
 
@@ -409,26 +382,32 @@ var Planet = (function () {
         this.radius = radius;
         this.gravityRadius = radius + Math.floor(Math.random() * 200);
 
+        this.container = new createjs.Container();
+
         this.shape = new createjs.Shape();
         this.shape.graphics.beginFill('#FF0000');
         this.shape.graphics.drawCircle((-radius / 2), (-radius/2), radius);
         this.shape.graphics.endFill();
+        // this.container.addChild(this.shape);
 
         this.gravityField = new createjs.Shape();
         this.gravityField.graphics.beginStroke("#3f3a49").setStrokeStyle(2).beginFill("#484356");
         this.gravityField.graphics.drawCircle((-radius / 2), (-radius/2), this.gravityRadius);
         this.gravityField.graphics.endFill();
         this.gravityField.alpha = 0.1;
+        this.container.addChild(this.gravityField);
 
         this.stroke = new createjs.Shape();
         this.stroke.graphics.beginStroke("#3f3a49").setStrokeStyle(2);
         this.stroke.graphics.drawCircle((-radius / 2), (-radius/2), this.gravityRadius);
         this.stroke.graphics.endFill();
+        this.container.addChild(this.stroke);
 
         // planeet img is 254 * 247px
         this.planetImg = new createjs.Bitmap('img/planet.png');
         this.planetImg.scaleX = (1/254) * (radius * 2);
         this.planetImg.scaleY = (1/247) * (radius * 2);
+        this.container.addChild(this.planetImg);
 
         this.shape.x = this.x;
         this.shape.y = this.y;
@@ -521,14 +500,38 @@ var Rocket = (function () {
 
     Rocket.prototype.bind = function() {
         var that = this;
+
         this.socket.on('move', function(data) {
             that.updateHeading(data['tilt'] / 500);
         });
 
         this.socket.on('speedchange', function(data) {
-            // that.setDirectSpeed(data['speed'] * 600);
             that.setRelativeSpeed(data['speed']);
         });
+
+        window.onkeydown = this.keyDownHandler;
+    };
+
+    Rocket.prototype.keyDownHandler = function(event) {
+        event.preventDefault();
+        switch(event.keyCode) {
+            case 38: //up
+                this.rocketVector.v += 10;
+                break;
+
+            case 40: //down
+                this.rocketVector.v -= 10;
+                break;
+
+            case 37: //left
+                this.updateHeading(-0.1);
+                break;
+
+            case 39: //right
+                this.updateHeading(0.1);
+                break;
+
+        }
     };
 
     Rocket.prototype.update = function() {
