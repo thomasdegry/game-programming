@@ -100,7 +100,7 @@ var Game = (function () {
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.shape);
-        this.galaxy.addObject(this.rocket.rocketImg);
+        this.galaxy.addObject(this.rocket.sprite);
 
         // score field
         this.score = new createjs.Text("0000", "20px sequibold", "#efefef");
@@ -111,7 +111,7 @@ var Game = (function () {
 
         // setup the ticker
         this.ticker = createjs.Ticker;
-        this.ticker.useRAF = true;
+        this.ticker.RAF = false;
         this.ticker.setFPS(60);
         this.ticker.addEventListener('tick', this.tickHandler);
     };
@@ -257,7 +257,7 @@ var Game = (function () {
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.shape);
-        this.galaxy.addObject(this.rocket.rocketImg);
+        this.galaxy.addObject(this.rocket.sprite);
 
         this.createPlanets();
 

@@ -14,27 +14,41 @@ var Rocket = (function () {
 
         this.socket = window.socket;
 
+        this.RocketAnim = new createjs.SpriteSheet({
+            'images': ["img/rocket.png"],
+            'frames': [
+                [452, 2, 48, 104],
+                [402, 2, 48, 104],
+                [352, 2, 48, 104],
+                [302, 2, 48, 104],
+                [252, 2, 48, 104],
+                [202, 2, 48, 104],
+                [152, 2, 48, 104],
+                [102, 2, 48, 104],
+                [52, 2, 48, 104],
+                [2, 2, 48, 104]
+            ],
+            'animations': {fly:[0,9]},
+            'framerate': 10
+        });
+
+        this.sprite = new createjs.Sprite(this.RocketAnim,'fly');
+        this.sprite.framerate = 10;
+        this.sprite.regX = 24;
+        this.sprite.regY = 52;
+
         this.shape = new createjs.Shape();
-        this.shape.graphics.beginFill('#' + color);
-        this.shape.graphics.drawPolyStar(0, 0, width, 3, 0, 180);
+        this.shape.graphics.beginFill('#ff00ff');
+        this.shape.graphics.drawRect(-this.width/2,-this.height/2,width,height);
         this.shape.graphics.endFill();
-        this.shape.scaleX = 4.5;
-        this.shape.scaleY = 2.4;
 
         this.identifier = undefined;
-
-        this.rocketImg = new createjs.Bitmap('img/rocket.png');
 
         this.zero = new createjs.Shape();
         this.zero.graphics.beginFill('#ff0000');
         this.zero.graphics.drawCircle(-(width/2), (-height/2), 1);
         this.zero.graphics.endFill();
 
-        this.shape.x = this.x - (this.width / 2);
-        this.shape.y = this.y - (this.width / 2);
-
-        this.rocketImg.x = this.x - 74;
-        this.rocketImg.y = this.y - 43;
 
         this.bind();
 
@@ -91,10 +105,7 @@ var Rocket = (function () {
         this.shape.x = this.x - (this.width / 2);
         this.shape.y = this.y - (this.width / 2);
 
-        this.rocketImg.x = this.x - 74;
-        this.rocketImg.y = this.y - 43;
-
-        this.shape.rotation = this.rocketVector.getHeading();
+        this.sprite.rotation = this.shape.rotation = this.rocketVector.getHeading() - 90;
 
         this.workingVectors = [];
     };

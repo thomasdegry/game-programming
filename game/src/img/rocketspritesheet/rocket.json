@@ -1,0 +1,33 @@
+{
+"images": ["rocket.png"],
+"frames": [
+
+    [452, 2, 48, 104], 
+    [402, 2, 48, 104], 
+    [352, 2, 48, 104], 
+    [302, 2, 48, 104], 
+    [252, 2, 48, 104], 
+    [202, 2, 48, 104], 
+    [152, 2, 48, 104], 
+    [102, 2, 48, 104], 
+    [52, 2, 48, 104], 
+    [2, 2, 48, 104]
+],
+"animations": {
+    
+        "rocket_00000":[0], 
+        "rocket_00001":[1], 
+        "rocket_00002":[2], 
+        "rocket_00003":[3], 
+        "rocket_00004":[4], 
+        "rocket_00005":[5], 
+        "rocket_00006":[6], 
+        "rocket_00007":[7], 
+        "rocket_00008":[8], 
+        "rocket_00009":[9]
+},
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:71919ef6fe11358596b33542ad55d1c2:2bcd51e9271eca9d4bec2717eb1a74a0:fa933cf49e27618c2da267cb089d5da2$",
+        "Created with TexturePacker (http://www.texturepacker.com) for EaselJS"
+]
+}

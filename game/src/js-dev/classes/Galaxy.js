@@ -12,6 +12,7 @@ var Galaxy = (function () {
         this.background.graphics.beginFill('#efefef');
         this.background.graphics.drawRect(0, 0, width, height);
         this.background.graphics.endFill();
+        //WAAROM VOEG JE DIE TOE IN ZICHZELF?
         this.container.addChild(this.container);
     };
 
