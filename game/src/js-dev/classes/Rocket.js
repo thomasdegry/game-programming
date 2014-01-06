@@ -106,7 +106,15 @@ var Rocket = (function () {
     };
 
     Rocket.prototype.updateHeading = function(heading) {
-        this.rocketVector.setHeading(this.rocketVector.h + heading);
+        //de checks dienen om de raket niet terug naar beneden te laten vliegen.
+        if(this.rocketVector.h <= Math.PI || this.rocketVector.h !== 0){
+            this.rocketVector.setHeading(this.rocketVector.h + heading);
+            if(this.rocketVector.h > Math.PI && heading > 0){
+                this.rocketVector.h = Math.PI;
+            }else if(this.rocketVector.h > Math.PI && heading < 0){
+                this.rocketVector.h = 0;
+            }
+        }
     };
 
     Rocket.prototype.setDirectSpeed = function(speed) {
