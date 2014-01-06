@@ -1,4 +1,4 @@
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Util:true, io:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Util:true, io:true, Gamestats:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -106,12 +106,9 @@ var Game = (function () {
         this.galaxy.addObject(this.rocket.shape);
         this.galaxy.addObject(this.rocket.rocketImg);
 
-        // score field
-        this.score = new createjs.Text("0000", "20px sequibold", "#efefef");
-        this.score.x = 15;
-        this.score.y = 30;
-        this.score.textBaseline = "alphabetic";
-        this.stage.addChild(this.score);
+        // create a game stats instance
+        this.gamestats = new Gamestats(15, 30, 2);
+        this.stage.addChild(this.gamestats.container);
 
         // setup the ticker
         this.ticker = createjs.Ticker;
@@ -175,6 +172,7 @@ var Game = (function () {
                 $("#crash").removeClass('false').addClass('true');
             }
 
+            this.gamestats.takeAllLives();
             this.endGame();
         } else {
             if(this.debug) {
@@ -190,6 +188,7 @@ var Game = (function () {
                 // remove the current planet from the galaxy
                 this.galaxy.removeObject(this.ufos[k].container);
                 this.ufos.splice(k, 1);
+                this.gamestats.takeALive();
 
                 if(this.rocket.remainingLives === 0) {
                     this.endGame();
@@ -198,7 +197,7 @@ var Game = (function () {
             }
         }
 
-        this.score.text = Util.proceedZeros(Math.floor(300000 + this.galaxy.container.y - 600));
+        this.gamestats.updateScore(this.galaxy.container.y);
 
         if(Math.abs(Math.floor(this.galaxy.container.y)) % 500 === 0) {
             this.difficultyMultiplier = Math.floor(this.difficultyMultiplier + 0.1);
