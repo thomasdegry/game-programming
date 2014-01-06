@@ -36,11 +36,8 @@ var Rocket = (function () {
         this.sprite.framerate = 10;
         this.sprite.regX = 24;
         this.sprite.regY = 52;
-
-        this.shape = new createjs.Shape();
-        this.shape.graphics.beginFill('#ff00ff');
-        this.shape.graphics.drawRect(-this.width/2,-this.height/2,width,height);
-        this.shape.graphics.endFill();
+        this.sprite.x = this.x;
+        this.sprite.y = this.y;
 
         this.identifier = undefined;
 
@@ -102,10 +99,10 @@ var Rocket = (function () {
         this.x += parseFloat(endCoords.x / 100);
         this.y += parseFloat(endCoords.y / 100);
 
-        this.shape.x = this.x - (this.width / 2);
-        this.shape.y = this.y - (this.width / 2);
+        this.sprite.x = this.x;
+        this.sprite.y = this.y;
 
-        this.sprite.rotation = this.shape.rotation = this.rocketVector.getHeading() - 90;
+        this.sprite.rotation = this.rocketVector.getHeading() - 90;
 
         this.workingVectors = [];
     };

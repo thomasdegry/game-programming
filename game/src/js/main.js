@@ -219,7 +219,6 @@ var Game = (function () {
         // make a rocket
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
-        this.galaxy.addObject(this.rocket.shape);
         this.galaxy.addObject(this.rocket.sprite);
 
         // create a game stats instance
@@ -238,11 +237,11 @@ var Game = (function () {
         for(var i = 0; i < this.bounds.length; i++) {
             switch(CollisionDetection.checkCollision(this.rocket, this.bounds[i])) {
                 case "l":
-                    this.rocket.shape.x = 0;
+                    this.rocket.sprite.x = 0;
                     break;
 
                 case "r":
-                    this.rocket.shape.x = this.cWidth;
+                    this.rocket.sprite.x = this.cWidth;
                     break;
             }
         }
@@ -347,7 +346,7 @@ var Game = (function () {
         this.ticker.removeEventListener('tick', this.tickHandler);
         this.currentPlanetYPos = this.galaxy.height - 250;
         this.currentUFOYPos = this.galaxy.height - 3000;
-        this.galaxy.removeObject(this.rocket.shape);
+        this.galaxy.removeObject(this.rocket.sprite);
         this.stage.removeChild(this.galaxy.container);
         this.stage.update();
         this.difficultyMultiplier = 1;
@@ -389,12 +388,11 @@ var Game = (function () {
         this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
-        this.galaxy.addObject(this.rocket.shape);
+        this.galaxy.addObject(this.rocket.sprite);
 
         this.rocket = new Rocket(-5, -10, 10, 20, 'efefef', this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
-        this.galaxy.addObject(this.rocket.shape);
         this.galaxy.addObject(this.rocket.sprite);
 
         this.createPlanets();
@@ -636,11 +634,8 @@ var Rocket = (function () {
         this.sprite.framerate = 10;
         this.sprite.regX = 24;
         this.sprite.regY = 52;
-
-        this.shape = new createjs.Shape();
-        this.shape.graphics.beginFill('#ff00ff');
-        this.shape.graphics.drawRect(-this.width/2,-this.height/2,width,height);
-        this.shape.graphics.endFill();
+        this.sprite.x = this.x;
+        this.sprite.y = this.y;
 
         this.identifier = undefined;
 
@@ -702,10 +697,10 @@ var Rocket = (function () {
         this.x += parseFloat(endCoords.x / 100);
         this.y += parseFloat(endCoords.y / 100);
 
-        this.shape.x = this.x - (this.width / 2);
-        this.shape.y = this.y - (this.width / 2);
+        this.sprite.x = this.x;
+        this.sprite.y = this.y;
 
-        this.sprite.rotation = this.shape.rotation = this.rocketVector.getHeading() - 90;
+        this.sprite.rotation = this.rocketVector.getHeading() - 90;
 
         this.workingVectors = [];
     };
