@@ -227,9 +227,12 @@ var Game = (function () {
 
         // setup the ticker
         this.ticker = createjs.Ticker;
-        this.ticker.RAF = false;
+        this.ticker.RAF = true;
         this.ticker.setFPS(60);
         this.ticker.addEventListener('tick', this.tickHandler);
+
+        //set playing boolean true for slow tickhandler fallback
+        this.playing = true;
     };
 
     Game.prototype.tickHandler = function(event) {
@@ -329,20 +332,21 @@ var Game = (function () {
                 this.planetDistance -= 5;
             }
         }
-
         // recycle graphics on top and update
         this.reArrangePlanets();
         this.reArrangeUfos();
-        console.log('will update rocket');
-        this.rocket.update();
 
-        this.galaxy.followRocket(this.rocket, this.cHeight, 230);
+        if (this.playing){
+            this.rocket.update();
+            this.galaxy.followRocket(this.rocket, this.cHeight, 230);
+        }
+
 
         this.stage.update();
     };
 
     Game.prototype.endGame = function() {
-        console.log('[GAME] in end game function');
+        this.playing = false;
         this.ticker.removeEventListener('tick', this.tickHandler);
         this.currentPlanetYPos = this.galaxy.height - 250;
         this.currentUFOYPos = this.galaxy.height - 3000;
@@ -369,7 +373,6 @@ var Game = (function () {
         if(this.useController) {
             this.socket.emit('gameplay:stop');
         }
-        console.log('end of endgame');
     };
 
     Game.prototype.restart = function() {
@@ -403,6 +406,8 @@ var Game = (function () {
         this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
 
         this.ticker.addEventListener('tick', this.tickHandler);
+
+        this.playing = true;
     };
 
     Game.prototype.reArrangePlanets = function() {
