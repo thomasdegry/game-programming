@@ -62,6 +62,10 @@ var Controller = (function () {
             console.log('[CONTROLLER] gameplay:stop received');
             that.stopLevel();
         });
+
+        this.socket.on('code:wrong', function() {
+            alert('Game not found, please check try again with the correct code');
+        });
     };
 
     Controller.prototype.handleCode = function () {

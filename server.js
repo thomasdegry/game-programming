@@ -59,6 +59,9 @@ io.sockets.on('connection', function (socket) {
 
             // Send accept to both controller & game
             io.sockets.in(data.code).emit('join:accept', data.code);
+        } else {
+            console.log('blabla ' + room.length);
+            io.sockets.clients(socket.code)[0].emit('code:wrong');
         }
     });
 
