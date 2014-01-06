@@ -355,6 +355,19 @@ h1 {
     background: #efefef;
     color: #2e2a36;
     text-decoration: none;
+
+    @include transition-property(all);
+    @include transition-duration(0.4s);
+    @include transition-timing-function(ease-in-out);
+    @include translate(0, 0);
+
+    @include opacity(1);
+    @include transition-delay(1.2s);
+
+    &.out {
+        @include opacity(0);
+        @include translate(0, 20px);
+    }
 }
 
 .hide {

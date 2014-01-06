@@ -13,7 +13,6 @@ var Planet = (function () {
         this.shape.graphics.beginFill('#FF0000');
         this.shape.graphics.drawCircle((-radius / 2), (-radius/2), radius);
         this.shape.graphics.endFill();
-        // this.container.addChild(this.shape);
 
         this.gravityField = new createjs.Shape();
         this.gravityField.graphics.beginStroke("#3f3a49").setStrokeStyle(2).beginFill("#484356");
@@ -38,8 +37,6 @@ var Planet = (function () {
         this.shape.y = this.y;
 
         // console.log('planeet met - ' + (254 * this.planetImg.scaleX / 2) + ' en width van ' + (this.radius * 2));
-        // this.planetImg.x = this.x - Math.floor(254 * this.planetImg.scaleX / 2);
-        // this.planetImg.y = this.y - Math.floor(254 * this.planetImg.scaleY / 2);
         this.planetImg.x = this.x - (Math.floor(127 * this.planetImg.scaleX)) - (this.radius / 2);
         this.planetImg.y = this.y - (Math.floor(123.5 * this.planetImg.scaleY)) - (this.radius / 2);
 

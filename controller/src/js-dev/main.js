@@ -143,8 +143,12 @@ var Controller = (function () {
         var restartButton = document.createElement('a');
         restartButton.setAttribute('href', '#');
         restartButton.setAttribute('id', 'restartButton');
+        restartButton.setAttribute('class', 'out');
         restartButton.innerHTML = 'Restart?';
         document.getElementById('speedSlider').appendChild(restartButton);
+        setTimeout(function() {
+            $("#restartButton").removeClass('out');
+        }, 1);
 
 
         var that = this;

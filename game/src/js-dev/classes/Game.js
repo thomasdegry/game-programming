@@ -1,4 +1,4 @@
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, CollisionDetection:true, Planet:true, Util:true, io:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, CollisionDetection:true, Planet:true, Util:true, io:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -15,6 +15,8 @@ var Game = (function () {
         this.planetDistance = 200;
         this.debug = true;
         this.useController = true;
+
+        this.settings = new Settings();
 
         this.socket = window.socket;
 
@@ -41,7 +43,6 @@ var Game = (function () {
             that.startGame();
         });
 
-        // this.socket.on('gameplay:start', this.restart);
         this.socket.on('gameplay:restart', this.restart);
 
         window.onbeforeunload = function() {
@@ -60,6 +61,7 @@ var Game = (function () {
 
         $(".connect-instructions").removeClass('out');
         $(".connect-instructions p span").text(this.rocket.identifier);
+        $(".connect-instructions p em").text(this.settings.hostName);
     };
 
     Game.prototype.proceedWithoutController = function(event) {
@@ -134,10 +136,6 @@ var Game = (function () {
             crashIndex;
 
         for(var j = 0; j < this.planets.length; j++){
-            // if(this.log) {
-            //     console.log("distance to planet "+j+": "+ Util.getDistance(this.planets[j],this.rocket));
-            // }
-
             var d = Util.getDistance(this.planets[j],this.rocket);
 
             if(d < this.planets[j].gravityRadius) {
@@ -206,10 +204,6 @@ var Game = (function () {
         this.galaxy.followRocket(this.rocket, this.cHeight, 230);
 
         this.stage.update();
-        this.draw();
-    };
-
-    Game.prototype.draw = function() {
     };
 
     Game.prototype.endGame = function() {
@@ -224,6 +218,17 @@ var Game = (function () {
         this.vector1 = undefined;
         this.planets = [];
 
+        var that = this;
+        if(this.useController) {
+            $(".restart-instructions-controller").removeClass('out');
+        } else {
+            $(".restart-instructions-no-controller").removeClass('out');
+            document.getElementById('restart').addEventListener('click', function(event) {
+                event.preventDefault();
+                that.restart();
+            });
+        }
+
         if(this.useController) {
             this.socket.emit('gameplay:stop');
         }
@@ -231,6 +236,13 @@ var Game = (function () {
 
     Game.prototype.restart = function() {
         console.log('[GAME] Game.prototype.restart');
+        if(this.useController) {
+            $(".restart-instructions-controller").addClass('out');
+        } else {
+            $(".restart-instructions-no-controller").addClass('out');
+            document.getElementById('restart').removeEventListener('click');
+        }
+
         this.galaxy = new Galaxy(this.cWidth, 300000);
         this.galaxy.container.y = -(this.galaxy.height-this.cHeight);
         this.stage.addChild(this.galaxy.container);
@@ -240,6 +252,12 @@ var Game = (function () {
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.shape);
+
+        this.rocket = new Rocket(-5, -10, 10, 20, 'efefef', this.vector1);
+        this.rocket.x = 150;
+        this.rocket.y = this.galaxy.height - 20;
+        this.galaxy.addObject(this.rocket.shape);
+        this.galaxy.addObject(this.rocket.rocketImg);
 
         this.createPlanets();
 
