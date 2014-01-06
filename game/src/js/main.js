@@ -113,7 +113,7 @@ var Galaxy = (function () {
     return Galaxy;
 })();
 
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, CollisionDetection:true, Planet:true, Util:true, io:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Util:true, io:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -208,8 +208,12 @@ var Game = (function () {
 
         // create temporary level
         this.currentPlanetYPos = this.galaxy.height - 250;
+        this.currentUFOYPos = this.galaxy.height - 3000;
+        console.log(this.currentUFOYPos);
         this.planets = [];
+        this.ufos = [];
         this.createPlanets();
+        this.createUFOs();
 
         // make a rocket
         this.rocket.x = 150;
@@ -286,20 +290,26 @@ var Game = (function () {
                 $("#crash").removeClass('false').addClass('true');
             }
 
-            // subtract a life of your rocket
-            this.rocket.dieOnce();
-            // remove the current planet from the galaxy
-            this.galaxy.removeObject(crashPlanet.container);
-            this.planets.splice(crashIndex, 1);
-
-            if(this.rocket.remainingLives === 0) {
-                console.log('[GAME] call endGame function');
-                this.endGame();
-                return false;
-            }
+            this.endGame();
         } else {
             if(this.debug) {
                 $("#crash").removeClass('true').addClass('false');
+            }
+        }
+
+        for(var k = 0; k < this.ufos.length; k++) {
+            var intersection = ndgmr.checkRectCollision(this.ufos[k].ufoImg, this.rocket.rocketImg);
+            if(intersection !== null) {
+                // subtract a life of your rocket
+                this.rocket.dieOnce();
+                // remove the current planet from the galaxy
+                this.galaxy.removeObject(this.ufos[k].container);
+                this.ufos.splice(k, 1);
+
+                if(this.rocket.remainingLives === 0) {
+                    this.endGame();
+                    return false;
+                }
             }
         }
 
@@ -313,6 +323,7 @@ var Game = (function () {
         }
 
         this.reArrangePlanets();
+        this.reArrangeUfos();
 
         this.rocket.update();
 
@@ -325,6 +336,7 @@ var Game = (function () {
         console.log('[GAME] in end game function');
         this.ticker.removeEventListener('tick', this.tickHandler);
         this.currentPlanetYPos = this.galaxy.height - 250;
+        this.currentUFOYPos = this.galaxy.height - 3000;
         this.galaxy.removeObject(this.rocket.shape);
         this.stage.removeChild(this.galaxy.container);
         this.stage.update();
@@ -332,6 +344,7 @@ var Game = (function () {
         this.rocket = undefined;
         this.vector1 = undefined;
         this.planets = [];
+        this.ufos = [];
 
         var that = this;
         if(this.useController) {
@@ -375,6 +388,7 @@ var Game = (function () {
         this.galaxy.addObject(this.rocket.rocketImg);
 
         this.createPlanets();
+        this.createUFOs();
 
         this.ticker.addEventListener('tick', this.tickHandler);
     };
@@ -390,6 +404,16 @@ var Game = (function () {
         }
     };
 
+    Game.prototype.reArrangeUfos = function() {
+        for(var i = 0; i < this.ufos.length; i++) {
+            if(this.rocket.y - this.ufos[i].startYPos < (-this.cHeight)) {
+                this.ufos[i].startYPos = this.currentUFOYPos;
+                this.ufos[i].update(this.difficultyMultiplier);
+                this.currentUFOYPos -= Math.floor((Math.random() * 3000) + 2500);
+            }
+        }
+    };
+
     Game.prototype.createPlanets = function() {
         for(var i = 0; i < 15; i++) {
             this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
@@ -398,6 +422,17 @@ var Game = (function () {
 
         for (var j = this.planets.length - 1; j >= 0; j--) {
             this.galaxy.addObject(this.planets[j].container);
+        }
+    };
+
+    Game.prototype.createUFOs = function() {
+        for(var i = 0; i < 6; i++) {
+            this.ufos.push(new Ufo(20, this.currentUFOYPos));
+            this.currentUFOYPos -= Math.floor((Math.random() * 3000) + 2500);
+        }
+
+        for(var j = this.ufos.length - 1; j >= 0; j--) {
+            this.galaxy.addObject(this.ufos[j].container);
         }
     };
 
@@ -617,6 +652,62 @@ var Rocket = (function () {
     };
 
     return Rocket;
+})();
+
+/* globals TweenMax:true, Power1:true, Sine:true */
+var Ufo = (function () {
+
+    var Ufo = function (startXPos, startYPos) {
+        _.bindAll(this);
+        this.startYPos = startYPos;
+        this.startXPos = startXPos;
+        this.container = new createjs.Container();
+
+        var colorDecider = Math.floor(Math.random() * 101);
+        if(colorDecider > 50) {
+            this.color = 'orange';
+        } else {
+            this.color = 'yellow';
+        }
+
+        this.ufoImg = new createjs.Bitmap('img/ufo-' + this.color + '.png');
+        this.container.addChild(this.ufoImg);
+
+        this.ufoImg.x = this.startXPos;
+        this.ufoImg.y = this.startYPos;
+
+        // if(this.color === 'orange') {
+        //     TweenMax.to(this.ufoImg, 9, {bezier:[{x:230, y: this.startYPos+4}, {x:450, y:this.startYPos-10}, {x:140, y:this.startYPos+15}, {x:20, y:this.startYPos}], ease:Power1.easeInOut, repeat:-1});
+        // } else {
+        //     TweenMax.to(this.ufoImg, 7, {bezier:[{x:210, y:this.startYPos+13}, {x:430, y:this.startYPos-7}, {x:20, y:this.startYPos}], ease:Sine.easeInOut, repeat:-1});
+        // }
+    };
+
+    Ufo.prototype.update = function(multiplier) {
+        TweenMax.killTweensOf(this.ufoImg);
+        this.container.removeChild(this.ufoImg);
+
+        var colorDecider = Math.floor(Math.random() * 101);
+        if(colorDecider > 50) {
+            this.color = 'orange';
+        } else {
+            this.color = 'yellow';
+        }
+
+        this.ufoImg = new createjs.Bitmap('img/ufo-' + this.color + '.png');
+        this.container.addChild(this.ufoImg);
+
+        this.ufoImg.x = this.startXPos;
+        this.ufoImg.y = this.startYPos;
+
+        if(this.color === 'orange') {
+            TweenMax.to(this.ufoImg, 9, {bezier:[{x:230, y: this.startYPos+4}, {x:450, y:this.startYPos-10}, {x:140, y:this.startYPos+15}, {x:20, y:this.startYPos}], ease:Power1.easeInOut, repeat:-1});
+        } else {
+            TweenMax.to(this.ufoImg, 7, {bezier:[{x:210, y:this.startYPos+13}, {x:430, y:this.startYPos-7}, {x:20, y:this.startYPos}], ease:Sine.easeInOut, repeat:-1});
+        }
+    };
+
+    return Ufo;
 })();
 
 var Util =(function () {
