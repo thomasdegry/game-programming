@@ -274,6 +274,9 @@ var Game = (function () {
         this.createPlanets();
         this.createUFOs();
 
+        this.gamestats.relive();
+        this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
+
         this.ticker.addEventListener('tick', this.tickHandler);
     };
 

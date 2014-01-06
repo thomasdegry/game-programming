@@ -389,6 +389,9 @@ var Game = (function () {
         this.createPlanets();
         this.createUFOs();
 
+        this.gamestats.relive();
+        this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
+
         this.ticker.addEventListener('tick', this.tickHandler);
     };
 
@@ -480,11 +483,24 @@ var Gamestats = (function () {
 
     Gamestats.prototype.takeALive = function() {
         this.container.removeChild(this.heartImgs[this.heartImgs.length - 1]);
+        this.heartImgs.splice(this.heartImgs.length - 1, 1);
     };
 
     Gamestats.prototype.takeAllLives = function() {
         for(var i = 0; i < this.heartImgs.length; i++) {
             this.container.removeChild(this.heartImgs[i]);
+        }
+        this.heartImgs = [];
+    };
+
+    Gamestats.prototype.relive = function() {
+        this.heartImgsXPos = 70;
+        for(var i = 0; i < this.lives; i++) {
+            this.heartImgs.push(new createjs.Bitmap('img/heart.png'));
+            this.heartImgs[i].x = this.heartImgsXPos;
+            this.heartImgs[i].y = 10;
+            this.container.addChild(this.heartImgs[i]);
+            this.heartImgsXPos += 30;
         }
     };
 
@@ -722,11 +738,11 @@ var Ufo = (function () {
         this.ufoImg.x = this.startXPos;
         this.ufoImg.y = this.startYPos;
 
-        // if(this.color === 'orange') {
-        //     TweenMax.to(this.ufoImg, 9, {bezier:[{x:230, y: this.startYPos+4}, {x:450, y:this.startYPos-10}, {x:140, y:this.startYPos+15}, {x:20, y:this.startYPos}], ease:Power1.easeInOut, repeat:-1});
-        // } else {
-        //     TweenMax.to(this.ufoImg, 7, {bezier:[{x:210, y:this.startYPos+13}, {x:430, y:this.startYPos-7}, {x:20, y:this.startYPos}], ease:Sine.easeInOut, repeat:-1});
-        // }
+        if(this.color === 'orange') {
+            TweenMax.to(this.ufoImg, 9, {bezier:[{x:230, y: this.startYPos+4}, {x:450, y:this.startYPos-10}, {x:140, y:this.startYPos+15}, {x:20, y:this.startYPos}], ease:Power1.easeInOut, repeat:-1});
+        } else {
+            TweenMax.to(this.ufoImg, 7, {bezier:[{x:210, y:this.startYPos+13}, {x:430, y:this.startYPos-7}, {x:20, y:this.startYPos}], ease:Sine.easeInOut, repeat:-1});
+        }
     };
 
     Ufo.prototype.update = function(multiplier) {
