@@ -88,7 +88,7 @@ var Galaxy = (function () {
         this.background.graphics.drawRect(0, 0, width, height);
         this.background.graphics.endFill();
         //WAAROM VOEG JE DIE TOE IN ZICHZELF?
-        this.container.addChild(this.container);
+        //this.container.addChild(this.container);
     };
 
     Galaxy.prototype.addObject = function(object) {
@@ -252,6 +252,7 @@ var Game = (function () {
             crashPlanet,
             crashIndex;
 
+        // TODO: refactor like ufo collision
         for(var j = 0; j < this.planets.length; j++){
             var d = Util.getDistance(this.planets[j],this.rocket);
 
@@ -277,17 +278,20 @@ var Game = (function () {
             }
         }
 
+        // if debug true onderaan links op de pagina indicators updaten
         if(collisionFlag && this.debug === true) {
             $("#inbound").removeClass('false').addClass('true');
         } else {
             $("#inbound").removeClass('true').addClass('false');
         }
 
+        // creash op een planeet
         if(crashFlag) {
             if(this.debug === true) {
                 $("#crash").removeClass('false').addClass('true');
             }
 
+            // update gamestats
             this.gamestats.takeAllLives();
             this.endGame();
         } else {
@@ -296,8 +300,9 @@ var Game = (function () {
             }
         }
 
+        // loop over ufos and check if collision
         for(var k = 0; k < this.ufos.length; k++) {
-            var intersection = ndgmr.checkRectCollision(this.ufos[k].ufoImg, this.rocket.rocketImg);
+            var intersection = ndgmr.checkRectCollision(this.ufos[k].ufoImg, this.rocket.sprite);
             if(intersection !== null) {
                 // subtract a life of your rocket
                 this.rocket.dieOnce();
@@ -313,8 +318,12 @@ var Game = (function () {
             }
         }
 
+        // update score in gamestats
         this.gamestats.updateScore(this.galaxy.container.y);
 
+
+        // difficulty increaser
+        // TODO: rapper moeilijk maken, niet aan 100000px geraken, te gemakkelijk dan
         if(Math.abs(Math.floor(this.galaxy.container.y)) % 500 === 0) {
             this.difficultyMultiplier = Math.floor(this.difficultyMultiplier + 0.1);
             if(this.planetDistance > 5) {
@@ -322,6 +331,7 @@ var Game = (function () {
             }
         }
 
+        // recycle graphics on top and update
         this.reArrangePlanets();
         this.reArrangeUfos();
 
