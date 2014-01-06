@@ -602,6 +602,7 @@ var Planet = (function () {
     return Planet;
 })();
 
+/* globals TweenMax:true */
 var Rocket = (function () {
 
     var Rocket = function (x, y, vector) {
@@ -704,7 +705,8 @@ var Rocket = (function () {
         this.sprite.x = this.x;
         this.sprite.y = this.y;
 
-        this.sprite.rotation = this.rocketVector.getHeading() - 90;
+        TweenMax.to(this.sprite, 0.5, {rotation: this.rocketVector.getHeading() - 90});
+        // this.sprite.rotation = this.rocketVector.getHeading() - 90;
 
         this.workingVectors = [];
     };
