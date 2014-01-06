@@ -1,13 +1,10 @@
 var Rocket = (function () {
 
-    var Rocket = function (x, y, width, height, color, vector) {
+    var Rocket = function (x, y, vector) {
         _.bindAll(this);
 
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
-        this.color = color;
         this.rocketVector = vector;
         this.workingVectors = [];
         this.remainingLives = 2;
@@ -41,10 +38,11 @@ var Rocket = (function () {
 
         this.identifier = undefined;
 
-        this.zero = new createjs.Shape();
-        this.zero.graphics.beginFill('#ff0000');
-        this.zero.graphics.drawCircle(-(width/2), (-height/2), 1);
-        this.zero.graphics.endFill();
+        //TODO: wat is dit?
+        // this.zero = new createjs.Shape();
+        // this.zero.graphics.beginFill('#ff0000');
+        // this.zero.graphics.drawCircle(-(width/2), (-height/2), 1);
+        // this.zero.graphics.endFill();
 
 
         this.bind();

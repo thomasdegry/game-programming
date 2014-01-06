@@ -56,7 +56,7 @@ var Game = (function () {
         $("#launch").addClass('out');
         var gameIdentifier = Math.floor(Math.random() * 1000);
         this.socket.emit('game:start', {code: gameIdentifier});
-        this.rocket = new Rocket(-5, -10, 10, 20, 'efefef', this.vector1);
+        this.rocket = new Rocket(-5, -10, this.vector1);
         this.rocket.identifier = gameIdentifier;
 
         $(".connect-instructions").removeClass('out');
@@ -217,7 +217,7 @@ var Game = (function () {
         // recycle graphics on top and update
         this.reArrangePlanets();
         this.reArrangeUfos();
-
+        console.log('will update rocket');
         this.rocket.update();
 
         this.galaxy.followRocket(this.rocket, this.cHeight, 230);
@@ -253,6 +253,7 @@ var Game = (function () {
         if(this.useController) {
             this.socket.emit('gameplay:stop');
         }
+        console.log('end of endgame');
     };
 
     Game.prototype.restart = function() {
@@ -269,12 +270,12 @@ var Game = (function () {
         this.stage.addChild(this.galaxy.container);
 
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
-        this.rocket = new Rocket(-5, -10, 10, 20, 'AA00FF', this.vector1);
+        this.rocket = new Rocket(-5, -10, this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.sprite);
 
-        this.rocket = new Rocket(-5, -10, 10, 20, 'efefef', this.vector1);
+        this.rocket = new Rocket(-5, -10, this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.sprite);
