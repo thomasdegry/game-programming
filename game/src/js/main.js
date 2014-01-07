@@ -643,13 +643,6 @@ var Rocket = (function () {
 
         this.identifier = undefined;
 
-        //TODO: wat is dit?
-        // this.zero = new createjs.Shape();
-        // this.zero.graphics.beginFill('#ff0000');
-        // this.zero.graphics.drawCircle(-(width/2), (-height/2), 1);
-        // this.zero.graphics.endFill();
-
-
         this.bind();
 
     };
