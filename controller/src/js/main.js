@@ -13,10 +13,12 @@ var Controller = (function () {
         this.socket = io.connect('http://' + window.location.host);
         this.code = 0;
         this.emitOrientation = true;
-        this.emitSpeed = true;
+        this.emitSpeed = false;
         this.emitTimeout = null;
         this.sliderHeight = undefined;
         this.underConstruction = false;
+        this.player = 1;
+        this.twoPlayers = false;
 
         FastClick.attach(document.body);
 
@@ -52,10 +54,9 @@ var Controller = (function () {
             }else if(relPosOnScreen < 0){
                 relPosOnScreen = 0;
             }
-            that.showSpeedOnControlPanel(1-relPosOnScreen);
-            that.emitSpeed = true;
             if(that.emitSpeed) {
-                // that.socket.emit('speed:change', {speed: relativeFingerHeight});
+                that.showSpeedOnControlPanel(1-relPosOnScreen);
+
                 that.socket.emit('speed:change', {speed: 1-relPosOnScreen});
                 that.emitSpeed = false;
 
@@ -66,6 +67,9 @@ var Controller = (function () {
         };
 
         this.socket.on('join:accept', function (data) {
+            console.log(data);
+            that.player = data.player;
+
             var login = document.getElementById('login');
             var header = document.getElementsByTagName('h1');
 
@@ -76,9 +80,49 @@ var Controller = (function () {
             that.sliderHeight = $("#speedSlider").height();
         });
 
+        this.socket.on('join:player2', function (data){
+            console.log('[CONTROLLER] seccondPlayerHasJoined');
+
+            that.twoPlayers = true;
+            switch(that.player){
+                case 1:
+                    that.emitSpeed = false;
+                    $('.speed-o-meter, .speed-instructions').addClass('dim');
+                    $('.speed-instructions p').html('Your partner is now controlling the speed...');
+                break;
+
+                case 2:
+                    that.startLevel();
+                    that.emitSpeed = true;
+                    $('div.heading-meter, div.heading-instructions').addClass('dim');
+                    $('.heading-instructions p').html('Your partner is now controlling the direction...');
+
+                break;
+            }
+        });
+
         this.socket.on('gameplay:start', function () {
             console.log('[CONTROLLER] received gameplay:start event through socket');
             that.startLevel();
+        });
+
+        this.socket.on('gameplay:restart', function () {
+            console.log('[CONTROLLER] received gameplay:restart event through socket');
+            switch(that.player){
+                case 1:
+                    that.startLevel();
+                    if (that.twoPlayers) {
+                        that.emitSpeed = false;
+                        $('.speed-o-meter, .speed-instructions').addClass('dim');
+                    }
+                break;
+
+                case 2:
+                    that.startLevel();
+                    that.emitSpeed = true;
+                    $('div.heading-meter, div.heading-instructions').addClass('dim');
+                break;
+            }
         });
 
         this.socket.on('gameplay:stop', function () {
@@ -89,7 +133,11 @@ var Controller = (function () {
         this.socket.on('code:wrong', function() {
             alert('Game not found, please check try again with the correct code');
         });
+        this.socket.on('code:full', function() {
+            alert('This room is full! :-(');
+        });
     };
+
 
     Controller.prototype.handleCode = function () {
     };
@@ -106,51 +154,32 @@ var Controller = (function () {
             $("#speedSlider").removeClass('out');
         }
 
-        this.emitOrientation = true;
-        this.emitSpeed = true;
+
 
         // Start listening for accelerometer
-        window.addEventListener('deviceorientation', function (e) {
-            var tilt = e.gamma;
-            if(tilt < -180) {
-                tilt = -180;
-            } else if(tilt > 180) {
-                tilt = 180;
-            }
+        if (this.player === 1) {
+            this.emitOrientation = true;
+            this.emitSpeed = true;
 
-            if (that.emitOrientation) {
-                that.socket.emit('move', {tilt: tilt});
-                that.emitOrientation = false;
-                that.showHeadingOnControlPanel(tilt);
-
-                that.emitTimeout = setTimeout(function () {
-                    that.emitOrientation = true;
-                }, 50);
-            }
-        }, false);
-
-        //TODO: WILL BE DEPRECATED
-        /*
-        $("#speedSlider").swipe({
-            swipeStatus:function(event, phase, direction, distance, duration, fingers) {
-                if(that.emitSpeed && phase === 'move') {
-                    // that.socket.emit('speed:change', {speed: relativeFingerHeight});
-                    that.socket.emit('speed:change', {speed: direction});
-                    that.emitSpeed = false;
-
-                    that.emitSpeedTimeout = setTimeout(function() {
-                        that.emitSpeed = true;
-                    }, 17);
+            window.addEventListener('deviceorientation', function (e) {
+                var tilt = e.gamma;
+                if(tilt < -180) {
+                    tilt = -180;
+                } else if(tilt > 180) {
+                    tilt = 180;
                 }
-            },
-            threshold:200,
-            maxTimeThreshold:5000,
-            fingers:1
-        });
 
-        this.socket.on('speed:updated', function(data) {
-            that.showSpeedOnControlPanel(data['newSpeed']);
-        });*/
+                if (that.emitOrientation) {
+                    that.socket.emit('move', {tilt: tilt});
+                    that.emitOrientation = false;
+                    that.showHeadingOnControlPanel(tilt);
+
+                    that.emitTimeout = setTimeout(function () {
+                        that.emitOrientation = true;
+                    }, 50);
+                }
+            }, false);
+        }
     };
 
     Controller.prototype.stopLevel = function () {
@@ -161,11 +190,11 @@ var Controller = (function () {
         this.emitTimeout = null;
         this.emitSpeed = false;
         this.emitSpeedTimeout = null;
-        $("#speedSlider").swipe("destroy");
         window.removeEventListener('deviceorientation');
 
         this.showSpeedOnControlPanel(0);
         this.showHeadingOnControlPanel(0);
+        $('.dim').removeClass('dim');
         $('#speedSlider').addClass('out');
 
         var speedSlider = document.getElementById('speedSlider');
@@ -186,7 +215,7 @@ var Controller = (function () {
             event.stopPropagation();
 
             that.socket.emit('gameplay:restart');
-            that.startLevel();
+            // that.startLevel();
         });
     };
 

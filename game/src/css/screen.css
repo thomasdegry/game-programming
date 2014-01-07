@@ -161,7 +161,7 @@ body {
 /* line 69, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions span {
   display: block;
-  font-family: 'sequibold';
+  font-family: 'Arial';
   font-size: 1.8em;
   color: #ffe15f;
   line-height: 2em;
