@@ -663,7 +663,7 @@ var Rocket = (function () {
         });
 
         this.socket.on('speed:change', function(data) {
-            that.setRelativeSpeed(data['speed']);
+            that.rocketVector.v = 700 * data['speed'];
         });
 
         window.onkeydown = this.keyDownHandler;
@@ -726,19 +726,6 @@ var Rocket = (function () {
 
     Rocket.prototype.setDirectSpeed = function(speed) {
         this.rocketVector.v = speed;
-    };
-
-    Rocket.prototype.setRelativeSpeed = function(direction) {
-        if(direction === 'up') {
-            if(this.rocketVector.v <= 690) {
-                this.rocketVector.v += 10;
-            }
-        } else if(direction === 'down') {
-            if(this.rocketVector.v > 0) {
-                this.rocketVector.v -= 10;
-            }
-        }
-        this.socket.emit('speed:updated', {newSpeed: this.rocketVector.v});
     };
 
     Rocket.prototype.dieOnce = function() {

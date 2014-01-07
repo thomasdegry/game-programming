@@ -40,7 +40,26 @@ var Controller = (function () {
             that.socket.emit('join:request', {code: that.code});
         };
 
-        document.body.ontouchmove = function(e) { e.preventDefault(); };
+        document.body.ontouchmove = function(e) {
+            e.preventDefault();
+            var relPosOnScreen = e.pageY / document.height;
+            if (relPosOnScreen > 1) {
+                relPosOnScreen = 1;
+            }else if(relPosOnScreen < 0){
+                relPosOnScreen = 0;
+            }
+            that.showSpeedOnControlPanel(1-relPosOnScreen);
+            that.emitSpeed = true;
+            if(that.emitSpeed) {
+                // that.socket.emit('speed:change', {speed: relativeFingerHeight});
+                that.socket.emit('speed:change', {speed: 1-relPosOnScreen});
+                that.emitSpeed = false;
+
+                that.emitSpeedTimeout = setTimeout(function() {
+                    that.emitSpeed = true;
+                }, 50);
+            }
+        };
 
         this.socket.on('join:accept', function (data) {
             var login = document.getElementById('login');
@@ -102,10 +121,12 @@ var Controller = (function () {
 
                 that.emitTimeout = setTimeout(function () {
                     that.emitOrientation = true;
-                }, 17);
+                }, 50);
             }
         }, false);
 
+        //TODO: WILL BE DEPRECATED
+        /*
         $("#speedSlider").swipe({
             swipeStatus:function(event, phase, direction, distance, duration, fingers) {
                 if(that.emitSpeed && phase === 'move') {
@@ -125,7 +146,7 @@ var Controller = (function () {
 
         this.socket.on('speed:updated', function(data) {
             that.showSpeedOnControlPanel(data['newSpeed']);
-        });
+        });*/
     };
 
     Controller.prototype.stopLevel = function () {
@@ -171,7 +192,7 @@ var Controller = (function () {
     };
 
     Controller.prototype.showSpeedOnControlPanel = function(speed) {
-        var speedCalculated = (((speed) / 700) * 180) - 90;
+        var speedCalculated = (speed * 180) - 90;
         $(".needle").css({ WebkitTransform: 'rotate(' + speedCalculated + 'deg)'});
     };
 
