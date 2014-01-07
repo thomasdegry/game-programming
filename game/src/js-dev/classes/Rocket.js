@@ -54,7 +54,8 @@ var Rocket = (function () {
         var that = this;
 
         this.socket.on('move', function(data) {
-            that.updateHeading(data['tilt'] / 500);
+            var angleInRad = data['tilt'] / 57.2957795;
+            that.updateHeading(angleInRad + Math.PI/2);
         });
 
         this.socket.on('speed:change', function(data) {
@@ -76,11 +77,11 @@ var Rocket = (function () {
                 break;
 
             case 37: //left
-                this.updateHeading(-0.1);
+                this.updateHeading(this.rocketVector.h - 0.1);
                 break;
 
             case 39: //right
-                this.updateHeading(0.1);
+                this.updateHeading(this.rocketVector.h + 0.1);
                 break;
 
         }
@@ -110,11 +111,11 @@ var Rocket = (function () {
     Rocket.prototype.updateHeading = function(heading) {
         //de checks dienen om de raket niet terug naar beneden te laten vliegen.
         if(this.rocketVector.h <= Math.PI || this.rocketVector.h !== 0){
-            this.rocketVector.setHeading(this.rocketVector.h + heading);
-            if(this.rocketVector.h > Math.PI && heading > 0){
-                this.rocketVector.h = Math.PI;
-            }else if(this.rocketVector.h > Math.PI && heading < 0){
-                this.rocketVector.h = 0;
+            this.rocketVector.setHeading(heading);
+            if(heading > Math.PI ){
+                this.rocketVector.setHeading(Math.PI);
+            }else if(heading < 0){
+                this.rocketVector.setHeading(0);
             }
         }
     };

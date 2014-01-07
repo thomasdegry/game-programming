@@ -5,7 +5,7 @@ var Planet = (function () {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.gravityRadius = radius + Math.floor(Math.random() * 200);
+        this.gravityRadius = radius + Math.floor(Math.random() * 150 +100);
 
         this.container = new createjs.Container();
 
