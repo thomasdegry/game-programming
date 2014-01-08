@@ -138,7 +138,6 @@ var Rocket = (function () {
         var that = this;
         setTimeout(function() {
             that.invincible = false;
-            console.log('not invincible anymore');
         }, miliseconds);
     };
 

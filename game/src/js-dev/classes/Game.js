@@ -12,9 +12,12 @@ var Game = (function () {
         this.h1 = Math.PI / 2;
         this.v1 = 1;
         this.difficultyMultiplier = 1;
-        this.planetDistance = 200;
+        this.planetDistance = 400;
         this.debug = true;
         this.useController = true;
+        // use how many planets replaced to increase difficulty
+        this.planetsMoved = 0;
+        this.previousNumberOfMovedAndIncreasedDifficulty = 0;
 
         this.settings = new Settings();
 
@@ -92,9 +95,9 @@ var Game = (function () {
         this.createBounds();
 
         // create temporary level
-        this.currentPlanetYPos = this.galaxy.height - 250;
-        this.currentUFOYPos = this.galaxy.height - 3000;
-        this.currentStarYpos = this.galaxy.height - 200;
+        this.currentPlanetYPos = this.galaxy.height - 320;
+        this.currentUFOYPos = this.galaxy.height - 3000 - Math.floor(Math.random() * 200);
+        this.currentStarYpos = this.galaxy.height - 1700 - Math.floor(Math.random() * 300);
         this.planets = [];
         this.ufos = [];
         this.stars = [];
@@ -107,6 +110,7 @@ var Game = (function () {
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.rocketImg);
         this.galaxy.addObject(this.rocket.sprite);
+        this.stage.setChildIndex(this.rocket.sprite, this.stage.getNumChildren() - 1);
 
         // create a game stats instance
         this.gamestats = new Gamestats(15, 30, 2);
@@ -120,6 +124,7 @@ var Game = (function () {
 
         //set playing boolean true for slow tickhandler fallback
         this.playing = true;
+
     };
 
     Game.prototype.tickHandler = function(event) {
@@ -198,12 +203,18 @@ var Game = (function () {
 
 
         // difficulty increaser
-        // TODO: rapper moeilijk maken, niet aan 100000px geraken, te gemakkelijk dan
-        if(Math.abs(Math.floor(this.galaxy.container.y)) % 500 === 0) {
-            this.difficultyMultiplier = Math.floor(this.difficultyMultiplier + 0.1);
-            if(this.planetDistance > 5) {
-                this.planetDistance -= 5;
+        if(this.planetsMoved % 5 === 0 && this.planetsMoved !== 0 && this.planetsMoved !== this.previousNumberOfMovedAndIncreasedDifficulty) {
+            if(this.planetDistance > 30) {
+                this.planetDistance -= 20;
             }
+
+            if(this.difficultyMultiplier >= 1.5) {
+                this.difficultyMultiplier += 0.05;
+            } else {
+                this.difficultyMultiplier += 0.1;
+            }
+            console.log(this.difficultyMultiplier);
+            this.previousNumberOfMovedAndIncreasedDifficulty = this.planetsMoved;
         }
 
         // recycle graphics on top and update
@@ -223,13 +234,16 @@ var Game = (function () {
     Game.prototype.endGame = function() {
         this.playing = false;
         this.ticker.removeEventListener('tick', this.tickHandler);
-        this.currentPlanetYPos = this.galaxy.height - 250;
-        this.currentUFOYPos = this.galaxy.height - 3000;
-        this.currentStarYpos = this.galaxy.height - 200;
+        this.currentPlanetYPos = this.galaxy.height - 320;
+        this.currentUFOYPos = this.galaxy.height - 3000 - Math.floor(Math.random() * 200);
+        this.currentStarYpos = this.galaxy.height - 1700 - Math.floor(Math.random() * 300);
         this.galaxy.removeObject(this.rocket.sprite);
         this.stage.removeChild(this.galaxy.container);
         this.stage.update();
         this.difficultyMultiplier = 1;
+        this.planetsMoved = 1;
+        this.planetDistance = 400;
+        this.previousNumberOfMovedAndIncreasedDifficulty = 1;
         this.rocket = undefined;
         this.vector1 = undefined;
         this.planets = [];
@@ -279,6 +293,7 @@ var Game = (function () {
 
         this.gamestats.relive();
         this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
+        this.stage.setChildIndex(this.rocket.sprite, this.stage.getNumChildren() - 1);
 
         this.ticker.addEventListener('tick', this.tickHandler);
 
@@ -292,6 +307,8 @@ var Game = (function () {
                 this.planets[i].x = Math.floor(Math.random() * this.cWidth);
                 this.planets[i].update(this.difficultyMultiplier);
                 this.currentPlanetYPos -= this.planetDistance;
+                // add planet to # planets moved to increase difficulty
+                this.planetsMoved++;
             }
         }
     };
