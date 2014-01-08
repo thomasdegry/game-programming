@@ -160,6 +160,12 @@ var Game = (function () {
 
         this.socket.on('join:accept', function(data) {
             that.startGame();
+            $("#multiplayerstats #controller1").removeClass('dim');
+
+        });
+
+        this.socket.on('join:player2', function(data) {
+            $("#multiplayerstats #controller2").removeClass('dim');
         });
 
         this.socket.on('gameplay:restart', this.restart);
@@ -181,12 +187,16 @@ var Game = (function () {
         $(".connect-instructions").removeClass('out');
         $(".connect-instructions p span").text(this.rocket.identifier);
         $(".connect-instructions p em").text(this.settings.hostName);
+
+        $("#multiplayerstats").removeClass('out');
+        $("#multiplayerstats p span").text(this.rocket.identifier);
     };
 
     Game.prototype.proceedWithoutController = function(event) {
         event.preventDefault();
         this.useController = false;
         this.startGame();
+        $("#multiplayerstats").addClass('out');
     };
 
     Game.prototype.startGame = function() {
@@ -403,7 +413,6 @@ var Game = (function () {
 
     Game.prototype.restart = function(event) {
         var that = this;
-        console.log(event);
         if(event !== undefined) {
             event.preventDefault();
         }
@@ -742,6 +751,36 @@ var Rocket = (function () {
         this.RocketAnim = new createjs.SpriteSheet({
             'images': ["img/rocket.png"],
             'frames': [
+                [1952, 2, 48, 104],
+                [1902, 2, 48, 104],
+                [1852, 2, 48, 104],
+                [1802, 2, 48, 104],
+                [1752, 2, 48, 104],
+                [1702, 2, 48, 104],
+                [1652, 2, 48, 104],
+                [1602, 2, 48, 104],
+                [1552, 2, 48, 104],
+                [1502, 2, 48, 104],
+                [1452, 2, 48, 104],
+                [1402, 2, 48, 104],
+                [1352, 2, 48, 104],
+                [1302, 2, 48, 104],
+                [1252, 2, 48, 104],
+                [1202, 2, 48, 104],
+                [1152, 2, 48, 104],
+                [1102, 2, 48, 104],
+                [1052, 2, 48, 104],
+                [1002, 2, 48, 104],
+                [952, 2, 48, 104],
+                [902, 2, 48, 104],
+                [852, 2, 48, 104],
+                [802, 2, 48, 104],
+                [752, 2, 48, 104],
+                [702, 2, 48, 104],
+                [652, 2, 48, 104],
+                [602, 2, 48, 104],
+                [552, 2, 48, 104],
+                [502, 2, 48, 104],
                 [452, 2, 48, 104],
                 [402, 2, 48, 104],
                 [352, 2, 48, 104],
@@ -753,7 +792,7 @@ var Rocket = (function () {
                 [52, 2, 48, 104],
                 [2, 2, 48, 104]
             ],
-            'animations': {fly:[0,9]},
+            'animations': {fly:[30,39],fast:[0,9],slow:[10,19],super:[20,29]},
             'framerate': 10
         });
 
@@ -835,7 +874,6 @@ var Rocket = (function () {
 
         TweenMax.to(this.sprite, 0.5, {rotation: this.rocketVector.getHeading() - 90});
         TweenMax.to(this.rocketImg, 0.5, {rotation: this.rocketVector.getHeading() - 90});
-        // this.sprite.rotation = this.rocketVector.getHeading() - 90;
 
         this.workingVectors = [];
     };

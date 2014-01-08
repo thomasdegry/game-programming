@@ -90,6 +90,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('gameplay:restart', function() {
         console.log('[SERVER] Emit gameplay:restart'.yellow);
         io.sockets.in(socket.code).emit('gameplay:restart');
+        // socket.broadcast.to(socket.code).emit('gameplay:restart');
     })
 
     socket.on('gameplay:start', function () {

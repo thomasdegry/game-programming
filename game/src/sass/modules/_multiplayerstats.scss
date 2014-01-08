@@ -1,0 +1,45 @@
+#multiplayerstats{
+    width: 500px;
+    margin: 15px auto 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-size: 1em;
+    line-height: 1.4em;
+    color: #efefee;
+
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+
+    &.out{
+        opacity: 0;
+    }
+
+    .code{
+        display: inline-block;
+        width: 170px;
+        margin-left: 10px;
+    }
+
+    span {
+        font-family: 'Arial';
+        font-size: 1.2em;
+        color: #ffe15f;
+        line-height: 2em;
+    }
+    .controller{
+        width: 17px;
+        height: 25px;
+        background: url('../img/phone.png') center center no-repeat;
+        display: inline-block;
+
+        @include transition-property(all);
+        @include transition-duration(0.7s);
+        @include transition-timing-function(ease-in-out);
+
+        &.dim{
+            opacity: 0.3;
+        }
+    }
+}

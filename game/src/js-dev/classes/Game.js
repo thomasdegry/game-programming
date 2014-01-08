@@ -44,6 +44,12 @@ var Game = (function () {
 
         this.socket.on('join:accept', function(data) {
             that.startGame();
+            $("#multiplayerstats #controller1").removeClass('dim');
+
+        });
+
+        this.socket.on('join:player2', function(data) {
+            $("#multiplayerstats #controller2").removeClass('dim');
         });
 
         this.socket.on('gameplay:restart', this.restart);
@@ -65,12 +71,16 @@ var Game = (function () {
         $(".connect-instructions").removeClass('out');
         $(".connect-instructions p span").text(this.rocket.identifier);
         $(".connect-instructions p em").text(this.settings.hostName);
+
+        $("#multiplayerstats").removeClass('out');
+        $("#multiplayerstats p span").text(this.rocket.identifier);
     };
 
     Game.prototype.proceedWithoutController = function(event) {
         event.preventDefault();
         this.useController = false;
         this.startGame();
+        $("#multiplayerstats").addClass('out');
     };
 
     Game.prototype.startGame = function() {
@@ -287,7 +297,6 @@ var Game = (function () {
 
     Game.prototype.restart = function(event) {
         var that = this;
-        console.log(event);
         if(event !== undefined) {
             event.preventDefault();
         }
