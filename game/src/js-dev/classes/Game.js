@@ -137,6 +137,7 @@ var Game = (function () {
         var collisionFlag = false,
             crashFlag = false;
 
+        // loop over planets with distance formula to check if planets need to attract you, sexy huh
         for(var j = 0; j < this.planets.length; j++){
             var d = Util.getDistance(this.planets[j],this.rocket);
 
@@ -145,10 +146,8 @@ var Game = (function () {
                 var force = this.planets[j].gravityRadius - d;
                 this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force));
             }
-        }
 
-        for(var l = 0; l < this.planets.length; l++) {
-            var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[l].planetImg, this.rocket.rocketImg);
+            var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[j].planetImg, this.rocket.rocketImg);
             if(intersactionPlanet !== false) {
                 crashFlag = true;
             }
