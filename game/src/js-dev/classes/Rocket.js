@@ -60,7 +60,7 @@ var Rocket = (function () {
                 [52, 2, 48, 104],
                 [2, 2, 48, 104]
             ],
-            'animations': {fly:[30,39],fast:[0,9],slow:[10,19],super:[20,29]},
+            'animations': {fly:[30,39],boost:[0,9],break:[10,19],invincible:[20,29]},
             'framerate': 10
         });
 
@@ -168,10 +168,12 @@ var Rocket = (function () {
 
     Rocket.prototype.makeInvincible = function(miliseconds) {
         this.invincible = true;
+        this.sprite.gotoAndPlay('invincible');
 
         var that = this;
         setTimeout(function() {
             that.invincible = false;
+            that.sprite.gotoAndPlay('fly');
         }, miliseconds);
     };
 
@@ -179,11 +181,13 @@ var Rocket = (function () {
         this.isUnderManipulation = true;
         this.speedBeforeManipulator = this.rocketVector.v;
         this.rocketVector.v = Math.floor(this.speedBeforeManipulator / 2);
+        this.sprite.gotoAndPlay('break');
 
         var that = this;
         setTimeout(function() {
             that.isUnderManipulation = false;
             that.rocketVector.v = that.speedBeforeManipulator;
+            that.sprite.gotoAndPlay('fly');
         }, 3000);
     };
 
@@ -191,11 +195,13 @@ var Rocket = (function () {
         this.isUnderManipulation = true;
         this.speedBeforeManipulator = this.rocketVector.v;
         this.rocketVector.v = 900;
+        this.sprite.gotoAndPlay('boost');
 
         var that = this;
         setTimeout(function() {
             that.isUnderManipulation = false;
             that.rocketVector.v = that.speedBeforeManipulator;
+            that.sprite.gotoAndPlay('fly');
         }, 3000);
     };
 
