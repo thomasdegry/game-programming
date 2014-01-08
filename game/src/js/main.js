@@ -211,7 +211,6 @@ var Game = (function () {
         this.currentPlanetYPos = this.galaxy.height - 250;
         this.currentUFOYPos = this.galaxy.height - 3000;
         this.currentStarYpos = this.galaxy.height - 200;
-        console.log(this.currentUFOYPos);
         this.planets = [];
         this.ufos = [];
         this.stars = [];
@@ -268,7 +267,6 @@ var Game = (function () {
 
             var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[j].planetImg, this.rocket.rocketImg);
             if(intersactionPlanet !== false && !this.rocket.invincible) {
-                console.log(this.rocket.invincible);
                 crashFlag = true;
             }
         }
@@ -339,7 +337,6 @@ var Game = (function () {
     };
 
     Game.prototype.endGame = function() {
-        console.log('[ENDGAME]');
         this.playing = false;
         this.ticker.removeEventListener('tick', this.tickHandler);
         this.currentPlanetYPos = this.galaxy.height - 250;
@@ -369,7 +366,6 @@ var Game = (function () {
     };
 
     Game.prototype.restart = function(event) {
-        console.log('[GAME] Game.prototype.restart');
         var that = this;
         if(event !== null || event !== undefined) {
             event.preventDefault();
@@ -427,7 +423,7 @@ var Game = (function () {
     };
 
     Game.prototype.reArrangeStars = function() {
-        for(var i = 0; i < this.planets.length; i++) {
+        for(var i = 0; i < this.stars.length; i++) {
             if(this.rocket.y - this.stars[i].y < (-this.cHeight)) {
                 this.stars[i].y = this.currentStarYpos;
                 this.stars[i].x = Math.floor(Math.random() * this.cWidth);
