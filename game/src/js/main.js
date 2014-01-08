@@ -219,8 +219,8 @@ var Game = (function () {
         // make a rocket
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
-        this.galaxy.addObject(this.rocket.sprite);
         this.galaxy.addObject(this.rocket.rocketImg);
+        this.galaxy.addObject(this.rocket.sprite);
 
         // create a game stats instance
         this.gamestats = new Gamestats(15, 30, 2);
@@ -366,6 +366,7 @@ var Game = (function () {
         this.rocket = new Rocket(-5, -10, this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
+        this.galaxy.addObject(this.rocket.rocketImg);
         this.galaxy.addObject(this.rocket.sprite);
 
         this.createPlanets();
