@@ -71,9 +71,26 @@ var Gamestats = (function () {
         this.heartImgs = [];
     };
 
-    Gamestats.prototype.showInvincibleFor = function(seconds) {
-        this.countdownContainer.alpha = 1;
+    Gamestats.prototype.showSomething = function(subject, seconds) {
+        TweenMax.killTweensOf(this.countdownFill);
+        this.countdownFill.graphics.clear();
+        var color = '#e7c54e';
+        switch(subject) {
+            case 'boostEngine':
+                color = '#81d766';
+                break;
+
+            case 'breakEngine':
+                color = '#b11500';
+                break;
+        }
+
+        this.countdownFill.graphics.beginFill(color);
+        this.countdownFill.graphics.drawRect(0, 0, 90, 18);
+        this.countdownFill.graphics.endFill();
         this.countdownFill.scaleX = 1;
+        this.countdownContainer.alpha = 1;
+
         TweenMax.to(this.countdownFill, seconds, {scaleX:0, repeat:0, ease:Linear.easeNone, onComplete:this.hideCountdown});
     };
 

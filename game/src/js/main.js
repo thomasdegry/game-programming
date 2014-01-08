@@ -114,7 +114,7 @@ var Galaxy = (function () {
     return Galaxy;
 })();
 
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, Util:true, io:true, Gamestats:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, RocketManipulator:true, Util:true, io:true, Gamestats:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -214,12 +214,15 @@ var Game = (function () {
         this.currentPlanetYPos = this.galaxy.height - 320;
         this.currentUFOYPos = this.galaxy.height - 3000 - Math.floor(Math.random() * 200);
         this.currentStarYpos = this.galaxy.height - 1700 - Math.floor(Math.random() * 300);
+        this.currentManipulatorYPos = this.galaxy.height - 1000 - Math.floor(Math.random() * 400);
         this.planets = [];
         this.ufos = [];
         this.stars = [];
-        this.createPlanets(17);
+        this.rocketManipulators = [];
+        this.createPlanets(25);
         this.createUFOs(7);
         this.createStars(3);
+        this.createRocketManipulators(8);
 
         // make a rocket
         this.rocket.x = 150;
@@ -310,7 +313,24 @@ var Game = (function () {
                 this.stars[l].update();
                 this.currentStarYpos -= Math.floor((Math.random() * 3000) + 5000);
                 this.rocket.makeInvincible(10000);
-                this.gamestats.showInvincibleFor(10);
+                // this.gamestats.showInvincibleFor(10);
+                this.gamestats.showSomething('invincible', 10);
+            }
+        }
+
+        // loop over alle manipulators
+        for(var m = 0; m < this.rocketManipulators.length; m++) {
+            var manipulatorIntersection = ndgmr.checkPixelCollision(this.rocketManipulators[m].arrows, this.rocket.rocketImg);
+            if(manipulatorIntersection !== false && !this.rocketManipulators[m].isUsed) {
+                var type = this.rocketManipulators[m].type;
+                if(type === 'up') {
+                    this.rocket.boostEngine();
+                    this.gamestats.showSomething('boostEngine', 3);
+                } else {
+                    this.rocket.breakEngine();
+                    this.gamestats.showSomething('breakEngine', 3);
+                }
+                this.rocketManipulators[m].isUsed = true;
             }
         }
 
@@ -319,8 +339,8 @@ var Game = (function () {
 
 
         // difficulty increaser
-        if(this.planetsMoved % 5 === 0 && this.planetsMoved !== 0 && this.planetsMoved !== this.previousNumberOfMovedAndIncreasedDifficulty) {
-            if(this.planetDistance > 30) {
+        if(this.planetsMoved % 10 === 0 && this.planetsMoved !== 0 && this.planetsMoved !== this.previousNumberOfMovedAndIncreasedDifficulty) {
+            if(this.planetDistance > 70) {
                 this.planetDistance -= 20;
             }
 
@@ -329,7 +349,6 @@ var Game = (function () {
             } else {
                 this.difficultyMultiplier += 0.1;
             }
-            console.log(this.difficultyMultiplier);
             this.previousNumberOfMovedAndIncreasedDifficulty = this.planetsMoved;
         }
 
@@ -337,6 +356,7 @@ var Game = (function () {
         this.reArrangePlanets();
         this.reArrangeUfos();
         this.reArrangeStars();
+        this.reArrangeManipulators();
 
         if (this.playing){
             this.rocket.update();
@@ -353,6 +373,7 @@ var Game = (function () {
         this.currentPlanetYPos = this.galaxy.height - 320;
         this.currentUFOYPos = this.galaxy.height - 3000 - Math.floor(Math.random() * 200);
         this.currentStarYpos = this.galaxy.height - 1700 - Math.floor(Math.random() * 300);
+        this.currentManipulatorYPos = this.galaxy.height - 1000 - Math.floor(Math.random() * 400);
         this.galaxy.removeObject(this.rocket.sprite);
         this.stage.removeChild(this.galaxy.container);
         this.stage.update();
@@ -365,6 +386,7 @@ var Game = (function () {
         this.planets = [];
         this.ufos = [];
         this.stars = [];
+        this.rocketManipulators = [];
 
         var that = this;
         if(this.useController) {
@@ -381,7 +403,8 @@ var Game = (function () {
 
     Game.prototype.restart = function(event) {
         var that = this;
-        if(event !== null || event !== undefined) {
+        console.log(event);
+        if(event !== undefined) {
             event.preventDefault();
         }
 
@@ -403,9 +426,10 @@ var Game = (function () {
         this.galaxy.addObject(this.rocket.rocketImg);
         this.galaxy.addObject(this.rocket.sprite);
 
-        this.createPlanets(17);
+        this.createPlanets(25);
         this.createUFOs(7);
         this.createStars(3);
+        this.createRocketManipulators(8);
 
         this.gamestats.relive();
         this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
@@ -450,6 +474,17 @@ var Game = (function () {
         }
     };
 
+    Game.prototype.reArrangeManipulators = function() {
+        for(var i = 0; i < this.rocketManipulators.length; i++) {
+            if(this.rocket.y - this.rocketManipulators[i].y < (-this.cHeight)) {
+                this.rocketManipulators[i].y = this.currentManipulatorYPos;
+                this.rocketManipulators[i].x = Math.floor(Math.random() * this.cWidth);
+                this.rocketManipulators[i].update();
+                this.currentManipulatorYPos -= Math.floor((Math.random() * 5000) + 1500);
+            }
+        }
+    };
+
     Game.prototype.createPlanets = function(ammount) {
         for(var i = 0; i < ammount - 1; i++) {
             this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
@@ -471,6 +506,14 @@ var Game = (function () {
             this.stars.push(new Star(Math.floor(Math.random() * this.cWidth), this.currentStarYpos));
             this.currentStarYpos -= Math.floor((Math.random() * 3000) + 5000);
             this.galaxy.addObject(this.stars[i].container);
+        }
+    };
+
+    Game.prototype.createRocketManipulators = function(ammount) {
+        for(var i = 0; i < ammount - 1; i++) {
+            this.rocketManipulators.push(new RocketManipulator(Math.floor(Math.random() * this.cWidth), this.currentManipulatorYPos));
+            this.currentManipulatorYPos -= Math.floor((Math.random() * 5000) + 1500);
+            this.galaxy.addObject(this.rocketManipulators[i].container);
         }
     };
 
@@ -556,9 +599,26 @@ var Gamestats = (function () {
         this.heartImgs = [];
     };
 
-    Gamestats.prototype.showInvincibleFor = function(seconds) {
-        this.countdownContainer.alpha = 1;
+    Gamestats.prototype.showSomething = function(subject, seconds) {
+        TweenMax.killTweensOf(this.countdownFill);
+        this.countdownFill.graphics.clear();
+        var color = '#e7c54e';
+        switch(subject) {
+            case 'boostEngine':
+                color = '#81d766';
+                break;
+
+            case 'breakEngine':
+                color = '#b11500';
+                break;
+        }
+
+        this.countdownFill.graphics.beginFill(color);
+        this.countdownFill.graphics.drawRect(0, 0, 90, 18);
+        this.countdownFill.graphics.endFill();
         this.countdownFill.scaleX = 1;
+        this.countdownContainer.alpha = 1;
+
         TweenMax.to(this.countdownFill, seconds, {scaleX:0, repeat:0, ease:Linear.easeNone, onComplete:this.hideCountdown});
     };
 
@@ -674,6 +734,9 @@ var Rocket = (function () {
         this.remainingLives = 2;
         this.invincible = false;
 
+        this.speedBeforeManipulator = 0;
+        this.isUnderManipulation = false;
+
         this.socket = window.socket;
 
         this.RocketAnim = new createjs.SpriteSheet({
@@ -722,7 +785,9 @@ var Rocket = (function () {
         });
 
         this.socket.on('speed:change', function(data) {
-            that.rocketVector.v = 700 * data['speed'];
+            if(!this.isUnderManipulation) {
+                that.rocketVector.v = 700 * data['speed'];
+            }
         });
 
         window.onkeydown = this.keyDownHandler;
@@ -804,7 +869,62 @@ var Rocket = (function () {
         }, miliseconds);
     };
 
+    Rocket.prototype.breakEngine = function() {
+        this.isUnderManipulation = true;
+        this.speedBeforeManipulator = this.rocketVector.v;
+        this.rocketVector.v = Math.floor(this.speedBeforeManipulator / 2);
+
+        var that = this;
+        setTimeout(function() {
+            that.isUnderManipulation = false;
+            that.rocketVector.v = that.speedBeforeManipulator;
+        }, 3000);
+    };
+
+    Rocket.prototype.boostEngine = function() {
+        this.isUnderManipulation = true;
+        this.speedBeforeManipulator = this.rocketVector.v;
+        this.rocketVector.v = 900;
+
+        var that = this;
+        setTimeout(function() {
+            that.isUnderManipulation = false;
+            that.rocketVector.v = that.speedBeforeManipulator;
+        }, 3000);
+    };
+
     return Rocket;
+})();
+
+var RocketManipulator = (function () {
+
+    var RocketManipulator = function (x, y) {
+        _.bindAll(this);
+        this.x = x;
+        this.y = y;
+        this.type = 'up';
+        this.isUsed = false;
+
+        this.container = new createjs.Container();
+
+        this.arrows = new createjs.Bitmap('img/manipulator.png');
+        this.arrows.x = this.x;
+        this.arrows.y = this.y;
+        this.container.addChild(this.arrows);
+
+        if(Math.floor(Math.random() * 100) < 50) {
+            this.type = 'down';
+            this.arrows.rotation = 180;
+        }
+    };
+
+    RocketManipulator.prototype.update = function() {
+        this.arrows.x = this.x;
+        this.arrows.y = this.y;
+        this.isUsed = false;
+    };
+
+    return RocketManipulator;
 })();
 
 /* globals TweenMax:true, Linear:true */

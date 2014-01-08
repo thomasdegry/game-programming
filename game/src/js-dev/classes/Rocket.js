@@ -11,6 +11,9 @@ var Rocket = (function () {
         this.remainingLives = 2;
         this.invincible = false;
 
+        this.speedBeforeManipulator = 0;
+        this.isUnderManipulation = false;
+
         this.socket = window.socket;
 
         this.RocketAnim = new createjs.SpriteSheet({
@@ -59,7 +62,9 @@ var Rocket = (function () {
         });
 
         this.socket.on('speed:change', function(data) {
-            that.rocketVector.v = 700 * data['speed'];
+            if(!this.isUnderManipulation) {
+                that.rocketVector.v = 700 * data['speed'];
+            }
         });
 
         window.onkeydown = this.keyDownHandler;
@@ -139,6 +144,30 @@ var Rocket = (function () {
         setTimeout(function() {
             that.invincible = false;
         }, miliseconds);
+    };
+
+    Rocket.prototype.breakEngine = function() {
+        this.isUnderManipulation = true;
+        this.speedBeforeManipulator = this.rocketVector.v;
+        this.rocketVector.v = Math.floor(this.speedBeforeManipulator / 2);
+
+        var that = this;
+        setTimeout(function() {
+            that.isUnderManipulation = false;
+            that.rocketVector.v = that.speedBeforeManipulator;
+        }, 3000);
+    };
+
+    Rocket.prototype.boostEngine = function() {
+        this.isUnderManipulation = true;
+        this.speedBeforeManipulator = this.rocketVector.v;
+        this.rocketVector.v = 900;
+
+        var that = this;
+        setTimeout(function() {
+            that.isUnderManipulation = false;
+            that.rocketVector.v = that.speedBeforeManipulator;
+        }, 3000);
     };
 
     return Rocket;
