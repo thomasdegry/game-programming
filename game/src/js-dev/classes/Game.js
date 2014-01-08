@@ -137,7 +137,7 @@ var Game = (function () {
         var collisionFlag = false,
             crashFlag = false;
 
-        // loop over planets with distance formula to check if planets need to attract you, sexy huh
+        // loop over planets with distance formula to check if planets need to attract you, sexy huh, and secondly check collision
         for(var j = 0; j < this.planets.length; j++){
             var d = Util.getDistance(this.planets[j],this.rocket);
 
@@ -190,6 +190,7 @@ var Game = (function () {
                 this.planetDistance -= 5;
             }
         }
+
         // recycle graphics on top and update
         this.reArrangePlanets();
         this.reArrangeUfos();
