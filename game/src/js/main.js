@@ -762,7 +762,6 @@ var Rocket = (function () {
 
         TweenMax.to(this.sprite, 0.5, {rotation: this.rocketVector.getHeading() - 90});
         TweenMax.to(this.rocketImg, 0.5, {rotation: this.rocketVector.getHeading() - 90});
-        // this.sprite.rotation = this.rocketVector.getHeading() - 90;
 
         this.workingVectors = [];
     };
