@@ -114,7 +114,7 @@ var Galaxy = (function () {
     return Galaxy;
 })();
 
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Util:true, io:true, Gamestats:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, Util:true, io:true, Gamestats:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -210,11 +210,14 @@ var Game = (function () {
         // create temporary level
         this.currentPlanetYPos = this.galaxy.height - 250;
         this.currentUFOYPos = this.galaxy.height - 3000;
+        this.currentStarYpos = this.galaxy.height - 200;
         console.log(this.currentUFOYPos);
         this.planets = [];
         this.ufos = [];
-        this.createPlanets();
-        this.createUFOs();
+        this.stars = [];
+        this.createPlanets(17);
+        this.createUFOs(7);
+        this.createStars(3);
 
         // make a rocket
         this.rocket.x = 150;
@@ -253,7 +256,7 @@ var Game = (function () {
         var collisionFlag = false,
             crashFlag = false;
 
-        // loop over planets with distance formula to check if planets need to attract you, sexy huh
+        // loop over planets with distance formula to check if planets need to attract you, sexy huh, and secondly check collision
         for(var j = 0; j < this.planets.length; j++){
             var d = Util.getDistance(this.planets[j],this.rocket);
 
@@ -264,7 +267,8 @@ var Game = (function () {
             }
 
             var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[j].planetImg, this.rocket.rocketImg);
-            if(intersactionPlanet !== false) {
+            if(intersactionPlanet !== false && !this.rocket.invincible) {
+                console.log(this.rocket.invincible);
                 crashFlag = true;
             }
         }
@@ -278,8 +282,8 @@ var Game = (function () {
 
         // loop over ufos and check if collision
         for(var k = 0; k < this.ufos.length; k++) {
-            var intersection = ndgmr.checkRectCollision(this.ufos[k].ufoImg, this.rocket.sprite);
-            if(intersection !== null) {
+            var intersection = ndgmr.checkPixelCollision(this.ufos[k].ufoImg, this.rocket.rocketImg);
+            if(intersection !== false && !this.rocket.invincible) {
                 // subtract a life of your rocket
                 this.rocket.dieOnce();
                 // remove the current planet from the galaxy
@@ -291,6 +295,19 @@ var Game = (function () {
                     this.endGame();
                     return false;
                 }
+            }
+        }
+
+        // loop over alle stars en check collision
+        for(var l = 0; l < this.stars.length; l++) {
+            var starIntersection = ndgmr.checkPixelCollision(this.stars[l].starImg, this.rocket.rocketImg);
+            if(starIntersection !== false) {
+                // if intersection we move the star up to reuse it, we don't do this in a reArrangeStars because collision keeps happening when flying slow, ufo's die if we hit them, stars don't, you can keep on collecting stars, but you can't keep collecting ufo's, you die after two
+                this.stars[l].y = this.currentStarYpos;
+                this.stars[l].update();
+                this.currentStarYpos -= Math.floor((Math.random() * 3000) + 5000);
+                this.rocket.makeInvincible(10000);
+                this.gamestats.showInvincibleFor(10);
             }
         }
 
@@ -306,6 +323,7 @@ var Game = (function () {
                 this.planetDistance -= 5;
             }
         }
+
         // recycle graphics on top and update
         this.reArrangePlanets();
         this.reArrangeUfos();
@@ -320,10 +338,12 @@ var Game = (function () {
     };
 
     Game.prototype.endGame = function() {
+        console.log('[ENDGAME]');
         this.playing = false;
         this.ticker.removeEventListener('tick', this.tickHandler);
         this.currentPlanetYPos = this.galaxy.height - 250;
         this.currentUFOYPos = this.galaxy.height - 3000;
+        this.currentStarYpos = this.galaxy.height - 200;
         this.galaxy.removeObject(this.rocket.sprite);
         this.stage.removeChild(this.galaxy.container);
         this.stage.update();
@@ -332,16 +352,14 @@ var Game = (function () {
         this.vector1 = undefined;
         this.planets = [];
         this.ufos = [];
+        this.stars = [];
 
         var that = this;
         if(this.useController) {
             $(".restart-instructions-controller").removeClass('out');
         } else {
             $(".restart-instructions-no-controller").removeClass('out');
-            document.getElementById('restart').addEventListener('click', function(event) {
-                event.preventDefault();
-                that.restart();
-            });
+            document.getElementById('restart').addEventListener('click', that.restart);
         }
 
         if(this.useController) {
@@ -349,13 +367,18 @@ var Game = (function () {
         }
     };
 
-    Game.prototype.restart = function() {
+    Game.prototype.restart = function(event) {
         console.log('[GAME] Game.prototype.restart');
+        var that = this;
+        if(event !== null || event !== undefined) {
+            event.preventDefault();
+        }
+
         if(this.useController) {
             $(".restart-instructions-controller").addClass('out');
         } else {
             $(".restart-instructions-no-controller").addClass('out');
-            document.getElementById('restart').removeEventListener('click');
+            document.getElementById('restart').removeEventListener('click', that.restart);
         }
 
         this.galaxy = new Galaxy(this.cWidth, 300000);
@@ -369,8 +392,9 @@ var Game = (function () {
         this.galaxy.addObject(this.rocket.rocketImg);
         this.galaxy.addObject(this.rocket.sprite);
 
-        this.createPlanets();
-        this.createUFOs();
+        this.createPlanets(17);
+        this.createUFOs(7);
+        this.createStars(3);
 
         this.gamestats.relive();
         this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
@@ -401,26 +425,29 @@ var Game = (function () {
         }
     };
 
-    Game.prototype.createPlanets = function() {
-        for(var i = 0; i < 15; i++) {
-            console.log('currentPlanetYpos: ',this.currentPlanetYPos);
+
+    Game.prototype.createPlanets = function(ammount) {
+        for(var i = 0; i < ammount - 1; i++) {
+            console.log('[createPlanets] current planet y pos = ' + this.currentPlanetYPos);
             this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
             this.currentPlanetYPos -= this.planetDistance;
-        }
-
-        for (var j = this.planets.length - 1; j >= 0; j--) {
-            this.galaxy.addObject(this.planets[j].container);
+            this.galaxy.addObject(this.planets[i].container);
         }
     };
 
-    Game.prototype.createUFOs = function() {
-        for(var i = 0; i < 6; i++) {
+    Game.prototype.createUFOs = function(ammount) {
+        for(var i = 0; i < ammount - 1; i++) {
             this.ufos.push(new Ufo(20, this.currentUFOYPos));
             this.currentUFOYPos -= Math.floor((Math.random() * 3000) + 2500);
+            this.galaxy.addObject(this.ufos[i].container);
         }
+    };
 
-        for(var j = this.ufos.length - 1; j >= 0; j--) {
-            this.galaxy.addObject(this.ufos[j].container);
+    Game.prototype.createStars = function(ammount) {
+        for(var i = 0; i < ammount - 1; i++) {
+            this.stars.push(new Star(Math.floor(Math.random() * this.cWidth), this.currentStarYpos));
+            this.currentStarYpos -= Math.floor((Math.random() * 3000) + 5000);
+            this.galaxy.addObject(this.stars[i].container);
         }
     };
 
@@ -433,7 +460,7 @@ var Game = (function () {
     return Game;
 })();
 
-/* global Util:true */
+/* global Util:true, TweenMax:true, Linear:true */
 var Gamestats = (function () {
 
     var Gamestats = function (x, y, lives) {
@@ -445,10 +472,37 @@ var Gamestats = (function () {
         this.heartImgsXPos = 70;
         this.container = new createjs.Container();
 
+        this.countdownContainer = new createjs.Container();
+        this.countdownContainer.alpha = 0;
+
+        this.container.addChild(this.countdownContainer);
+
         // score field
         this.score = new createjs.Text("0000", "20px sequibold", "#efefef");
         this.score.textBaseline = "alphabetic";
         this.container.addChild(this.score);
+
+        // default star
+        this.defaultStar = new createjs.Bitmap('img/default-star.png');
+        this.defaultStar.x = 367;
+        this.defaultStar.y = 19;
+        this.countdownContainer.addChild(this.defaultStar);
+
+        this.countdownFill = new createjs.Shape();
+        this.countdownFill.graphics.beginFill('#e7c54e');
+        this.countdownFill.graphics.drawRect(0, 0, 90, 18);
+        this.countdownFill.graphics.endFill();
+        this.countdownFill.x = 390;
+        this.countdownFill.y = 15;
+        this.countdownContainer.addChild(this.countdownFill);
+
+        this.countdownBox = new createjs.Shape();
+        this.countdownBox.graphics.beginStroke('#ffffff').setStrokeStyle(1);
+        this.countdownBox.graphics.drawRect(0, 0, 90, 18);
+        this.countdownBox.graphics.endFill();
+        this.countdownBox.x = 390;
+        this.countdownBox.y = 15;
+        this.countdownContainer.addChild(this.countdownBox);
 
         // create hearts for each lives
         for(var i = 0; i < this.lives; i++) {
@@ -477,6 +531,16 @@ var Gamestats = (function () {
             this.container.removeChild(this.heartImgs[i]);
         }
         this.heartImgs = [];
+    };
+
+    Gamestats.prototype.showInvincibleFor = function(seconds) {
+        this.countdownContainer.alpha = 1;
+        this.countdownFill.scaleX = 1;
+        TweenMax.to(this.countdownFill, seconds, {scaleX:0, repeat:0, ease:Linear.easeNone, onComplete:this.hideCountdown});
+    };
+
+    Gamestats.prototype.hideCountdown = function() {
+        TweenMax.to(this.countdownContainer, 0.7, {alpha: 0});
     };
 
     Gamestats.prototype.relive = function() {
@@ -584,6 +648,7 @@ var Rocket = (function () {
         this.rocketVector = vector;
         this.workingVectors = [];
         this.remainingLives = 2;
+        this.invincible = false;
 
         this.socket = window.socket;
 
@@ -706,7 +771,57 @@ var Rocket = (function () {
         this.remainingLives--;
     };
 
+    Rocket.prototype.makeInvincible = function(miliseconds) {
+        this.invincible = true;
+
+        var that = this;
+        setTimeout(function() {
+            that.invincible = false;
+            console.log('not invincible anymore');
+        }, miliseconds);
+    };
+
     return Rocket;
+})();
+
+/* globals TweenMax:true, Linear:true */
+var Star = (function () {
+
+    var Star = function (x, y) {
+        _.bindAll(this);
+
+        this.x = x;
+        this.y = y;
+
+        this.container = new createjs.Container();
+
+        this.starImg = new createjs.Bitmap('img/star.png');
+        this.container.addChild(this.starImg);
+
+        this.starImg.x = this.x+30;
+        this.starImg.y = this.y;
+
+        TweenMax.to(this.starImg, 3, {bezier:[{x:this.x - 30, y: this.y}, {x:this.x + 30, y:this.y}], ease: Linear.easeNone, repeat:-1});
+    };
+
+    Star.prototype.update = function() {
+        TweenMax.killTweensOf(this.starImg);
+        this.container.removeChild(this.starImg);
+
+        this.starImg = new createjs.Bitmap('img/star.png');
+        this.container.addChild(this.starImg);
+
+        this.starImg.x = this.x+30;
+        this.starImg.y = this.y;
+
+        TweenMax.to(this.starImg, 3, {bezier:[{x:this.x - 30, y: this.y}, {x:this.x + 30, y:this.y}], ease: Linear.easeNone, repeat:-1});
+    };
+
+    Star.prototype.hide = function() {
+        this.starImg.alpha = 0;
+    };
+
+    return Star;
 })();
 
 /* globals TweenMax:true, Power1:true, Sine:true */
