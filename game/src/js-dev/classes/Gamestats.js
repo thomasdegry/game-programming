@@ -1,4 +1,4 @@
-/* global Util:true */
+/* global Util:true, TweenMax:true, Linear:true */
 var Gamestats = (function () {
 
     var Gamestats = function (x, y, lives) {
@@ -10,10 +10,37 @@ var Gamestats = (function () {
         this.heartImgsXPos = 70;
         this.container = new createjs.Container();
 
+        this.countdownContainer = new createjs.Container();
+        this.countdownContainer.alpha = 0;
+
+        this.container.addChild(this.countdownContainer);
+
         // score field
         this.score = new createjs.Text("0000", "20px sequibold", "#efefef");
         this.score.textBaseline = "alphabetic";
         this.container.addChild(this.score);
+
+        // default star
+        this.defaultStar = new createjs.Bitmap('img/default-star.png');
+        this.defaultStar.x = 367;
+        this.defaultStar.y = 19;
+        this.countdownContainer.addChild(this.defaultStar);
+
+        this.countdownFill = new createjs.Shape();
+        this.countdownFill.graphics.beginFill('#e7c54e');
+        this.countdownFill.graphics.drawRect(0, 0, 90, 18);
+        this.countdownFill.graphics.endFill();
+        this.countdownFill.x = 390;
+        this.countdownFill.y = 15;
+        this.countdownContainer.addChild(this.countdownFill);
+
+        this.countdownBox = new createjs.Shape();
+        this.countdownBox.graphics.beginStroke('#ffffff').setStrokeStyle(1);
+        this.countdownBox.graphics.drawRect(0, 0, 90, 18);
+        this.countdownBox.graphics.endFill();
+        this.countdownBox.x = 390;
+        this.countdownBox.y = 15;
+        this.countdownContainer.addChild(this.countdownBox);
 
         // create hearts for each lives
         for(var i = 0; i < this.lives; i++) {
@@ -42,6 +69,16 @@ var Gamestats = (function () {
             this.container.removeChild(this.heartImgs[i]);
         }
         this.heartImgs = [];
+    };
+
+    Gamestats.prototype.showInvincibleFor = function(seconds) {
+        this.countdownContainer.alpha = 1;
+        this.countdownFill.scaleX = 1;
+        TweenMax.to(this.countdownFill, seconds, {scaleX:0, repeat:0, ease:Linear.easeNone, onComplete:this.hideCountdown});
+    };
+
+    Gamestats.prototype.hideCountdown = function() {
+        TweenMax.to(this.countdownContainer, 0.7, {alpha: 0});
     };
 
     Gamestats.prototype.relive = function() {

@@ -1,4 +1,4 @@
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Util:true, io:true, Gamestats:true */
+/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, Util:true, io:true, Gamestats:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -94,11 +94,14 @@ var Game = (function () {
         // create temporary level
         this.currentPlanetYPos = this.galaxy.height - 250;
         this.currentUFOYPos = this.galaxy.height - 3000;
+        this.currentStarYpos = this.galaxy.height - 200;
         console.log(this.currentUFOYPos);
         this.planets = [];
         this.ufos = [];
-        this.createPlanets();
-        this.createUFOs();
+        this.stars = [];
+        this.createPlanets(17);
+        this.createUFOs(7);
+        this.createStars(3);
 
         // make a rocket
         this.rocket.x = 150;
@@ -148,7 +151,8 @@ var Game = (function () {
             }
 
             var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[j].planetImg, this.rocket.rocketImg);
-            if(intersactionPlanet !== false) {
+            if(intersactionPlanet !== false && !this.rocket.invincible) {
+                console.log(this.rocket.invincible);
                 crashFlag = true;
             }
         }
@@ -162,8 +166,8 @@ var Game = (function () {
 
         // loop over ufos and check if collision
         for(var k = 0; k < this.ufos.length; k++) {
-            var intersection = ndgmr.checkRectCollision(this.ufos[k].ufoImg, this.rocket.sprite);
-            if(intersection !== null) {
+            var intersection = ndgmr.checkPixelCollision(this.ufos[k].ufoImg, this.rocket.rocketImg);
+            if(intersection !== false && !this.rocket.invincible) {
                 // subtract a life of your rocket
                 this.rocket.dieOnce();
                 // remove the current planet from the galaxy
@@ -175,6 +179,19 @@ var Game = (function () {
                     this.endGame();
                     return false;
                 }
+            }
+        }
+
+        // loop over alle stars en check collision
+        for(var l = 0; l < this.stars.length; l++) {
+            var starIntersection = ndgmr.checkPixelCollision(this.stars[l].starImg, this.rocket.rocketImg);
+            if(starIntersection !== false) {
+                // if intersection we move the star up to reuse it, we don't do this in a reArrangeStars because collision keeps happening when flying slow, ufo's die if we hit them, stars don't, you can keep on collecting stars, but you can't keep collecting ufo's, you die after two
+                this.stars[l].y = this.currentStarYpos;
+                this.stars[l].update();
+                this.currentStarYpos -= Math.floor((Math.random() * 3000) + 5000);
+                this.rocket.makeInvincible(10000);
+                this.gamestats.showInvincibleFor(10);
             }
         }
 
@@ -205,10 +222,12 @@ var Game = (function () {
     };
 
     Game.prototype.endGame = function() {
+        console.log('[ENDGAME]');
         this.playing = false;
         this.ticker.removeEventListener('tick', this.tickHandler);
         this.currentPlanetYPos = this.galaxy.height - 250;
         this.currentUFOYPos = this.galaxy.height - 3000;
+        this.currentStarYpos = this.galaxy.height - 200;
         this.galaxy.removeObject(this.rocket.sprite);
         this.stage.removeChild(this.galaxy.container);
         this.stage.update();
@@ -217,16 +236,14 @@ var Game = (function () {
         this.vector1 = undefined;
         this.planets = [];
         this.ufos = [];
+        this.stars = [];
 
         var that = this;
         if(this.useController) {
             $(".restart-instructions-controller").removeClass('out');
         } else {
             $(".restart-instructions-no-controller").removeClass('out');
-            document.getElementById('restart').addEventListener('click', function(event) {
-                event.preventDefault();
-                that.restart();
-            });
+            document.getElementById('restart').addEventListener('click', that.restart);
         }
 
         if(this.useController) {
@@ -234,13 +251,18 @@ var Game = (function () {
         }
     };
 
-    Game.prototype.restart = function() {
+    Game.prototype.restart = function(event) {
         console.log('[GAME] Game.prototype.restart');
+        var that = this;
+        if(event !== null || event !== undefined) {
+            event.preventDefault();
+        }
+
         if(this.useController) {
             $(".restart-instructions-controller").addClass('out');
         } else {
             $(".restart-instructions-no-controller").addClass('out');
-            document.getElementById('restart').removeEventListener('click');
+            document.getElementById('restart').removeEventListener('click', that.restart);
         }
 
         this.galaxy = new Galaxy(this.cWidth, 300000);
@@ -254,8 +276,9 @@ var Game = (function () {
         this.galaxy.addObject(this.rocket.rocketImg);
         this.galaxy.addObject(this.rocket.sprite);
 
-        this.createPlanets();
-        this.createUFOs();
+        this.createPlanets(17);
+        this.createUFOs(7);
+        this.createStars(3);
 
         this.gamestats.relive();
         this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
@@ -286,25 +309,28 @@ var Game = (function () {
         }
     };
 
-    Game.prototype.createPlanets = function() {
-        for(var i = 0; i < 15; i++) {
+    Game.prototype.createPlanets = function(ammount) {
+        for(var i = 0; i < ammount - 1; i++) {
+            console.log('[createPlanets] current planet y pos = ' + this.currentPlanetYPos);
             this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
             this.currentPlanetYPos -= this.planetDistance;
-        }
-
-        for (var j = this.planets.length - 1; j >= 0; j--) {
-            this.galaxy.addObject(this.planets[j].container);
+            this.galaxy.addObject(this.planets[i].container);
         }
     };
 
-    Game.prototype.createUFOs = function() {
-        for(var i = 0; i < 6; i++) {
+    Game.prototype.createUFOs = function(ammount) {
+        for(var i = 0; i < ammount - 1; i++) {
             this.ufos.push(new Ufo(20, this.currentUFOYPos));
             this.currentUFOYPos -= Math.floor((Math.random() * 3000) + 2500);
+            this.galaxy.addObject(this.ufos[i].container);
         }
+    };
 
-        for(var j = this.ufos.length - 1; j >= 0; j--) {
-            this.galaxy.addObject(this.ufos[j].container);
+    Game.prototype.createStars = function(ammount) {
+        for(var i = 0; i < ammount - 1; i++) {
+            this.stars.push(new Star(Math.floor(Math.random() * this.cWidth), this.currentStarYpos));
+            this.currentStarYpos -= Math.floor((Math.random() * 3000) + 5000);
+            this.galaxy.addObject(this.stars[i].container);
         }
     };
 

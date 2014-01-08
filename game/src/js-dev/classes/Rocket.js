@@ -9,6 +9,7 @@ var Rocket = (function () {
         this.rocketVector = vector;
         this.workingVectors = [];
         this.remainingLives = 2;
+        this.invincible = false;
 
         this.socket = window.socket;
 
@@ -129,6 +130,16 @@ var Rocket = (function () {
 
     Rocket.prototype.dieOnce = function() {
         this.remainingLives--;
+    };
+
+    Rocket.prototype.makeInvincible = function(miliseconds) {
+        this.invincible = true;
+
+        var that = this;
+        setTimeout(function() {
+            that.invincible = false;
+            console.log('not invincible anymore');
+        }, miliseconds);
     };
 
     return Rocket;
