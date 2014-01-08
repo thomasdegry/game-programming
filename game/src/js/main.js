@@ -327,6 +327,7 @@ var Game = (function () {
         // recycle graphics on top and update
         this.reArrangePlanets();
         this.reArrangeUfos();
+        this.reArrangeStars();
 
         if (this.playing){
             this.rocket.update();
@@ -425,9 +426,19 @@ var Game = (function () {
         }
     };
 
+    Game.prototype.reArrangeStars = function() {
+        for(var i = 0; i < this.planets.length; i++) {
+            if(this.rocket.y - this.stars[i].y < (-this.cHeight)) {
+                this.stars[i].y = this.currentStarYpos;
+                this.stars[i].x = Math.floor(Math.random() * this.cWidth);
+                this.stars[i].update();
+                this.currentStarYpos -= Math.floor((Math.random() * 3000) + 5000);
+            }
+        }
+    };
+
     Game.prototype.createPlanets = function(ammount) {
         for(var i = 0; i < ammount - 1; i++) {
-            console.log('[createPlanets] current planet y pos = ' + this.currentPlanetYPos);
             this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
             this.currentPlanetYPos -= this.planetDistance;
             this.galaxy.addObject(this.planets[i].container);
@@ -814,10 +825,6 @@ var Star = (function () {
         this.starImg.y = this.y;
 
         TweenMax.to(this.starImg, 3, {bezier:[{x:this.x - 30, y: this.y}, {x:this.x + 30, y:this.y}], ease: Linear.easeNone, repeat:-1});
-    };
-
-    Star.prototype.hide = function() {
-        this.starImg.alpha = 0;
     };
 
     return Star;

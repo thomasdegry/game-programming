@@ -31,9 +31,5 @@ var Star = (function () {
         TweenMax.to(this.starImg, 3, {bezier:[{x:this.x - 30, y: this.y}, {x:this.x + 30, y:this.y}], ease: Linear.easeNone, repeat:-1});
     };
 
-    Star.prototype.hide = function() {
-        this.starImg.alpha = 0;
-    };
-
     return Star;
 })();
