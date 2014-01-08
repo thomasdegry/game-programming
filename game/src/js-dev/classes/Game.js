@@ -104,6 +104,7 @@ var Game = (function () {
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.sprite);
+        this.galaxy.addObject(this.rocket.rocketImg);
 
         // create a game stats instance
         this.gamestats = new Gamestats(15, 30, 2);
@@ -134,56 +135,30 @@ var Game = (function () {
         }
 
         var collisionFlag = false,
-            crashFlag = false,
-            crashPlanet,
-            crashIndex;
+            crashFlag = false;
 
-        // TODO: refactor like ufo collision
         for(var j = 0; j < this.planets.length; j++){
             var d = Util.getDistance(this.planets[j],this.rocket);
 
             if(d < this.planets[j].gravityRadius) {
-                collisionFlag = true;
                 var angle = Util.getAngle(this.planets[j],this.rocket);
                 var force = this.planets[j].gravityRadius - d;
                 this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force));
-            } else {
-                if(!collisionFlag) {
-                    collisionFlag = false;
-                }
-            }
-
-            if(Util.getDistance(this.planets[j],this.rocket) < this.planets[j].radius) {
-                crashFlag = true;
-                crashPlanet = this.planets[j];
-                crashIndex = j;
-            } else {
-                if(!crashFlag) {
-                    crashFlag = false;
-                }
             }
         }
 
-        // if debug true onderaan links op de pagina indicators updaten
-        if(collisionFlag && this.debug === true) {
-            $("#inbound").removeClass('false').addClass('true');
-        } else {
-            $("#inbound").removeClass('true').addClass('false');
+        for(var l = 0; l < this.planets.length; l++) {
+            var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[l].planetImg, this.rocket.rocketImg);
+            if(intersactionPlanet !== false) {
+                crashFlag = true;
+            }
         }
 
         // creash op een planeet
         if(crashFlag) {
-            if(this.debug === true) {
-                $("#crash").removeClass('false').addClass('true');
-            }
-
             // update gamestats
             this.gamestats.takeAllLives();
             this.endGame();
-        } else {
-            if(this.debug) {
-                $("#crash").removeClass('true').addClass('false');
-            }
         }
 
         // loop over ufos and check if collision
@@ -273,11 +248,6 @@ var Game = (function () {
         this.stage.addChild(this.galaxy.container);
 
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
-        this.rocket = new Rocket(-5, -10, this.vector1);
-        this.rocket.x = 150;
-        this.rocket.y = this.galaxy.height - 20;
-        this.galaxy.addObject(this.rocket.sprite);
-
         this.rocket = new Rocket(-5, -10, this.vector1);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;

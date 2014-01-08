@@ -30,6 +30,12 @@ var Rocket = (function () {
             'framerate': 10
         });
 
+        this.rocketImg = new createjs.Bitmap('img/rocket-ghost.png');
+        this.rocketImg.regX = 26;
+        this.rocketImg.regY = 52;
+        this.rocketImg.x = this.x;
+        this.rocketImg.y = this.y;
+
         this.sprite = new createjs.Sprite(this.RocketAnim,'fly');
         this.sprite.framerate = 10;
         this.sprite.regX = 24;
@@ -95,7 +101,11 @@ var Rocket = (function () {
         this.sprite.x = this.x;
         this.sprite.y = this.y;
 
+        this.rocketImg.x = this.x;
+        this.rocketImg.y = this.y;
+
         TweenMax.to(this.sprite, 0.5, {rotation: this.rocketVector.getHeading() - 90});
+        TweenMax.to(this.rocketImg, 0.5, {rotation: this.rocketVector.getHeading() - 90});
         // this.sprite.rotation = this.rocketVector.getHeading() - 90;
 
         this.workingVectors = [];
