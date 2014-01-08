@@ -287,6 +287,7 @@ var Game = (function () {
 
     Game.prototype.createPlanets = function() {
         for(var i = 0; i < 15; i++) {
+            console.log('currentPlanetYpos: ',this.currentPlanetYPos);
             this.planets.push(new Planet(Math.floor(Math.random() * this.cWidth), this.currentPlanetYPos, (Math.floor(Math.random() * 20) + 20)));
             this.currentPlanetYPos -= this.planetDistance;
         }
