@@ -377,7 +377,8 @@ var Game = (function () {
 
     Game.prototype.restart = function(event) {
         var that = this;
-        if(event !== null || event !== undefined) {
+        console.log(event);
+        if(event) {
             event.preventDefault();
         }
 
