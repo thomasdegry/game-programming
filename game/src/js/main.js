@@ -562,7 +562,7 @@ var Gamestats = (function () {
         this.y = y;
         this.lives = lives;
         this.heartImgs = [];
-        this.heartImgsXPos = 70;
+        this.heartImgsXPos = 80;
         this.container = new createjs.Container();
 
         this.countdownContainer = new createjs.Container();
@@ -580,6 +580,16 @@ var Gamestats = (function () {
         this.defaultStar.x = 367;
         this.defaultStar.y = 19;
         this.countdownContainer.addChild(this.defaultStar);
+
+        this.boost = new createjs.Bitmap('img/boost.png');
+        this.boost.x = 367;
+        this.boost.y = 19;
+        this.countdownContainer.addChild(this.boost);
+
+        this.break = new createjs.Bitmap('img/turtle.png');
+        this.break.x = 362;
+        this.break.y = 21;
+        this.countdownContainer.addChild(this.break);
 
         this.countdownFill = new createjs.Shape();
         this.countdownFill.graphics.beginFill('#e7c54e');
@@ -629,14 +639,21 @@ var Gamestats = (function () {
     Gamestats.prototype.showSomething = function(subject, seconds) {
         TweenMax.killTweensOf(this.countdownFill);
         this.countdownFill.graphics.clear();
+        this.defaultStar.alpha = 0; this.boost.alpha = 0; this.break.alpha = 0;
         var color = '#e7c54e';
         switch(subject) {
             case 'boostEngine':
                 color = '#81d766';
+                this.boost.alpha = 1;
                 break;
 
             case 'breakEngine':
                 color = '#b11500';
+                this.break.alpha = 1;
+                break;
+
+            default:
+                this.defaultStar.alpha = 1;
                 break;
         }
 
@@ -697,7 +714,14 @@ var Planet = (function () {
         this.container.addChild(this.stroke);
 
         // planeet img is 254 * 247px
-        this.planetImg = new createjs.Bitmap('img/planet.png');
+        var randomColorDecider = Math.floor(Math.random() * 100);
+        if(randomColorDecider < 33) {
+            this.planetImg = new createjs.Bitmap('img/planet.png');
+        } else if(randomColorDecider >= 33 && randomColorDecider < 66) {
+            this.planetImg = new createjs.Bitmap('img/planet-blue.png');
+        } else {
+            this.planetImg = new createjs.Bitmap('img/planet-orange.png');
+        }
         this.planetImg.scaleX = (1/254) * (radius * 2);
         this.planetImg.scaleY = (1/247) * (radius * 2);
         this.container.addChild(this.planetImg);
@@ -723,6 +747,18 @@ var Planet = (function () {
         // this.gravityRadius = (this.radius + Math.floor(Math.random() * 200)) * multiplier;
         this.gravityRadius = this.radius + 50 + Math.floor(Math.random() * (100 * multiplier));
         var newRadius = this.radius * multiplier;
+
+        var randomColorDecider = Math.floor(Math.random() * 100);
+        if(randomColorDecider < 33) {
+            this.planetImg = new createjs.Bitmap('img/planet.png');
+        } else if(randomColorDecider >= 33 && randomColorDecider < 66) {
+            this.planetImg = new createjs.Bitmap('img/planet-blue.png');
+        } else {
+            this.planetImg = new createjs.Bitmap('img/planet-orange.png');
+        }
+        this.planetImg.scaleX = (1/254) * (newRadius * 2);
+        this.planetImg.scaleY = (1/247) * (newRadius * 2);
+        this.container.addChild(this.planetImg);
 
         this.gravityField.graphics.clear();
         this.gravityField.graphics.beginStroke("#3f3a49").setStrokeStyle(2).beginFill("#484356");
@@ -1141,10 +1177,12 @@ var Util =(function () {
 
     Util.proceedZeros = function(score) {
         if(score.toString().length === 1) {
-            return "000" + score;
+            return "0000" + score;
         } else if(score.toString().length === 2) {
-            return "00" + score;
+            return "000" + score;
         } else if(score.toString().length === 3) {
+            return "00" + score;
+        } else if(score.toString().length === 4) {
             return "0" + score;
         } else {
             return score;

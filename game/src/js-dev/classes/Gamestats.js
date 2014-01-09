@@ -7,7 +7,7 @@ var Gamestats = (function () {
         this.y = y;
         this.lives = lives;
         this.heartImgs = [];
-        this.heartImgsXPos = 70;
+        this.heartImgsXPos = 80;
         this.container = new createjs.Container();
 
         this.countdownContainer = new createjs.Container();
@@ -25,6 +25,16 @@ var Gamestats = (function () {
         this.defaultStar.x = 367;
         this.defaultStar.y = 19;
         this.countdownContainer.addChild(this.defaultStar);
+
+        this.boost = new createjs.Bitmap('img/boost.png');
+        this.boost.x = 367;
+        this.boost.y = 19;
+        this.countdownContainer.addChild(this.boost);
+
+        this.break = new createjs.Bitmap('img/turtle.png');
+        this.break.x = 362;
+        this.break.y = 21;
+        this.countdownContainer.addChild(this.break);
 
         this.countdownFill = new createjs.Shape();
         this.countdownFill.graphics.beginFill('#e7c54e');
@@ -74,14 +84,21 @@ var Gamestats = (function () {
     Gamestats.prototype.showSomething = function(subject, seconds) {
         TweenMax.killTweensOf(this.countdownFill);
         this.countdownFill.graphics.clear();
+        this.defaultStar.alpha = 0; this.boost.alpha = 0; this.break.alpha = 0;
         var color = '#e7c54e';
         switch(subject) {
             case 'boostEngine':
                 color = '#81d766';
+                this.boost.alpha = 1;
                 break;
 
             case 'breakEngine':
                 color = '#b11500';
+                this.break.alpha = 1;
+                break;
+
+            default:
+                this.defaultStar.alpha = 1;
                 break;
         }
 
