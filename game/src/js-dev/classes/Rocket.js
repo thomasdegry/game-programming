@@ -1,4 +1,4 @@
-/* globals TweenMax:true, Soundboard:true */
+/* globals TweenMax:true, Soundboard:true, Settings:true */
 var Rocket = (function () {
 
     var Rocket = function (x, y, vector, soundboard) {
@@ -11,6 +11,7 @@ var Rocket = (function () {
         this.workingVectors = [];
         this.remainingLives = 2;
         this.invincible = false;
+        this.settings = new Settings();
 
         this.speedBeforeManipulator = 0;
         this.isUnderManipulation = false;
@@ -146,7 +147,9 @@ var Rocket = (function () {
 
         this.workingVectors = [];
 
-        this.soundboard.rocketloop.setVolume(this.rocketVector.v/5);
+        if(!this.settings.debug) {
+            this.soundboard.rocketloop.setVolume(this.rocketVector.v/5);
+        }
     };
 
     Rocket.prototype.updateHeading = function(heading) {
@@ -167,21 +170,27 @@ var Rocket = (function () {
 
     Rocket.prototype.dieOnce = function() {
         this.remainingLives--;
-        this.soundboard.lostlife.play();
+        if(!this.settings.debug) {
+            this.soundboard.lostlife.play();
+        }
     };
 
     Rocket.prototype.makeInvincible = function(miliseconds) {
         this.invincible = true;
         this.sprite.gotoAndPlay('invincible');
-        this.soundboard.gameloop.pause();
-        this.soundboard.invincible.play();
+        if(!this.settings.debug) {
+            this.soundboard.gameloop.pause();
+            this.soundboard.invincible.play();
+        }
 
         var that = this;
         setTimeout(function() {
             that.invincible = false;
             that.sprite.gotoAndPlay('fly');
-            that.soundboard.invincible.stop();
-            that.soundboard.gameloop.play();
+            if(!that.settings.debug) {
+                that.soundboard.invincible.stop();
+                that.soundboard.gameloop.play();
+            }
         }, miliseconds);
     };
 
@@ -190,7 +199,9 @@ var Rocket = (function () {
         this.speedBeforeManipulator = this.rocketVector.v;
         this.rocketVector.v = Math.floor(this.speedBeforeManipulator / 2);
         this.sprite.gotoAndPlay('break');
-        this.soundboard.break.play();
+        if(!this.settings.debug) {
+            this.soundboard.break.play();
+        }
 
         var that = this;
         setTimeout(function() {
@@ -205,7 +216,9 @@ var Rocket = (function () {
         this.speedBeforeManipulator = this.rocketVector.v;
         this.rocketVector.v = 900;
         this.sprite.gotoAndPlay('boost');
-        this.soundboard.boost.play();
+        if(!this.settings.debug) {
+            this.soundboard.boost.play();
+        }
 
         var that = this;
         setTimeout(function() {

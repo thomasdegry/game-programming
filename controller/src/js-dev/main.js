@@ -2,6 +2,7 @@
 /* globals FastClick */
 /* globals alert */
 /* globals swipe */
+/* globals Settings */
 
 var Controller = (function () {
 
@@ -12,9 +13,10 @@ var Controller = (function () {
         this.emitSpeed = false;
         this.emitTimeout = null;
         this.sliderHeight = undefined;
-        this.underConstruction = false;
         this.player = 1;
         this.twoPlayers = false;
+
+        this.settings = new Settings();
 
         FastClick.attach(document.body);
 
@@ -23,11 +25,7 @@ var Controller = (function () {
             return false;
         }
 
-        if(this.underConstruction) {
-            this.fakeControlPanel();
-        } else {
-            this.bind();
-        }
+        this.bind();
     }
 
     Controller.prototype.bind = function() {
@@ -146,6 +144,12 @@ var Controller = (function () {
         if(restartButton !== null) {
             restartButton.parentNode.removeChild(restartButton);
         }
+
+        var tip = document.getElementById('tip');
+        if(tip !== null) {
+            tip.parentNode.removeChild(tip);
+        }
+
         if($("#speedSlider").hasClass('out')) {
             $("#speedSlider").removeClass('out');
         }
@@ -204,6 +208,14 @@ var Controller = (function () {
             $("#restartButton").removeClass('out');
         }, 1);
 
+        var tip = document.createElement('div');
+        tip.setAttribute('class', 'out');
+        tip.setAttribute('id', 'tip');
+        document.getElementById('speedSlider').appendChild(tip);
+        $("#tip").html('Tip <span>' + this.settings.tips[Math.floor(Math.random() * this.settings.tips.length)] + '</span>');
+        setTimeout(function() {
+            $("#tip").removeClass('out');
+        }, 1);
 
         var that = this;
         document.getElementById('restartButton').addEventListener('click', function(event) {
@@ -223,31 +235,6 @@ var Controller = (function () {
     Controller.prototype.showSpeedOnControlPanel = function(speed) {
         var speedCalculated = (speed * 180) - 90;
         $(".needle").css({ WebkitTransform: 'rotate(' + speedCalculated + 'deg)'});
-    };
-
-    Controller.prototype.fakeControlPanel = function() {
-        document.body.ontouchmove = function(e) { e.preventDefault(); };
-        var login = document.getElementById('login');
-        var header = document.getElementsByTagName('h1');
-
-        login.parentNode.removeChild(header[0]);
-        login.parentNode.removeChild(login);
-
-        $("#speedSlider").removeClass('hide');
-        this.sliderHeight = $("#speedSlider").height();
-
-        var that = this;
-        window.addEventListener('deviceorientation', function (e) {
-            var tilt = e.gamma;
-            if(tilt < -90) {
-                tilt = -90;
-            } else if(tilt > 90) {
-                tilt = 90;
-            }
-
-            that.showHeadingOnControlPanel(tilt);
-
-        }, false);
     };
 
     return Controller;

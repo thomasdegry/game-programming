@@ -371,6 +371,46 @@ h1 {
     &.out {
         @include opacity(0);
         @include translate(0, 20px);
+        pointer-events: none;
+    }
+}
+
+#tip {
+    width: 284px;
+    display: block;
+    position: absolute;
+    text-align: center;
+    top: 270px;
+    left: 50%;
+    margin-left: -142px;
+    @include border-radius(3px);
+    background-color: rgba(0, 0, 0, 0.2);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding: 10px 0 10px 0;
+    text-transform: uppercase;
+
+    @include transition-property(all);
+    @include transition-duration(0.4s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(1.4s);
+
+    @include translate(0, 0);
+    @include opacity(1);
+
+    color: tint(#3b3449, 20);
+    font-weight: bold;
+
+    span {
+        display: block;
+        color: rgb(255, 255, 255);
+        line-height: 30px;
+        font-weight: normal;
+    }
+
+    &.out {
+        @include opacity(0);
+        @include translate(0, 20px);
+        pointer-events: none;
     }
 }
 

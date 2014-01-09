@@ -32,20 +32,18 @@ var Game = (function () {
             $("#crash, #inbound").removeClass('hide');
         }
 
-        this.soundboard = new Soundboard();
-        this.soundboard.lobbyloop.fadeIn(3000);
-        $('#mute').click(function(e){
-            e.preventDefault();
-            buzz.all().toggleMute();
-            if ($(this).hasClass('dim')) {
-                $(this).removeClass('dim');
-            }else{
-                $(this).addClass('dim');
-            }
-        });
-
-        if(this.settings.debug) {
-            buzz.all().toggleMute();
+        if(!this.settings.debug) {
+            this.soundboard = new Soundboard();
+            this.soundboard.lobbyloop.fadeIn(3000);
+            $('#mute').click(function(e){
+                e.preventDefault();
+                buzz.all().toggleMute();
+                if ($(this).hasClass('dim')) {
+                    $(this).removeClass('dim');
+                }else{
+                    $(this).addClass('dim');
+                }
+            });
         }
 
         this.bind();
@@ -154,9 +152,11 @@ var Game = (function () {
         //set playing boolean true for slow tickhandler fallback
         this.playing = true;
 
-        this.soundboard.lobbyloop.stop();
-        this.soundboard.gameloop.fadeIn(2000);
-        this.soundboard.rocketloop.play();
+        if(!this.settings.debug) {
+            this.soundboard.lobbyloop.stop();
+            this.soundboard.gameloop.fadeIn(2000);
+            this.soundboard.rocketloop.play();
+        }
 
     };
 
@@ -253,18 +253,24 @@ var Game = (function () {
 
 
         // difficulty increaser
-        if(this.planetsMoved % 10 === 0 && this.planetsMoved !== 0 && this.planetsMoved !== this.previousNumberOfMovedAndIncreasedDifficulty) {
-            if(this.planetDistance > 70) {
+        if(this.planetsMoved % 6 === 0 && this.planetsMoved !== 0 && this.planetsMoved !== this.previousNumberOfMovedAndIncreasedDifficulty) {
+            if(this.planetDistance > 160) {
                 this.planetDistance -= 20;
+            } else {
+                this.planetDistance -= 1;
             }
 
-            if(this.difficultyMultiplier >= 1.5) {
+            if(this.difficultyMultiplier >= 1.75) {
+                this.difficultyMultiplier += 0.01;
+            } else if(this.difficultyMultiplier >= 1.5) {
                 this.difficultyMultiplier += 0.05;
             } else {
                 this.difficultyMultiplier += 0.1;
             }
             this.previousNumberOfMovedAndIncreasedDifficulty = this.planetsMoved;
+            console.log(this.planetDistance, this.difficultyMultiplier);
         }
+
 
         // recycle graphics on top and update
         this.reArrangePlanets();
@@ -305,7 +311,6 @@ var Game = (function () {
         var that = this;
         if(this.useController) {
             $(".restart-instructions-controller").removeClass('out');
-            $(".restart-instructions-controller .tip span").text(this.settings.tips[Math.floor(Math.random() * this.settings.tips.length)]);
         } else {
             $(".restart-instructions-no-controller").removeClass('out');
             $(".restart-instructions-no-controller .tip span").text(this.settings.tips[Math.floor(Math.random() * this.settings.tips.length)]);
@@ -315,11 +320,14 @@ var Game = (function () {
         if(this.useController) {
             this.socket.emit('gameplay:stop');
         }
-        this.soundboard.gameloop.stop();
-        this.soundboard.invincible.stop();
-        this.soundboard.rocketloop.stop();
-        this.soundboard.endgame.play();
-        this.soundboard.lobbyloop.fadeIn(2000);
+
+        if(!this.settings.debug) {
+            this.soundboard.gameloop.stop();
+            this.soundboard.invincible.stop();
+            this.soundboard.rocketloop.stop();
+            this.soundboard.endgame.play();
+            this.soundboard.lobbyloop.fadeIn(2000);
+        }
     };
 
     Game.prototype.restart = function(event) {
@@ -360,10 +368,12 @@ var Game = (function () {
 
         this.playing = true;
 
-        this.soundboard.lobbyloop.stop();
-        this.soundboard.gameloop.fadeIn(2000);
-        this.soundboard.rocketloop.play();
-        this.soundboard.newlife.play();
+        if(!this.settings.debug) {
+            this.soundboard.lobbyloop.stop();
+            this.soundboard.gameloop.fadeIn(2000);
+            this.soundboard.rocketloop.play();
+            this.soundboard.newlife.play();
+        }
     };
 
     Game.prototype.reArrangePlanets = function() {
