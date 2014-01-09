@@ -1,0 +1,16 @@
+.tip {
+    background-color: rgba(0, 0, 0, 0.2);
+    display: block;
+    @include border-radius(3px);
+    position: relative;
+    top: 260px;
+    font-weight: bold;
+    color: tint(#3b3449, 20);
+    padding: 10px 0 10px 0;
+
+    span {
+        display: block;
+        color: rgba(255, 255, 255, 1);
+        font-weight: normal;
+    }
+}

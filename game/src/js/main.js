@@ -4,6 +4,8 @@ var Settings =(function () {
 
     var Settings = function () {
         this.hostName = 'http://192.168.0.247';
+        this.debug = true;
+        this.tips = ['Tip 1', 'Tip 2', 'Tip 3', 'Tip 4', 'Tip 5'];
     };
 
     return Settings;
@@ -121,8 +123,7 @@ var Game = (function () {
     var Game = function () {
         _.bindAll(this);
 
-        // debug vars
-        this.log = false;
+        this.settings = new Settings();
 
         // setup defaults
         this.h1 = Math.PI / 2;
@@ -160,6 +161,10 @@ var Game = (function () {
                 $(this).addClass('dim');
             }
         });
+
+        if(this.settings.debug) {
+            buzz.all().toggleMute();
+        }
 
         this.bind();
     };
@@ -418,8 +423,10 @@ var Game = (function () {
         var that = this;
         if(this.useController) {
             $(".restart-instructions-controller").removeClass('out');
+            $(".restart-instructions-controller .tip span").text(this.settings.tips[Math.floor(Math.random() * this.settings.tips.length)]);
         } else {
             $(".restart-instructions-no-controller").removeClass('out');
+            $(".restart-instructions-no-controller .tip span").text(this.settings.tips[Math.floor(Math.random() * this.settings.tips.length)]);
             document.getElementById('restart').addEventListener('click', that.restart);
         }
 
@@ -445,6 +452,7 @@ var Game = (function () {
             $(".restart-instructions-no-controller").addClass('out');
             document.getElementById('restart').removeEventListener('click', that.restart);
         }
+
 
         this.galaxy = new Galaxy(this.cWidth, 300000);
         this.galaxy.container.y = -(this.galaxy.height-this.cHeight);
