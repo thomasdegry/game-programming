@@ -30,10 +30,12 @@ var Util =(function () {
 
     Util.proceedZeros = function(score) {
         if(score.toString().length === 1) {
-            return "000" + score;
+            return "0000" + score;
         } else if(score.toString().length === 2) {
-            return "00" + score;
+            return "000" + score;
         } else if(score.toString().length === 3) {
+            return "00" + score;
+        } else if(score.toString().length === 4) {
             return "0" + score;
         } else {
             return score;

@@ -7,7 +7,7 @@ var Gamestats = (function () {
         this.y = y;
         this.lives = lives;
         this.heartImgs = [];
-        this.heartImgsXPos = 70;
+        this.heartImgsXPos = 80;
         this.container = new createjs.Container();
 
         this.countdownContainer = new createjs.Container();

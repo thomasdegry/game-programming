@@ -544,7 +544,7 @@ var Gamestats = (function () {
         this.y = y;
         this.lives = lives;
         this.heartImgs = [];
-        this.heartImgsXPos = 70;
+        this.heartImgsXPos = 80;
         this.container = new createjs.Container();
 
         this.countdownContainer = new createjs.Container();
@@ -696,7 +696,14 @@ var Planet = (function () {
         this.container.addChild(this.stroke);
 
         // planeet img is 254 * 247px
-        this.planetImg = new createjs.Bitmap('img/planet.png');
+        var randomColorDecider = Math.floor(Math.random() * 100);
+        if(randomColorDecider < 33) {
+            this.planetImg = new createjs.Bitmap('img/planet.png');
+        } else if(randomColorDecider >= 33 && randomColorDecider < 66) {
+            this.planetImg = new createjs.Bitmap('img/planet-blue.png');
+        } else {
+            this.planetImg = new createjs.Bitmap('img/planet-orange.png');
+        }
         this.planetImg.scaleX = (1/254) * (radius * 2);
         this.planetImg.scaleY = (1/247) * (radius * 2);
         this.container.addChild(this.planetImg);
@@ -722,6 +729,18 @@ var Planet = (function () {
         // this.gravityRadius = (this.radius + Math.floor(Math.random() * 200)) * multiplier;
         this.gravityRadius = this.radius + 50 + Math.floor(Math.random() * (100 * multiplier));
         var newRadius = this.radius * multiplier;
+
+        var randomColorDecider = Math.floor(Math.random() * 100);
+        if(randomColorDecider < 33) {
+            this.planetImg = new createjs.Bitmap('img/planet.png');
+        } else if(randomColorDecider >= 33 && randomColorDecider < 66) {
+            this.planetImg = new createjs.Bitmap('img/planet-blue.png');
+        } else {
+            this.planetImg = new createjs.Bitmap('img/planet-orange.png');
+        }
+        this.planetImg.scaleX = (1/254) * (newRadius * 2);
+        this.planetImg.scaleY = (1/247) * (newRadius * 2);
+        this.container.addChild(this.planetImg);
 
         this.gravityField.graphics.clear();
         this.gravityField.graphics.beginStroke("#3f3a49").setStrokeStyle(2).beginFill("#484356");
@@ -1112,10 +1131,12 @@ var Util =(function () {
 
     Util.proceedZeros = function(score) {
         if(score.toString().length === 1) {
-            return "000" + score;
+            return "0000" + score;
         } else if(score.toString().length === 2) {
-            return "00" + score;
+            return "000" + score;
         } else if(score.toString().length === 3) {
+            return "00" + score;
+        } else if(score.toString().length === 4) {
             return "0" + score;
         } else {
             return score;
