@@ -114,7 +114,7 @@ var Galaxy = (function () {
     return Galaxy;
 })();
 
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, RocketManipulator:true, Util:true, io:true, Gamestats:true */
+/* globals Vector:true, Rocket:true, Soundboard:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, RocketManipulator:true, Util:true, io:true, Gamestats:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -149,6 +149,9 @@ var Game = (function () {
             $("#crash, #inbound").removeClass('hide');
         }
 
+        this.soundboard = new Soundboard();
+        this.soundboard.lobbyloop.fadeIn(3000);
+
         this.bind();
     };
 
@@ -181,7 +184,7 @@ var Game = (function () {
         $("#launch").addClass('out');
         var gameIdentifier = Math.floor(Math.random() * 1000);
         this.socket.emit('game:start', {code: gameIdentifier});
-        this.rocket = new Rocket(-5, -10, this.vector1);
+        this.rocket = new Rocket(-5, -10, this.vector1, this.soundboard);
         this.rocket.identifier = gameIdentifier;
 
         $(".connect-instructions").removeClass('out');
@@ -190,6 +193,7 @@ var Game = (function () {
 
         $("#multiplayerstats").removeClass('out');
         $("#multiplayerstats p span").text(this.rocket.identifier);
+
     };
 
     Game.prototype.proceedWithoutController = function(event) {
@@ -253,6 +257,10 @@ var Game = (function () {
 
         //set playing boolean true for slow tickhandler fallback
         this.playing = true;
+
+        this.soundboard.lobbyloop.stop();
+        this.soundboard.gameloop.fadeIn(2000);
+        this.soundboard.rocketloop.play();
 
     };
 
@@ -409,6 +417,11 @@ var Game = (function () {
         if(this.useController) {
             this.socket.emit('gameplay:stop');
         }
+        this.soundboard.gameloop.stop();
+        this.soundboard.invincible.stop();
+        this.soundboard.rocketloop.stop();
+        this.soundboard.endgame.play();
+        this.soundboard.lobbyloop.fadeIn(2000);
     };
 
     Game.prototype.restart = function(event) {
@@ -429,7 +442,7 @@ var Game = (function () {
         this.stage.addChild(this.galaxy.container);
 
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
-        this.rocket = new Rocket(-5, -10, this.vector1);
+        this.rocket = new Rocket(-5, -10, this.vector1, this.soundboard);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.rocketImg);
@@ -447,6 +460,11 @@ var Game = (function () {
         this.ticker.addEventListener('tick', this.tickHandler);
 
         this.playing = true;
+
+        this.soundboard.lobbyloop.stop();
+        this.soundboard.gameloop.fadeIn(2000);
+        this.soundboard.rocketloop.play();
+        this.soundboard.newlife.play();
     };
 
     Game.prototype.reArrangePlanets = function() {
@@ -730,15 +748,16 @@ var Planet = (function () {
     return Planet;
 })();
 
-/* globals TweenMax:true */
+/* globals TweenMax:true, Soundboard:true */
 var Rocket = (function () {
 
-    var Rocket = function (x, y, vector) {
+    var Rocket = function (x, y, vector, soundboard) {
         _.bindAll(this);
 
         this.x = x;
         this.y = y;
         this.rocketVector = vector;
+        this.soundboard = soundboard;
         this.workingVectors = [];
         this.remainingLives = 2;
         this.invincible = false;
@@ -876,6 +895,8 @@ var Rocket = (function () {
         TweenMax.to(this.rocketImg, 0.5, {rotation: this.rocketVector.getHeading() - 90});
 
         this.workingVectors = [];
+
+        this.soundboard.rocketloop.setVolume(this.rocketVector.v/5);
     };
 
     Rocket.prototype.updateHeading = function(heading) {
@@ -896,16 +917,21 @@ var Rocket = (function () {
 
     Rocket.prototype.dieOnce = function() {
         this.remainingLives--;
+        this.soundboard.lostlife.play();
     };
 
     Rocket.prototype.makeInvincible = function(miliseconds) {
         this.invincible = true;
         this.sprite.gotoAndPlay('invincible');
+        this.soundboard.gameloop.pause();
+        this.soundboard.invincible.play();
 
         var that = this;
         setTimeout(function() {
             that.invincible = false;
             that.sprite.gotoAndPlay('fly');
+            that.soundboard.invincible.stop();
+            that.soundboard.gameloop.play();
         }, miliseconds);
     };
 
@@ -914,6 +940,7 @@ var Rocket = (function () {
         this.speedBeforeManipulator = this.rocketVector.v;
         this.rocketVector.v = Math.floor(this.speedBeforeManipulator / 2);
         this.sprite.gotoAndPlay('break');
+        this.soundboard.break.play();
 
         var that = this;
         setTimeout(function() {
@@ -928,6 +955,7 @@ var Rocket = (function () {
         this.speedBeforeManipulator = this.rocketVector.v;
         this.rocketVector.v = 900;
         this.sprite.gotoAndPlay('boost');
+        this.soundboard.boost.play();
 
         var that = this;
         setTimeout(function() {
@@ -969,6 +997,24 @@ var RocketManipulator = (function () {
     };
 
     return RocketManipulator;
+})();
+
+/* globals buzz: true */
+var Soundboard = (function (){
+    var Soundboard = function(){
+        this.lobbyloop = new buzz.sound('sound/lobby.mp3',{preload: true, loop: true});
+        this.gameloop = new buzz.sound('sound/game.mp3',{preload: true, loop: true});
+        this.endgame = new buzz.sound('sound/endgame.mp3',{preload: true, loop: false});
+        this.boost = new buzz.sound('sound/boost.mp3',{preload: true, loop: false});
+        this.break = new buzz.sound('sound/enginebreak.mp3',{preload: true, loop: false});
+        this.lostlife = new buzz.sound('sound/lostlife.mp3',{preload: true, loop: false});
+        this.newlife = new buzz.sound('sound/newlife.mp3',{preload: true, loop: false});
+        this.invincible = new buzz.sound('sound/invincible.mp3',{preload: true, loop: true});
+        this.rocketloop = new buzz.sound('sound/rocketloop.mp3',{preload: true, loop: true});
+        this.rocketloop.setVolume(0);
+    };
+
+    return Soundboard;
 })();
 
 /* globals TweenMax:true, Linear:true */

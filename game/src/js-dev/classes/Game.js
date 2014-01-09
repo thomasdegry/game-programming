@@ -1,4 +1,4 @@
-/* globals Vector:true, Rocket:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, RocketManipulator:true, Util:true, io:true, Gamestats:true */
+/* globals Vector:true, Rocket:true, Soundboard:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, RocketManipulator:true, Util:true, io:true, Gamestats:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -33,6 +33,9 @@ var Game = (function () {
             $("#crash, #inbound").removeClass('hide');
         }
 
+        this.soundboard = new Soundboard();
+        this.soundboard.lobbyloop.fadeIn(3000);
+
         this.bind();
     };
 
@@ -65,7 +68,7 @@ var Game = (function () {
         $("#launch").addClass('out');
         var gameIdentifier = Math.floor(Math.random() * 1000);
         this.socket.emit('game:start', {code: gameIdentifier});
-        this.rocket = new Rocket(-5, -10, this.vector1);
+        this.rocket = new Rocket(-5, -10, this.vector1, this.soundboard);
         this.rocket.identifier = gameIdentifier;
 
         $(".connect-instructions").removeClass('out');
@@ -74,6 +77,7 @@ var Game = (function () {
 
         $("#multiplayerstats").removeClass('out');
         $("#multiplayerstats p span").text(this.rocket.identifier);
+
     };
 
     Game.prototype.proceedWithoutController = function(event) {
@@ -137,6 +141,10 @@ var Game = (function () {
 
         //set playing boolean true for slow tickhandler fallback
         this.playing = true;
+
+        this.soundboard.lobbyloop.stop();
+        this.soundboard.gameloop.fadeIn(2000);
+        this.soundboard.rocketloop.play();
 
     };
 
@@ -293,6 +301,11 @@ var Game = (function () {
         if(this.useController) {
             this.socket.emit('gameplay:stop');
         }
+        this.soundboard.gameloop.stop();
+        this.soundboard.invincible.stop();
+        this.soundboard.rocketloop.stop();
+        this.soundboard.endgame.play();
+        this.soundboard.lobbyloop.fadeIn(2000);
     };
 
     Game.prototype.restart = function(event) {
@@ -313,7 +326,7 @@ var Game = (function () {
         this.stage.addChild(this.galaxy.container);
 
         this.vector1 = new Vector(0, 0, this.h1, this.v1);
-        this.rocket = new Rocket(-5, -10, this.vector1);
+        this.rocket = new Rocket(-5, -10, this.vector1, this.soundboard);
         this.rocket.x = 150;
         this.rocket.y = this.galaxy.height - 20;
         this.galaxy.addObject(this.rocket.rocketImg);
@@ -331,6 +344,11 @@ var Game = (function () {
         this.ticker.addEventListener('tick', this.tickHandler);
 
         this.playing = true;
+
+        this.soundboard.lobbyloop.stop();
+        this.soundboard.gameloop.fadeIn(2000);
+        this.soundboard.rocketloop.play();
+        this.soundboard.newlife.play();
     };
 
     Game.prototype.reArrangePlanets = function() {
