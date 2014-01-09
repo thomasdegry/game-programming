@@ -63,6 +63,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
+@font-face {
+  font-family: 'sequibold';
+  src: url("fonts/sequi_bold-webfont.eot");
+  src: url("fonts/sequi_bold-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/sequi_bold-webfont.woff") format("woff"), url("fonts/sequi_bold-webfont.ttf") format("truetype"), url("fonts/sequi_bold-webfont.svg#sequibold") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* line 1, ../sass/modules/_canvas.scss */
 html, body {
   height: 100%;
@@ -80,7 +88,7 @@ body {
   background-image: linear-gradient(#3c3449, #1f1f21);
 }
 
-/* line 11, ../sass/modules/_canvas.scss */
+/* line 12, ../sass/modules/_canvas.scss */
 .canvas-wrapper {
   width: 500px;
   height: 700px;
@@ -89,53 +97,19 @@ body {
   margin-top: 50px;
   position: relative;
 }
-/* line 19, ../sass/modules/_canvas.scss */
+/* line 20, ../sass/modules/_canvas.scss */
 .canvas-wrapper #canvas {
   width: 500px;
   height: 700px;
   border: 5px solid #efefef;
-}
-/* line 25, ../sass/modules/_canvas.scss */
-.canvas-wrapper #launch {
-  width: 316px;
-  height: 178px;
-  margin: 0 auto;
-  text-indent: -119988px;
   overflow: hidden;
-  text-align: left;
-  display: block;
-  background-image: url(../img/launch.png);
-  background-repeat: no-repeat;
-  -webkit-transition-property: all;
-  -moz-transition-property: all;
-  -o-transition-property: all;
-  transition-property: all;
-  -webkit-transition-duration: 0.5s;
-  -moz-transition-duration: 0.5s;
-  -o-transition-duration: 0.5s;
-  transition-duration: 0.5s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-timing-function: ease-in-out;
-  -o-transition-timing-function: ease-in-out;
-  transition-timing-function: ease-in-out;
-  position: absolute;
-  top: 300px;
-  left: 50%;
-  margin-left: -158px;
 }
-/* line 43, ../sass/modules/_canvas.scss */
-.canvas-wrapper #launch.out {
-  top: 50px;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
-  pointer-events: none;
-}
-/* line 50, ../sass/modules/_canvas.scss */
+/* line 27, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions {
   width: 400px;
   display: block;
   position: absolute;
-  top: 280px;
+  top: 150px;
   text-align: center;
   left: 50%;
   margin-left: -200px;
@@ -154,12 +128,16 @@ body {
   -moz-transition-timing-function: ease-in-out;
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.4s;
+  -moz-transition-delay: 0.4s;
+  -o-transition-delay: 0.4s;
+  transition-delay: 0.4s;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   font-size: 1em;
   line-height: 1.4em;
 }
-/* line 69, ../sass/modules/_canvas.scss */
+/* line 47, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions span {
   display: block;
   font-family: 'Arial';
@@ -167,7 +145,7 @@ body {
   color: #ffe15f;
   line-height: 2em;
 }
-/* line 77, ../sass/modules/_canvas.scss */
+/* line 55, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions a {
   display: inline-block;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -193,19 +171,23 @@ body {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 92, ../sass/modules/_canvas.scss */
+/* line 70, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions a:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
-/* line 97, ../sass/modules/_canvas.scss */
+/* line 75, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions.out {
-  top: 400px;
+  -webkit-transform: translate(0, 30px);
+  -moz-transform: translate(0, 30px);
+  -ms-transform: translate(0, 30px);
+  -o-transform: translate(0, 30px);
+  transform: translate(0, 30px);
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   pointer-events: none;
 }
-/* line 104, ../sass/modules/_canvas.scss */
+/* line 82, ../sass/modules/_canvas.scss */
 .canvas-wrapper .restart-instructions-controller {
   width: 400px;
   display: block;
@@ -239,7 +221,7 @@ body {
   font-size: 1em;
   line-height: 1.4em;
 }
-/* line 124, ../sass/modules/_canvas.scss */
+/* line 102, ../sass/modules/_canvas.scss */
 .canvas-wrapper .restart-instructions-controller.out {
   -webkit-transform: translate(0, 20px);
   -moz-transform: translate(0, 20px);
@@ -250,7 +232,7 @@ body {
   opacity: 0;
   pointer-events: none;
 }
-/* line 131, ../sass/modules/_canvas.scss */
+/* line 109, ../sass/modules/_canvas.scss */
 .canvas-wrapper .restart-instructions-no-controller {
   width: 400px;
   display: block;
@@ -284,7 +266,7 @@ body {
   font-size: 1em;
   line-height: 1.4em;
 }
-/* line 152, ../sass/modules/_canvas.scss */
+/* line 130, ../sass/modules/_canvas.scss */
 .canvas-wrapper .restart-instructions-no-controller a {
   width: 200px;
   line-height: 40px;
@@ -304,7 +286,7 @@ body {
   position: relative;
   top: 10px;
 }
-/* line 168, ../sass/modules/_canvas.scss */
+/* line 146, ../sass/modules/_canvas.scss */
 .canvas-wrapper .restart-instructions-no-controller.out {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
@@ -459,10 +441,598 @@ div.indicator.false {
   display: none !important;
 }
 
-@font-face {
+/* line 1, ../sass/modules/_launchscreen.scss */
+.launchscreen {
+  width: 500px;
+  height: 700px;
+  overflow: hidden;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+/* line 11, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .ufo-left {
+  -webkit-transform: translate(-120px, 0);
+  -moz-transform: translate(-120px, 0);
+  -ms-transform: translate(-120px, 0);
+  -o-transform: translate(-120px, 0);
+  transform: translate(-120px, 0);
+}
+/* line 15, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .app-name {
+  -webkit-transform: translate(-20px, 0);
+  -moz-transform: translate(-20px, 0);
+  -ms-transform: translate(-20px, 0);
+  -o-transform: translate(-20px, 0);
+  transform: translate(-20px, 0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+/* line 20, ../sass/modules/_launchscreen.scss */
+.launchscreen.out #launch {
+  -webkit-transform: translate(30px, 0);
+  -moz-transform: translate(30px, 0);
+  -ms-transform: translate(30px, 0);
+  -o-transform: translate(30px, 0);
+  transform: translate(30px, 0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+/* line 25, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .ufo-right {
+  -webkit-transform: translate(100px, 10px);
+  -moz-transform: translate(100px, 10px);
+  -ms-transform: translate(100px, 10px);
+  -o-transform: translate(100px, 10px);
+  transform: translate(100px, 10px);
+}
+/* line 29, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .planet-left {
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+/* line 33, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .planet-right {
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+/* line 37, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .field-left {
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+/* line 41, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .field-right {
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+/* line 45, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .rocket {
+  -webkit-transform: translate(0, 400px);
+  -moz-transform: translate(0, 400px);
+  -ms-transform: translate(0, 400px);
+  -o-transform: translate(0, 400px);
+  transform: translate(0, 400px);
+}
+/* line 49, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .star-left {
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+/* line 53, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .star-right {
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+/* line 57, ../sass/modules/_launchscreen.scss */
+.launchscreen.out .credits {
+  -webkit-transform: translate(300px, 0);
+  -moz-transform: translate(300px, 0);
+  -ms-transform: translate(300px, 0);
+  -o-transform: translate(300px, 0);
+  transform: translate(300px, 0);
+}
+
+/* line 63, ../sass/modules/_launchscreen.scss */
+.ufo-left {
+  background-image: url(../img/launch/ufo-left.png);
+  width: 72px;
+  height: 48px;
+  position: absolute;
+  top: 50px;
+  left: 35px;
+  pointer-events: none;
+  -webkit-transform: translateZ(0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+}
+
+/* line 79, ../sass/modules/_launchscreen.scss */
+.ufo-right {
+  background-image: url(../img/launch/ufo-right.png);
+  width: 163px;
+  height: 104px;
+  position: absolute;
+  top: 245px;
+  left: 408px;
+  pointer-events: none;
+  -webkit-transform: translateZ(0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.7;
+  -moz-transition-delay: 0.7;
+  -o-transition-delay: 0.7;
+  transition-delay: 0.7;
+}
+
+/* line 96, ../sass/modules/_launchscreen.scss */
+.app-name {
   font-family: 'sequibold';
-  src: url("fonts/sequi_bold-webfont.eot");
-  src: url("fonts/sequi_bold-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/sequi_bold-webfont.woff") format("woff"), url("fonts/sequi_bold-webfont.ttf") format("truetype"), url("fonts/sequi_bold-webfont.svg#sequibold") format("svg");
-  font-weight: normal;
-  font-style: normal;
+  color: rgba(0, 0, 0, 0.21);
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.7em;
+  position: relative;
+  -webkit-transform: translateZ(0);
+  top: 100px;
+  pointer-events: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.2s;
+  -moz-transition-delay: 0.2s;
+  -o-transition-delay: 0.2s;
+  transition-delay: 0.2s;
+}
+
+/* line 116, ../sass/modules/_launchscreen.scss */
+#launch {
+  width: 283px;
+  position: absolute;
+  top: 153px;
+  left: 50%;
+  -webkit-transform: translateZ(0);
+  margin-left: -141px;
+  -webkit-border-radius: 64px;
+  -moz-border-radius: 64px;
+  -ms-border-radius: 64px;
+  -o-border-radius: 64px;
+  border-radius: 64px;
+  background-color: #eeeeee;
+  background-image: url(../img/launch/launch.png);
+  background-position: center center;
+  text-indent: -119988px;
+  overflow: hidden;
+  text-align: left;
+  background-repeat: no-repeat;
+  text-align: center;
+  line-height: 64px;
+  display: block;
+  -webkit-box-shadow: #999999 0px 6px 0px;
+  -moz-box-shadow: #999999 0px 6px 0px;
+  box-shadow: #999999 0px 6px 0px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.4s;
+  -moz-transition-delay: 0.4s;
+  -o-transition-delay: 0.4s;
+  transition-delay: 0.4s;
+}
+/* line 141, ../sass/modules/_launchscreen.scss */
+#launch.out {
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  transition-delay: 0s;
+  -webkit-transform: translate(0, -40px);
+  -moz-transform: translate(0, -40px);
+  -ms-transform: translate(0, -40px);
+  -o-transform: translate(0, -40px);
+  transform: translate(0, -40px);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+/* line 147, ../sass/modules/_launchscreen.scss */
+#launch:active {
+  -webkit-transition-duration: 0s;
+  -moz-transition-duration: 0s;
+  -o-transition-duration: 0s;
+  transition-duration: 0s;
+  -webkit-box-shadow: #999999 0px 3px 0px;
+  -moz-box-shadow: #999999 0px 3px 0px;
+  box-shadow: #999999 0px 3px 0px;
+  top: 156px;
+}
+
+/* line 154, ../sass/modules/_launchscreen.scss */
+.star {
+  background-image: url(../img/star.png);
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  pointer-events: none;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+}
+/* line 166, ../sass/modules/_launchscreen.scss */
+.star.star-left {
+  top: 465px;
+  left: 20px;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-transition-delay: 0.9s;
+  -moz-transition-delay: 0.9s;
+  -o-transition-delay: 0.9s;
+  transition-delay: 0.9s;
+}
+/* line 173, ../sass/modules/_launchscreen.scss */
+.star.star-right {
+  top: 615px;
+  right: 40px;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-transition-delay: 1.2s;
+  -moz-transition-delay: 1.2s;
+  -o-transition-delay: 1.2s;
+  transition-delay: 1.2s;
+}
+
+/* line 181, ../sass/modules/_launchscreen.scss */
+.planet-left {
+  background-image: url(../img/launch/planet-left.png);
+  -webkit-transform: translateZ(0);
+  width: 174px;
+  height: 169px;
+  position: absolute;
+  top: 550px;
+  left: -7px;
+  pointer-events: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.6s;
+  -moz-transition-delay: 0.6s;
+  -o-transition-delay: 0.6s;
+  transition-delay: 0.6s;
+}
+
+/* line 199, ../sass/modules/_launchscreen.scss */
+.field-left {
+  background-color: rgba(72, 67, 86, 0.1);
+  -webkit-transform: translateZ(0);
+  -webkit-border-radius: 415px;
+  -moz-border-radius: 415px;
+  -ms-border-radius: 415px;
+  -o-border-radius: 415px;
+  border-radius: 415px;
+  border: 2px solid #3f3a49;
+  width: 415px;
+  height: 415px;
+  position: absolute;
+  top: 420px;
+  left: -120px;
+  pointer-events: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 1.2s;
+  -moz-transition-delay: 1.2s;
+  -o-transition-delay: 1.2s;
+  transition-delay: 1.2s;
+}
+
+/* line 218, ../sass/modules/_launchscreen.scss */
+.rocket {
+  background-image: url(../img/launch/rocket.png);
+  -webkit-transform: translateZ(0);
+  width: 352px;
+  height: 380px;
+  pointer-events: none;
+  position: absolute;
+  top: 320px;
+  left: 74px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.8s;
+  -moz-transition-delay: 0.8s;
+  -o-transition-delay: 0.8s;
+  transition-delay: 0.8s;
+}
+
+/* line 234, ../sass/modules/_launchscreen.scss */
+.planet-right {
+  background-image: url(../img/launch/planet-right.png);
+  width: 111px;
+  height: 108px;
+  pointer-events: none;
+  -webkit-transform: translateZ(0);
+  position: absolute;
+  top: 465px;
+  right: 45px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 1.3s;
+  -moz-transition-delay: 1.3s;
+  -o-transition-delay: 1.3s;
+  transition-delay: 1.3s;
+}
+
+/* line 251, ../sass/modules/_launchscreen.scss */
+.field-right {
+  background-color: rgba(72, 67, 86, 0.1);
+  -webkit-border-radius: 415px;
+  -moz-border-radius: 415px;
+  -ms-border-radius: 415px;
+  -o-border-radius: 415px;
+  border-radius: 415px;
+  border: 2px solid #3f3a49;
+  -webkit-transform: translateZ(0);
+  width: 325px;
+  height: 325px;
+  position: absolute;
+  top: 354px;
+  left: 237px;
+  pointer-events: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.7s;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.8s;
+  -moz-transition-delay: 0.8s;
+  -o-transition-delay: 0.8s;
+  transition-delay: 0.8s;
+}
+
+/* line 270, ../sass/modules/_launchscreen.scss */
+.credits {
+  background-image: url(../img/launch/credits.png);
+  width: 221px;
+  height: 35px;
+  -webkit-transform: translateZ(0);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-family: 'Bitter', sans-serif;
+  text-align: center;
+  font-size: 0.8em;
+  color: #eeeeee;
+  line-height: 3.2em;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 1.4s;
+  -moz-transition-delay: 1.4s;
+  -o-transition-delay: 1.4s;
+  transition-delay: 1.4s;
+}
+/* line 289, ../sass/modules/_launchscreen.scss */
+.credits a {
+  color: #f6d3ad;
+  text-decoration: none;
 }

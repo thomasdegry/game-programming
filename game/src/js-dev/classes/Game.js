@@ -6,6 +6,7 @@ var Game = (function () {
         _.bindAll(this);
 
         this.settings = new Settings();
+        $(".launchscreen").removeClass('out');
 
         // setup defaults
         this.h1 = Math.PI / 2;
@@ -102,6 +103,7 @@ var Game = (function () {
             this.socket.emit('gameplay:start');
         }
 
+        $(".launchscreen").addClass('out');
         $(".connect-instructions").addClass('out');
         // setup the stage
         this.stage = new createjs.Stage("canvas");

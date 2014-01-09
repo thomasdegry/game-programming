@@ -1,0 +1,293 @@
+.launchscreen {
+    width: 500px;
+    height: 700px;
+    overflow: hidden;
+    position: absolute;
+    top: 5px; left: 5px;
+    @include opacity(1);
+    @include translate(0, 0);
+
+    &.out {
+        .ufo-left {
+            @include translate(-120px, 0);
+        }
+
+        .app-name {
+            @include translate(-20px, 0);
+            @include opacity(0);
+        }
+
+        #launch {
+            @include translate(30px, 0);
+            @include opacity(0);
+        }
+
+        .ufo-right {
+            @include translate(100px, 10px);
+        }
+
+        .planet-left {
+            @include scale(0, 0);
+        }
+
+        .planet-right {
+            @include scale(0, 0);
+        }
+
+        .field-left {
+            @include scale(0, 0);
+        }
+
+        .field-right {
+            @include scale(0, 0);
+        }
+
+        .rocket {
+            @include translate(0, 400px);
+        }
+
+        .star-left {
+            @include scale(0, 0);
+        }
+
+        .star-right {
+            @include scale(0, 0);
+        }
+
+        .credits {
+            @include translate(300px, 0);
+        }
+    }
+}
+
+.ufo-left {
+    background-image: url(../img/launch/ufo-left.png);
+    width: 72px;
+    height: 48px;
+    position: absolute;
+    top: 50px; left: 35px;
+    pointer-events: none;
+    -webkit-transform: translateZ(0);
+    @include opacity(1);
+    @include translate(0, 0);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+}
+
+.ufo-right {
+    background-image: url(../img/launch/ufo-right.png);
+    width: 163px;
+    height: 104px;
+    position: absolute;
+    top: 245px; left: 408px;
+    pointer-events: none;
+    -webkit-transform: translateZ(0);
+    @include opacity(1);
+    @include translate(0, 0);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(0.7);
+}
+
+.app-name {
+    font-family: 'sequibold';
+    color: rgba(0, 0, 0, 0.21);
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.7em;
+    position: relative;
+    -webkit-transform: translateZ(0);
+    top: 100px;
+    pointer-events: none;
+    @include opacity(1);
+    @include translate(0, 0);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(0.2s);
+}
+
+#launch {
+    width: 283px;
+    position: absolute;
+    top: 153px;
+    left: 50%;
+    -webkit-transform: translateZ(0);
+    margin-left: -141px;
+    @include border-radius(64px);
+    background-color: #eeeeee;
+    background-image: url(../img/launch/launch.png);
+    background-position: center center;
+    @include hide-text();
+    background-repeat: no-repeat;
+    text-align: center;
+    line-height: 64px;
+    display: block;
+    @include box-shadow(#999999 0px 6px 0px);
+    @include opacity(1);
+    @include translate(0, 0);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(0.4s);
+
+    &.out {
+        @include transition-delay(0s);
+        @include translate(0, -40px);
+        @include opacity(0);
+    }
+
+    &:active {
+        @include transition-duration(0s);
+        @include box-shadow(#999999 0px 3px 0px);
+        top: 156px;
+    }
+}
+
+.star {
+    background-image: url(../img/star.png);
+    width: 22px;
+    // -webkit-transform: translateZ(0);
+    height: 22px;
+    position: absolute;
+    pointer-events: none;
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+
+    &.star-left {
+        top: 465px;
+        left: 20px;
+        @include scale(1, 1);
+        @include transition-delay(0.9s);
+    }
+
+    &.star-right {
+        top: 615px;
+        right: 40px;
+        @include scale(1, 1);
+        @include transition-delay(1.2s);
+    }
+}
+
+.planet-left {
+    background-image: url(../img/launch/planet-left.png);
+    -webkit-transform: translateZ(0);
+    width: 174px;
+    height: 169px;
+    position: absolute;
+    top: 550px; left: -7px;
+    pointer-events: none;
+    @include opacity(1);
+    @include scale(1, 1);
+    @include transform-origin(50%, 50%);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(0.6s);
+}
+
+.field-left {
+    background-color: rgba(72, 67, 86, 0.1);
+    -webkit-transform: translateZ(0);
+    @include border-radius(415px);
+    border: 2px solid #3f3a49;
+    width: 415px; height: 415px;
+    position: absolute;
+    top: 420px; left: -120px;
+    pointer-events: none;
+    @include opacity(1);
+    @include scale(1, 1);
+    @include transform-origin(50%, 50%);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(1.2s);
+}
+
+.rocket {
+    background-image: url(../img/launch/rocket.png);
+    -webkit-transform: translateZ(0);
+    width: 352px; height: 380px;
+    pointer-events: none;
+    position: absolute;
+    top: 320px; left: 74px;
+    @include opacity(1);
+    @include translate(0, 0);
+
+    @include transition-property(all);
+    @include transition-duration(1s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(0.8s);
+}
+
+.planet-right {
+    background-image: url(../img/launch/planet-right.png);
+    width: 111px; height: 108px;
+    pointer-events: none;
+    -webkit-transform: translateZ(0);
+    position: absolute;
+    top: 465px; right: 45px;
+    @include opacity(1);
+    @include scale(1, 1);
+    @include transform-origin(50%, 50%);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(1.3s);
+}
+
+.field-right {
+    background-color: rgba(72, 67, 86, 0.1);
+    @include border-radius(415px);
+    border: 2px solid #3f3a49;
+    -webkit-transform: translateZ(0);
+    width: 325px; height: 325px;
+    position: absolute;
+    top: 354px; left: 237px;
+    pointer-events: none;
+    @include opacity(1);
+    @include scale(1, 1);
+    @include transform-origin(50%, 50%);
+
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(0.8s);
+}
+
+.credits {
+    background-image: url(../img/launch/credits.png);
+    width: 221px; height: 35px;
+    -webkit-transform: translateZ(0);
+    position: absolute;
+    bottom: 0; right: 0;
+    font-family: 'Bitter', sans-serif;
+    text-align: center;
+    font-size: 0.8em;
+    color: #eeeeee;
+    line-height: 3.2em;
+    @include opacity(1);
+    @include translate(0, 0);
+
+    @include transition-property(all);
+    @include transition-duration(1s);
+    @include transition-timing-function(ease-in-out);
+    @include transition-delay(1.4s);
+
+    a {
+        color: #f6d3ad;
+        text-decoration: none;
+    }
+}
