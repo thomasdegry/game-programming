@@ -1,4 +1,4 @@
-/* globals Vector:true, Rocket:true, Soundboard:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, RocketManipulator:true, Util:true, io:true, Gamestats:true */
+/* globals Vector:true, Rocket:true, buzz:true, Soundboard:true, Galaxy: true, Bound:true, Settings:true, ndgmr:true, CollisionDetection:true, Planet:true, Ufo:true, Star:true, RocketManipulator:true, Util:true, io:true, Gamestats:true */
 window.socket = io.connect('http://' + window.location.host + '/');
 var Game = (function () {
 
@@ -35,6 +35,15 @@ var Game = (function () {
 
         this.soundboard = new Soundboard();
         this.soundboard.lobbyloop.fadeIn(3000);
+        $('#mute').click(function(e){
+            e.preventDefault();
+            buzz.all().toggleMute();
+            if ($(this).hasClass('dim')) {
+                $(this).removeClass('dim');
+            }else{
+                $(this).addClass('dim');
+            }
+        });
 
         this.bind();
     };

@@ -1,7 +1,7 @@
 var Settings =(function () {
 
     var Settings = function () {
-        this.hostName = 'http://192.168.60.220';
+        this.hostName = 'http://192.168.0.247';
     };
 
     return Settings;
