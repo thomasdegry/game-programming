@@ -132,24 +132,22 @@ body {
   -moz-transition-delay: 0.4s;
   -o-transition-delay: 0.4s;
   transition-delay: 0.4s;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
+  font-family: 'Bitter', sans-serif;
   font-size: 1em;
   line-height: 1.4em;
 }
-/* line 47, ../sass/modules/_canvas.scss */
+/* line 46, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions span {
   display: block;
-  font-family: 'Arial';
+  font-family: 'Bitter', sans-serif;
   font-size: 1.8em;
   color: #ffe15f;
   line-height: 2em;
 }
-/* line 55, ../sass/modules/_canvas.scss */
+/* line 54, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions a {
   display: inline-block;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
+  font-family: 'Bitter', sans-serif;
   font-size: 1em;
   line-height: 1.4em;
   color: #efefef;
@@ -171,12 +169,12 @@ body {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 70, ../sass/modules/_canvas.scss */
+/* line 69, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions a:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
-/* line 75, ../sass/modules/_canvas.scss */
+/* line 74, ../sass/modules/_canvas.scss */
 .canvas-wrapper .connect-instructions.out {
   -webkit-transform: translate(0, 30px);
   -moz-transform: translate(0, 30px);
@@ -192,8 +190,7 @@ body {
 #multiplayerstats {
   width: 500px;
   margin: 20px auto 0;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
+  font-family: 'Bitter', sans-serif;
   font-size: 1em;
   line-height: 1.4em;
   color: #efefee;
@@ -215,7 +212,7 @@ body {
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
-/* line 16, ../sass/modules/_multiplayerstats.scss */
+/* line 15, ../sass/modules/_multiplayerstats.scss */
 #multiplayerstats.out {
   opacity: 0;
   -webkit-transform: translate(0, 20px);
@@ -224,7 +221,7 @@ body {
   -o-transform: translate(0, 20px);
   transform: translate(0, 20px);
 }
-/* line 21, ../sass/modules/_multiplayerstats.scss */
+/* line 20, ../sass/modules/_multiplayerstats.scss */
 #multiplayerstats .code {
   display: inline-block;
   width: 170px;
@@ -232,14 +229,14 @@ body {
   position: relative;
   top: -6px;
 }
-/* line 29, ../sass/modules/_multiplayerstats.scss */
+/* line 28, ../sass/modules/_multiplayerstats.scss */
 #multiplayerstats span {
   font-family: 'Arial';
   font-size: 1.2em;
   color: #ffe15f;
   line-height: 2em;
 }
-/* line 36, ../sass/modules/_multiplayerstats.scss */
+/* line 35, ../sass/modules/_multiplayerstats.scss */
 #multiplayerstats .controller {
   width: 17px;
   height: 25px;
@@ -258,7 +255,7 @@ body {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 46, ../sass/modules/_multiplayerstats.scss */
+/* line 45, ../sass/modules/_multiplayerstats.scss */
 #multiplayerstats .controller.dim {
   opacity: 0.3;
 }
@@ -925,12 +922,11 @@ div.indicator.false {
   -moz-transition-delay: 0.2s;
   -o-transition-delay: 0.2s;
   transition-delay: 0.2s;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
+  font-family: 'Bitter', sans-serif;
   font-size: 1em;
   line-height: 1.4em;
 }
-/* line 31, ../sass/modules/_restartscreen.scss */
+/* line 30, ../sass/modules/_restartscreen.scss */
 .restartscreen .ufo-left {
   -webkit-transform: translateZ(0);
   background-image: url(../img/restart/ufo-left.png);
@@ -956,7 +952,7 @@ div.indicator.false {
   top: 274px;
   left: -64px;
 }
-/* line 43, ../sass/modules/_restartscreen.scss */
+/* line 42, ../sass/modules/_restartscreen.scss */
 .restartscreen .ufo-right {
   -webkit-transform: translateZ(0);
   background-image: url(../img/restart/ufo-right.png);
@@ -982,7 +978,7 @@ div.indicator.false {
   -o-transition-delay: 0.3s;
   transition-delay: 0.3s;
 }
-/* line 56, ../sass/modules/_restartscreen.scss */
+/* line 55, ../sass/modules/_restartscreen.scss */
 .restartscreen .app-name {
   -webkit-transform: translateZ(0);
   font-family: 'sequibold';
@@ -1019,7 +1015,7 @@ div.indicator.false {
   -o-transition-delay: 0.1s;
   transition-delay: 0.1s;
 }
-/* line 77, ../sass/modules/_restartscreen.scss */
+/* line 76, ../sass/modules/_restartscreen.scss */
 .restartscreen #restart {
   -webkit-transform: translateZ(0);
   width: 283px;
@@ -1069,7 +1065,7 @@ div.indicator.false {
   -o-transition-delay: 0.2s;
   transition-delay: 0.2s;
 }
-/* line 108, ../sass/modules/_restartscreen.scss */
+/* line 107, ../sass/modules/_restartscreen.scss */
 .restartscreen #restart:active {
   -webkit-transition-duration: 0s;
   -moz-transition-duration: 0s;
@@ -1080,7 +1076,7 @@ div.indicator.false {
   box-shadow: #999999 0px 3px 0px;
   top: 156px;
 }
-/* line 115, ../sass/modules/_restartscreen.scss */
+/* line 114, ../sass/modules/_restartscreen.scss */
 .restartscreen .fire {
   -webkit-transform: translateZ(0);
   pointer-events: none;
@@ -1107,7 +1103,7 @@ div.indicator.false {
   -o-transition-delay: 1.5s;
   transition-delay: 1.5s;
 }
-/* line 129, ../sass/modules/_restartscreen.scss */
+/* line 128, ../sass/modules/_restartscreen.scss */
 .restartscreen .gravity-field {
   -webkit-transform: translateZ(0);
   background-color: rgba(72, 67, 86, 0.1);
@@ -1148,7 +1144,7 @@ div.indicator.false {
   -o-transition-delay: 0.5s;
   transition-delay: 0.5s;
 }
-/* line 148, ../sass/modules/_restartscreen.scss */
+/* line 147, ../sass/modules/_restartscreen.scss */
 .restartscreen .tip {
   -webkit-transform: translateZ(0);
   background-color: #3c3449;
@@ -1184,7 +1180,7 @@ div.indicator.false {
   -o-transition-delay: 1s;
   transition-delay: 1s;
 }
-/* line 164, ../sass/modules/_restartscreen.scss */
+/* line 163, ../sass/modules/_restartscreen.scss */
 .restartscreen .tip span {
   display: block;
   width: 100%;
@@ -1193,7 +1189,7 @@ div.indicator.false {
   color: #eeeeee;
   line-height: 40px;
 }
-/* line 175, ../sass/modules/_restartscreen.scss */
+/* line 174, ../sass/modules/_restartscreen.scss */
 .restartscreen .planetPiecesLayer {
   pointer-events: none;
   position: absolute;
@@ -1210,7 +1206,7 @@ div.indicator.false {
   -o-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
-/* line 182, ../sass/modules/_restartscreen.scss */
+/* line 181, ../sass/modules/_restartscreen.scss */
 .restartscreen .planetPiecesLayer.layer1 {
   -webkit-transform: translateZ(0);
   background: url(../img/restart/layer1.png);
@@ -1223,7 +1219,7 @@ div.indicator.false {
   -o-transition-delay: 0.9s;
   transition-delay: 0.9s;
 }
-/* line 190, ../sass/modules/_restartscreen.scss */
+/* line 189, ../sass/modules/_restartscreen.scss */
 .restartscreen .planetPiecesLayer.layer2 {
   -webkit-transform: translateZ(0);
   background: url(../img/restart/layer2.png);
@@ -1236,7 +1232,7 @@ div.indicator.false {
   -o-transition-delay: 1s;
   transition-delay: 1s;
 }
-/* line 198, ../sass/modules/_restartscreen.scss */
+/* line 197, ../sass/modules/_restartscreen.scss */
 .restartscreen .planetPiecesLayer.layer3 {
   -webkit-transform: translateZ(0);
   background: url(../img/restart/layer3.png);
@@ -1249,7 +1245,7 @@ div.indicator.false {
   -o-transition-delay: 1.1s;
   transition-delay: 1.1s;
 }
-/* line 206, ../sass/modules/_restartscreen.scss */
+/* line 205, ../sass/modules/_restartscreen.scss */
 .restartscreen .planetPiecesLayer.layer4 {
   -webkit-transform: translateZ(0);
   background: url(../img/restart/layer4.png);
@@ -1262,7 +1258,7 @@ div.indicator.false {
   -o-transition-delay: 1.2s;
   transition-delay: 1.2s;
 }
-/* line 215, ../sass/modules/_restartscreen.scss */
+/* line 214, ../sass/modules/_restartscreen.scss */
 .restartscreen .rocketPiece {
   pointer-events: none;
   position: absolute;
@@ -1279,7 +1275,7 @@ div.indicator.false {
   -o-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
-/* line 223, ../sass/modules/_restartscreen.scss */
+/* line 222, ../sass/modules/_restartscreen.scss */
 .restartscreen .rocketPiece.rocket1 {
   -webkit-transform: translateZ(0);
   background: url(../img/restart/rocket1.png);
@@ -1297,7 +1293,7 @@ div.indicator.false {
   -o-transition-delay: 0.7s;
   transition-delay: 0.7s;
 }
-/* line 232, ../sass/modules/_restartscreen.scss */
+/* line 231, ../sass/modules/_restartscreen.scss */
 .restartscreen .rocketPiece.rocket2 {
   -webkit-transform: translateZ(0);
   background: url(../img/restart/rocket2.png);
@@ -1315,7 +1311,7 @@ div.indicator.false {
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
-/* line 241, ../sass/modules/_restartscreen.scss */
+/* line 240, ../sass/modules/_restartscreen.scss */
 .restartscreen .rocketPiece.rocket3 {
   -webkit-transform: translateZ(0);
   background-image: url(../img/restart/rocket3.png);
@@ -1333,7 +1329,7 @@ div.indicator.false {
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
-/* line 250, ../sass/modules/_restartscreen.scss */
+/* line 249, ../sass/modules/_restartscreen.scss */
 .restartscreen .rocketPiece.rocket4 {
   -webkit-transform: translateZ(0);
   background-image: url(../img/restart/rocket4.png);
@@ -1351,7 +1347,7 @@ div.indicator.false {
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
-/* line 260, ../sass/modules/_restartscreen.scss */
+/* line 259, ../sass/modules/_restartscreen.scss */
 .restartscreen .star {
   pointer-events: none;
   position: absolute;
@@ -1375,7 +1371,7 @@ div.indicator.false {
   width: 22px;
   height: 22px;
 }
-/* line 270, ../sass/modules/_restartscreen.scss */
+/* line 269, ../sass/modules/_restartscreen.scss */
 .restartscreen .star.star1 {
   -webkit-transform: translateZ(0);
   top: 353px;
@@ -1392,7 +1388,7 @@ div.indicator.false {
   -o-transition-delay: 1.5s;
   transition-delay: 1.5s;
 }
-/* line 278, ../sass/modules/_restartscreen.scss */
+/* line 277, ../sass/modules/_restartscreen.scss */
 .restartscreen .star.star2 {
   -webkit-transform: translateZ(0);
   top: 270px;
@@ -1409,7 +1405,7 @@ div.indicator.false {
   -o-transition-delay: 1.6s;
   transition-delay: 1.6s;
 }
-/* line 286, ../sass/modules/_restartscreen.scss */
+/* line 285, ../sass/modules/_restartscreen.scss */
 .restartscreen .star.star3 {
   -webkit-transform: translateZ(0);
   top: 631px;
@@ -1426,7 +1422,7 @@ div.indicator.false {
   -o-transition-delay: 1.75s;
   transition-delay: 1.75s;
 }
-/* line 294, ../sass/modules/_restartscreen.scss */
+/* line 293, ../sass/modules/_restartscreen.scss */
 .restartscreen .star.star4 {
   -webkit-transform: translateZ(0);
   top: 663px;
@@ -1443,7 +1439,7 @@ div.indicator.false {
   -o-transition-delay: 1.9s;
   transition-delay: 1.9s;
 }
-/* line 305, ../sass/modules/_restartscreen.scss */
+/* line 304, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .app-name {
   -webkit-transform: translate(-20px, 0);
   -moz-transform: translate(-20px, 0);
@@ -1454,7 +1450,7 @@ div.indicator.false {
   opacity: 0;
   pointer-events: none;
 }
-/* line 311, ../sass/modules/_restartscreen.scss */
+/* line 310, ../sass/modules/_restartscreen.scss */
 .restartscreen.out #restart, .restartscreen.out p {
   -webkit-transform: translate(30px, 0);
   -moz-transform: translate(30px, 0);
@@ -1464,7 +1460,7 @@ div.indicator.false {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-/* line 316, ../sass/modules/_restartscreen.scss */
+/* line 315, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .ufo-left {
   -webkit-transform: translate(-150px, 0);
   -moz-transform: translate(-150px, 0);
@@ -1473,7 +1469,7 @@ div.indicator.false {
   transform: translate(-150px, 0);
   pointer-events: none;
 }
-/* line 321, ../sass/modules/_restartscreen.scss */
+/* line 320, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .ufo-right {
   -webkit-transform: translate(90px, 0);
   -moz-transform: translate(90px, 0);
@@ -1482,12 +1478,12 @@ div.indicator.false {
   transform: translate(90px, 0);
   pointer-events: none;
 }
-/* line 326, ../sass/modules/_restartscreen.scss */
+/* line 325, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .star1, .restartscreen.out .star2, .restartscreen.out .star3, .restartscreen.out .star4 {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-/* line 330, ../sass/modules/_restartscreen.scss */
+/* line 329, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .gravity-field {
   -webkit-transform: scale(0, 0);
   -moz-transform: scale(0, 0);
@@ -1496,7 +1492,7 @@ div.indicator.false {
   transform: scale(0, 0);
   pointer-events: none;
 }
-/* line 335, ../sass/modules/_restartscreen.scss */
+/* line 334, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .layer1, .restartscreen.out .layer4 {
   -webkit-transform: translate(-500px, 0);
   -moz-transform: translate(-500px, 0);
@@ -1505,7 +1501,7 @@ div.indicator.false {
   transform: translate(-500px, 0);
   pointer-events: none;
 }
-/* line 340, ../sass/modules/_restartscreen.scss */
+/* line 339, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .layer2, .restartscreen.out .layer3 {
   -webkit-transform: translate(530px, 0);
   -moz-transform: translate(530px, 0);
@@ -1514,13 +1510,13 @@ div.indicator.false {
   transform: translate(530px, 0);
   pointer-events: none;
 }
-/* line 345, ../sass/modules/_restartscreen.scss */
+/* line 344, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .fire {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   pointer-events: none;
 }
-/* line 350, ../sass/modules/_restartscreen.scss */
+/* line 349, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .rocket1 {
   -webkit-transform: translate(0, 400px);
   -moz-transform: translate(0, 400px);
@@ -1529,7 +1525,7 @@ div.indicator.false {
   transform: translate(0, 400px);
   pointer-events: none;
 }
-/* line 355, ../sass/modules/_restartscreen.scss */
+/* line 354, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .rocket2 {
   -webkit-transform: translate(0, 300px);
   -moz-transform: translate(0, 300px);
@@ -1538,7 +1534,7 @@ div.indicator.false {
   transform: translate(0, 300px);
   pointer-events: none;
 }
-/* line 360, ../sass/modules/_restartscreen.scss */
+/* line 359, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .rocket3 {
   -webkit-transform: translate(0, 410px);
   -moz-transform: translate(0, 410px);
@@ -1547,7 +1543,7 @@ div.indicator.false {
   transform: translate(0, 410px);
   pointer-events: none;
 }
-/* line 365, ../sass/modules/_restartscreen.scss */
+/* line 364, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .rocket4 {
   -webkit-transform: translate(0, 170px);
   -moz-transform: translate(0, 170px);
@@ -1556,7 +1552,7 @@ div.indicator.false {
   transform: translate(0, 170px);
   pointer-events: none;
 }
-/* line 370, ../sass/modules/_restartscreen.scss */
+/* line 369, ../sass/modules/_restartscreen.scss */
 .restartscreen.out .tip {
   -webkit-transform: translate(0, 85px);
   -moz-transform: translate(0, 85px);
