@@ -89,6 +89,12 @@ var Planet = (function () {
 
         this.stroke.x = this.x;
         this.stroke.y = this.y;
+
+        var time = Math.floor(Math.random()*3)+2;
+
+        TweenMax.to(this.container, time, {y: ++time * 7, yoyo:true, repeat:-1, ease:Sine.easeInOut});
+        TweenMax.to(this.planetImg, time, {y: this.planetImg.y + 10, yoyo:true, repeat:-1, ease:Sine.easeInOut});
+        TweenMax.to(this.planetImg, time, {rotation: 10, yoyo:true, repeat:-1, ease:Sine.easeInOut});
     };
 
     return Planet;
