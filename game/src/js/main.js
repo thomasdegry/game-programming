@@ -287,18 +287,13 @@ var Game = (function () {
     };
 
     Game.prototype.tickHandler = function(event) {
-        // loop through the bounds to see if there is collision
-        for(var i = 0; i < this.bounds.length; i++) {
-            switch(CollisionDetection.checkCollision(this.rocket, this.bounds[i])) {
-                case "l":
-                    this.rocket.sprite.x = 0;
-                    break;
-
-                case "r":
-                    this.rocket.sprite.x = this.cWidth;
-                    break;
-            }
+        // don't let it go out the screen
+        if (this.rocket.x < 0) {
+            this.rocket.x = 0;
+        }else if(this.rocket.x > this.cWidth){
+            this.rocket.x = this.cWidth;
         }
+
 
         var collisionFlag = false,
             crashFlag = false;
@@ -579,7 +574,6 @@ var Game = (function () {
     };
 
     Game.prototype.createBounds = function() {
-        // three bounds, no bound on the top, right border, bottom border, left border
         this.bounds.push(new Bound(this.galaxy.width - 1, 0, 1, this.galaxy.height));
         this.bounds.push(new Bound(0, 0, 1, this.galaxy.height));
     };
