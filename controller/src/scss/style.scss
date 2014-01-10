@@ -35,52 +35,53 @@ h1 {
 }
 
 ::-webkit-input-placeholder { /* WebKit browsers */
-    color: #fff;
+    color: #b5b5b5;
 }
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: #fff;
+    color: #b5b5b5;
 }
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: #fff;
+    color: #b5b5b5;
 }
 :-ms-input-placeholder { /* Internet Explorer 10+ */
-    color: #fff;
+    color: #b5b5b5;
 }
 
 #login {
-    margin: 2em auto;
-    width: 268px;
-    padding: 0;
+    position: relative;
+    width: 266px;
+    margin: 0 auto;
 }
 
 #game-id {
     @include appearance(none);
-    background-color: #332e3d;
-    border: 2px solid #4e485b;
-    @include border-radius(2px);
-    color: #fff;
-    font-size: 26px;
-    text-align: center;
-    height: 65px;
-    padding: 0;
-    outline: 0;
-    width: 266px;
-    margin: 0 auto 0.7em;
-    font-family: 'Arial';
+    width: 100%;
+    height: 64px;
+    @include border-radius(64px);
+    background-color: #eeeeee;
+    @include box-shadow(#999999 0px 6px 0px);
+    border: none;
+    display: block;
+    margin-top: 25px;
+    font-family: 'Bitter', sans-serif;
+    color: #3c3448;
+    font-size: 1.5em;
+    @include box-sizing(border-box);
+    padding-left: 30px;
 }
 
 #game-id-submit {
     @include appearance(none);
-    background-color: #efefef;
-    border: 0px;
-    color: #4e485b;
-    font-size: 1em;
-    font-family: 'sequibold';
-    @include border-radius(2px);
-    height: 63px;
-    cursor: pointer;
-    width: 82px;
-    float: right;
+    width: 64px; height: 64px;
+    background-color: #d39f4c;
+    position: absolute;
+    right: 0px; top: 0px;
+    @include border-radius(64px);
+    border: none;
+    color: #3c3449;
+    font-family: 'Bitter', sans-serif;
+    font-size: 1.1em;
+    padding-left: -5px;
 }
 
 #speedSlider {
@@ -345,30 +346,37 @@ h1 {
 }
 
 #restartButton {
-    width: 200px;
-    line-height: 40px;
+    -webkit-transform: translateZ(0);
+    width: 283px;
     position: absolute;
-    top: 50px;
+    bottom: 150px;
     left: 50%;
-    margin-left: -100px;
-    text-align: center;
-    @include border-radius(4px);
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    background: #efefef;
-    color: #2e2a36;
-    text-decoration: none;
-
-    @include transition-property(all);
-    @include transition-duration(0.4s);
-    @include transition-timing-function(ease-in-out);
+    line-height: 64px;
+    margin-left: -141px;
+    @include border-radius(64px);
+    background-color: #eeeeee;
+    background-image: url(../img/restart.png);
+    background-size: 50%;
+    background-position: center center;
+    @include hide-text();
+    background-repeat: no-repeat;
+    display: block;
+    @include box-shadow(#999999 0px 6px 0px);
+    @include opacity(1);
     @include translate(0, 0);
 
-    @include opacity(1);
+    @include transition-property(all);
+    @include transition-duration(0.7s);
+    @include transition-timing-function(ease-in-out);
     @include transition-delay(1.2s);
 
     &.out {
+        @include transition-delay(0s);
+        @include translate(0, 40px);
+        @include opacity(0);
+    }
+
+    &:active {
         @include opacity(0);
         @include translate(0, 20px);
         pointer-events: none;
@@ -380,14 +388,10 @@ h1 {
     display: block;
     position: absolute;
     text-align: center;
-    top: 270px;
+    top: 50px;
     left: 50%;
     margin-left: -142px;
-    @include border-radius(3px);
-    background-color: rgba(0, 0, 0, 0.2);
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    padding: 10px 0 10px 0;
-    text-transform: uppercase;
+    font-family: 'Bitter', Helvetica, Arial, sans-serif;
 
     @include transition-property(all);
     @include transition-duration(0.4s);
@@ -397,15 +401,9 @@ h1 {
     @include translate(0, 0);
     @include opacity(1);
 
-    color: tint(#3b3449, 20);
+    color: #ffd154;
     font-weight: bold;
-
-    span {
-        display: block;
-        color: rgb(255, 255, 255);
-        line-height: 30px;
-        font-weight: normal;
-    }
+    line-height: 1.5em;
 
     &.out {
         @include opacity(0);

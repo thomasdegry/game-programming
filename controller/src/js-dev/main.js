@@ -212,7 +212,7 @@ var Controller = (function () {
         tip.setAttribute('class', 'out');
         tip.setAttribute('id', 'tip');
         document.getElementById('speedSlider').appendChild(tip);
-        $("#tip").html('Tip <span>' + this.settings.tips[Math.floor(Math.random() * this.settings.tips.length)] + '</span>');
+        $("#tip").html(this.settings.tips[Math.floor(Math.random() * this.settings.tips.length)]);
         setTimeout(function() {
             $("#tip").removeClass('out');
         }, 1);
