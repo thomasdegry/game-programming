@@ -105,6 +105,7 @@ var Game = (function () {
 
         $(".launchscreen").addClass('out');
         $(".connect-instructions").addClass('out');
+
         // setup the stage
         this.stage = new createjs.Stage("canvas");
         this.stage.canvas.width = this.cWidth;
@@ -153,6 +154,11 @@ var Game = (function () {
 
         //set playing boolean true for slow tickhandler fallback
         this.playing = true;
+        if(this.useController) {
+            $(".restart-instructions-controller").removeClass('hide');
+        } else {
+            $(".restart-instructions-no-controller").removeClass('hide');
+        }
 
         if(!this.settings.debug) {
             this.soundboard.lobbyloop.stop();
@@ -270,7 +276,6 @@ var Game = (function () {
                 this.difficultyMultiplier += 0.1;
             }
             this.previousNumberOfMovedAndIncreasedDifficulty = this.planetsMoved;
-            console.log(this.planetDistance, this.difficultyMultiplier);
         }
 
 

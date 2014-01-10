@@ -79,74 +79,74 @@ body {
         }
     }
 
-    .restart-instructions-controller {
-        width: 400px;
-        display: block;
-        position: absolute;
-        top: 300px;
-        text-align: center;
-        left: 50%;
-        margin-left: -200px;
-        color: #efefee;
-        @include translate(0, 0);
-        @include opacity(1);
-        @include transition-property(all);
-        @include transition-duration(0.7s);
-        @include transition-timing-function(ease-in-out);
+    // .restart-instructions-controller {
+    //     width: 400px;
+    //     display: block;
+    //     position: absolute;
+    //     top: 300px;
+    //     text-align: center;
+    //     left: 50%;
+    //     margin-left: -200px;
+    //     color: #efefee;
+    //     @include translate(0, 0);
+    //     @include opacity(1);
+    //     @include transition-property(all);
+    //     @include transition-duration(0.7s);
+    //     @include transition-timing-function(ease-in-out);
 
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        text-transform: uppercase;
-        font-size: 1em;
-        line-height: 1.4em;
+    //     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    //     text-transform: uppercase;
+    //     font-size: 1em;
+    //     line-height: 1.4em;
 
-        &.out {
-            @include translate(0, 20px);
-            @include opacity(0);
-            pointer-events: none;
-        }
-    }
+    //     &.out {
+    //         @include translate(0, 20px);
+    //         @include opacity(0);
+    //         pointer-events: none;
+    //     }
+    // }
 
-    .restart-instructions-no-controller {
-        width: 400px;
-        display: block;
-        position: absolute;
-        top: 300px;
-        text-align: center;
-        left: 50%;
-        margin-left: -200px;
-        color: #efefee;
+    // .restart-instructions-no-controller {
+    //     width: 400px;
+    //     display: block;
+    //     position: absolute;
+    //     top: 300px;
+    //     text-align: center;
+    //     left: 50%;
+    //     margin-left: -200px;
+    //     color: #efefee;
 
-        @include translate(0, 0);
-        @include opacity(1);
-        @include transition-property(all);
-        @include transition-duration(0.7s);
-        @include transition-timing-function(ease-in-out);
+    //     @include translate(0, 0);
+    //     @include opacity(1);
+    //     @include transition-property(all);
+    //     @include transition-duration(0.7s);
+    //     @include transition-timing-function(ease-in-out);
 
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        text-transform: uppercase;
-        font-size: 1em;
-        line-height: 1.4em;
+    //     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    //     text-transform: uppercase;
+    //     font-size: 1em;
+    //     line-height: 1.4em;
 
-        a {
-            width: 200px;
-            line-height: 40px;
-            text-align: center;
-            @include border-radius(4px);
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: #efefef;
-            color: #2e2a36;
-            text-decoration: none;
-            padding: 10px 20px 10px 20px;
-            position: relative;
-            top: 10px;
-        }
+    //     a {
+    //         width: 200px;
+    //         line-height: 40px;
+    //         text-align: center;
+    //         @include border-radius(4px);
+    //         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    //         text-transform: uppercase;
+    //         letter-spacing: 1px;
+    //         background: #efefef;
+    //         color: #2e2a36;
+    //         text-decoration: none;
+    //         padding: 10px 20px 10px 20px;
+    //         position: relative;
+    //         top: 10px;
+    //     }
 
-        &.out {
-            @include opacity(0);
-            @include translate(0, 20px);
-            pointer-events: none;
-        }
-    }
+    //     &.out {
+    //         @include opacity(0);
+    //         @include translate(0, 20px);
+    //         pointer-events: none;
+    //     }
+    // }
 }
