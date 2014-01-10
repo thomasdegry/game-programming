@@ -51,7 +51,7 @@ var Controller = (function () {
             if(that.emitSpeed) {
                 that.showSpeedOnControlPanel(1-relPosOnScreen);
 
-                that.socket.emit('speed:change', {speed: 1-relPosOnScreen});
+                that.socket.emit('speed:change', {speed: (1-relPosOnScreen)*2});
                 that.emitSpeed = false;
 
                 that.emitSpeedTimeout = setTimeout(function() {
