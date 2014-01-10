@@ -468,13 +468,6 @@ var Game = (function () {
         this.galaxy.container.y = -(this.galaxy.height-this.cHeight);
         this.stage.addChild(this.galaxy.container);
 
-        this.vector1 = new Vector(0, 0, this.h1, this.v1);
-        this.rocket = new Rocket(-5, -10, this.vector1, this.soundboard);
-        this.rocket.x = 150;
-        this.rocket.y = this.galaxy.height - 20;
-        this.galaxy.addObject(this.rocket.rocketImg);
-        this.galaxy.addObject(this.rocket.sprite);
-
         this.createPlanets(25);
         this.createUFOs(7);
         this.createStars(3);
@@ -482,7 +475,13 @@ var Game = (function () {
 
         this.gamestats.relive();
         this.stage.setChildIndex(this.gamestats.container, this.stage.getNumChildren() - 1);
-        this.stage.setChildIndex(this.rocket.sprite, this.stage.getNumChildren() - 1);
+
+        this.vector1 = new Vector(0, 0, this.h1, this.v1);
+        this.rocket = new Rocket(-5, -10, this.vector1, this.soundboard);
+        this.rocket.x = 150;
+        this.rocket.y = this.galaxy.height - 20;
+        this.galaxy.addObject(this.rocket.rocketImg);
+        this.galaxy.addObject(this.rocket.sprite);
 
         this.ticker.addEventListener('tick', this.tickHandler);
 
