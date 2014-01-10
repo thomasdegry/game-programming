@@ -310,7 +310,7 @@ var Game = (function () {
             if(d < this.planets[j].gravityRadius) {
                 var angle = Util.getAngle(this.planets[j],this.rocket);
                 var force = this.planets[j].gravityRadius - d;
-                this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force));
+                this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force * 3));
             }
 
             var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[j].planetImg, this.rocket.rocketImg);
@@ -717,6 +717,7 @@ var Gamestats = (function () {
     return Gamestats;
 })();
 
+/* globals TweenMax:true, Sine:true */
 var Planet = (function () {
 
     var Planet = function (x, y, radius) {
@@ -727,11 +728,6 @@ var Planet = (function () {
         this.gravityRadius = radius + 50 + Math.floor(Math.random() * 100);
 
         this.container = new createjs.Container();
-
-        this.shape = new createjs.Shape();
-        this.shape.graphics.beginFill('#FF0000');
-        this.shape.graphics.drawCircle((-radius / 2), (-radius/2), radius);
-        this.shape.graphics.endFill();
 
         this.gravityField = new createjs.Shape();
         this.gravityField.graphics.beginStroke("#3f3a49").setStrokeStyle(2).beginFill("#484356");
@@ -759,9 +755,6 @@ var Planet = (function () {
         this.planetImg.scaleY = (1/247) * (radius * 2);
         this.container.addChild(this.planetImg);
 
-        this.shape.x = this.x;
-        this.shape.y = this.y;
-
         // console.log('planeet met - ' + (254 * this.planetImg.scaleX / 2) + ' en width van ' + (this.radius * 2));
         this.planetImg.x = this.x - (Math.floor(127 * this.planetImg.scaleX)) - (this.radius / 2);
         this.planetImg.y = this.y - (Math.floor(123.5 * this.planetImg.scaleY)) - (this.radius / 2);
@@ -771,12 +764,15 @@ var Planet = (function () {
 
         this.gravityField.x = this.x;
         this.gravityField.y = this.y;
+
+        var time = Math.floor(Math.random()*3)+2;
+
+        TweenMax.to(this.container, time, {y: ++time * 7, yoyo:true, repeat:-1, ease:Sine.easeInOut});
+        TweenMax.to(this.planetImg, time, {y: this.planetImg.y + 10, yoyo:true, repeat:-1, ease:Sine.easeInOut});
+        TweenMax.to(this.planetImg, time, {rotation: 10, yoyo:true, repeat:-1, ease:Sine.easeInOut});
     };
 
     Planet.prototype.update = function(multiplier) {
-        this.shape.x = this.x;
-        this.shape.y = this.y;
-
         // this.gravityRadius = (this.radius + Math.floor(Math.random() * 200)) * multiplier;
         this.gravityRadius = this.radius + 50 + Math.floor(Math.random() * (100 * multiplier));
         var newRadius = this.radius * multiplier;
@@ -812,6 +808,12 @@ var Planet = (function () {
 
         this.stroke.x = this.x;
         this.stroke.y = this.y;
+
+        var time = Math.floor(Math.random()*3)+2;
+
+        TweenMax.to(this.container, time, {y: ++time * 7, yoyo:true, repeat:-1, ease:Sine.easeInOut});
+        TweenMax.to(this.planetImg, time, {y: this.planetImg.y + 10, yoyo:true, repeat:-1, ease:Sine.easeInOut});
+        TweenMax.to(this.planetImg, time, {rotation: 10, yoyo:true, repeat:-1, ease:Sine.easeInOut});
     };
 
     return Planet;

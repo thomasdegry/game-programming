@@ -192,7 +192,7 @@ var Game = (function () {
             if(d < this.planets[j].gravityRadius) {
                 var angle = Util.getAngle(this.planets[j],this.rocket);
                 var force = this.planets[j].gravityRadius - d;
-                this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force));
+                this.rocket.workingVectors.push(new Vector(this.rocket.x, this.rocket.y,angle,force * 3));
             }
 
             var intersactionPlanet = ndgmr.checkPixelCollision(this.planets[j].planetImg, this.rocket.rocketImg);

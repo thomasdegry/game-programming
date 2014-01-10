@@ -59,7 +59,7 @@ h1 {
     height: 64px;
     @include border-radius(64px);
     background-color: #eeeeee;
-    @include box-shadow(#999999 0px 6px 0px);
+    @include box-shadow(#999999 0px 4px 0px);
     border: none;
     display: block;
     margin-top: 25px;
