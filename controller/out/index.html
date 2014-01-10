@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>Space</title>
+    <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Connect</h1>
+    <form id="login">
+        <p>
+            <input type="tel" placeholder="Code" id="game-id" autofocus="autofocus" autocomplete="off" maxlength="4" />
+        </p>
+        <p>
+            <input type="submit" id="game-id-submit" value="GO" />
+        </p>
+    </form>
+
+    <div id="speedSlider" class="out">
+        <h1>Control Panel</h1>
+        <div class="speed-o-meter">
+            <div class="needle"></div>
+            <div class="needle-holder"></div>
+        </div>
+        <div class="speed-instructions">
+            <p>Swipe up &amp; down on the screen to adjust speed</p>
+        </div>
+        <div class="heading-meter">
+            <div class="rocket-left"></div>
+            <div class="rocket-up"></div>
+            <div class="rocket-right"></div>
+            <div class="indicator-holder">
+                <div class="indicator"></div>
+            </div>
+        </div>
+        <div class="heading-instructions">
+            <p>Tilt left and right to change your direction</p>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/vendor/fastclick.js"></script>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

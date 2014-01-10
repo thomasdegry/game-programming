@@ -3,7 +3,7 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     colors = require ('colors');
-    development = true;
+    development = false;
 
 server.listen(3000);
 
